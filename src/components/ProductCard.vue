@@ -10,7 +10,7 @@ defineProps({
 </script>
 
 <template>
-  <RouterLink :to="'/product/' + product.id" class="w-[32%] aspect-square mb-3 rounded-sm">
+  <RouterLink :to="'/product/' + product.id" class="w-[32%] h-28 mb-2 rounded-sm">
     <img :src="product.image" alt="product image" class="w-full h-full object-cover rounded-sm" />
 
     <!-- Price -->

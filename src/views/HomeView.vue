@@ -4,7 +4,9 @@
             <h1 class="py-5">{{ storeInfo.title }}</h1>
             <p class="text-granite-gray py-3 w-10/12">{{ storeInfo.sub_title }}</p>
             <div class="flex gap-3 pt-3 pb-6">
-                <button class="py-5 w-full bg-black text-white rounded-lg">Start Shopping Now</button>
+                <RouterLink to="/store" class="w-full">
+                    <button class="py-5 w-full bg-black text-white rounded-lg">Start Shopping Now</button>
+                </RouterLink>
 
                 <button class="py-5 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
             </div>
@@ -49,13 +51,13 @@
             <h3 class="mb-3">Best-Selling Products You’ll Love</h3>
             <p class="text-granite-gray py-3">Shop our most popular items, loved by customers like you</p>
 
-            <div class="flex justify-between">
+            <div class="flex flex-wrap justify-between">
                 <ProductCard v-for="product in storeInfo.best_sellers" :key="product.id" :product="product" />
             </div>
 
-            <div class="w-full flex justify-center py-2">
+            <RouterLink to="/store" class="w-full flex justify-center pt-4">
                 <button class="py-5 w-2/3 bg-black text-white rounded-lg">Start Shopping Now</button>
-            </div>
+            </RouterLink>
         </section>
         <!--  -->
         <section class="py-12 px-4 text-white bg-black">
