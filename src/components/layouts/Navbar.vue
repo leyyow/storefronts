@@ -28,7 +28,7 @@
                     </button>
 
                     <button class="py-4 w-full bg-anti-flash-white rounded-lg">
-                        Start Shopping Now
+                        View Testimonial
                     </button>
                 </div>
             </div>
