@@ -1,0 +1,82 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+html,
+body {
+    line-height: 1;
+    scroll-behavior: smooth;
+    height: auto;
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 16px);
+    font-weight: 400;
+}
+
+p {
+    line-height: 1.5;
+
+    &.big {
+        $vw: 100vw;
+        font-size: calc($vw / 375px * 20px);
+    }
+
+    &.bigger {
+        $vw: 100vw;
+        font-size: calc($vw / 375px * 24px);
+    }
+}
+
+small {
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 10px);
+}
+
+h1 {
+    line-height: 1.2;
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 50px);
+    font-weight: 500;
+}
+
+h2 {
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 45px);
+    font-weight: 500;
+}
+
+h3 {
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 40px);
+    font-weight: 500;
+}
+
+h4 {
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 35px);
+    font-weight: 500;
+}
+
+h5 {
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 28px);
+    font-weight: 500;
+}
+
+h6 {
+    $vw: 100vw;
+    font-size: calc($vw / 375px * 20px);
+    font-weight: 500;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    outline: none;
+}
+
+img {
+    vertical-align: middle;
+}
