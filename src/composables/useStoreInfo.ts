@@ -5,11 +5,11 @@ export function useStoreInfo() {
     let storeInfo = reactive({
         title: "Shop smarter, live better",
         sub_title: "Shop top products and exclusive deals with ease.",
-        landing_images: {
-            img1: "https://loremflickr.com/1280/720",
-            img2: "https://loremflickr.com/1280/720",
-            img3: "https://loremflickr.com/1280/720",
-        },
+        landing_images: [
+            "https://loremflickr.com/1280/720",
+            "https://loremflickr.com/1280/720",
+            "https://loremflickr.com/1280/720",
+        ],
         fold: {
             title: "Why shop with us",
             reason_1: {

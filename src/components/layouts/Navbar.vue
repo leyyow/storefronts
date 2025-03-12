@@ -12,8 +12,8 @@
                 ]"
                 @click="toggleNav"
             >
-                <Icon icon="material-symbols-light:menu-rounded" class="h-6 w-6 m-0.5" v-if="!navIsOpen" />
-                <Icon icon="material-symbols-light:close-rounded" class="h-6 w-6" v-else />
+                <Menu class="h-6 w-6 m-0.5" v-if="!navIsOpen" />
+                <X class="h-6 w-6" v-else />
             </div>
         </nav>
         <div v-if="navIsOpen" class="nav__menu border-t-2 border-columbia-blue flex-1 bg-white fixed h-screen w-screen z-10">
@@ -37,7 +37,7 @@
 </template>
 
 <script setup>
-import { Icon } from "@iconify/vue";
+import { Menu, X } from "lucide-vue-next";
 import { ref } from "vue";
 
 const navIsOpen = ref(false);

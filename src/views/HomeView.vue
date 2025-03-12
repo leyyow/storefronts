@@ -8,11 +8,23 @@
 
                 <button class="py-4 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
             </div>
+
+            <SwiperCarousel>
+                <SwiperSlide
+                    v-for="(item, index) in storeInfo.landing_images"
+                    :key="index"
+                    class="flex justify-center items-center"
+                >
+                    <img :src="item" alt="Slide Image" class="rounded-lg shadow-lg object-cover h-80 w-full" />
+                </SwiperSlide>
+            </SwiperCarousel>
         </section>
     </div>
 </template>
 <script setup>
 import { useStoreInfo } from "../composables/useStoreInfo";
+import { SwiperSlide } from "swiper/vue";
+import SwiperCarousel from "../components/SwiperCarousel.vue";
 
 const { storeInfo } = useStoreInfo();
 </script>
