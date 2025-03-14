@@ -66,7 +66,7 @@
                     v-slot="$form"
                     :initialValues
                     :resolver
-                    :validateOnValueUpdate="false"
+                    :validateOnValueUpdate="true"
                     :validateOnBlur="false"
                     @submit="onFormSubmit"
                     class="flex flex-col gap-4 w-full py-4"
@@ -80,7 +80,7 @@
                                 name="variant1"
                                 type="text"
                                 :placeholder="filteredProduct.options1.name"
-                                class="w-full bg-anti-flash-white placeholder:text-manatee text-dark-green rounded-md border-0 py-2"
+                                class="w-full bg-anti-flash-white placeholder:text-manatee text-manatee rounded-md border-0 py-2"
                             />
                             <Message
                                 v-if="$form.variant1?.invalid"
@@ -99,7 +99,7 @@
                                 name="variant2"
                                 type="text"
                                 :placeholder="filteredProduct.options2.name"
-                                class="w-full bg-anti-flash-white placeholder:text-manatee text-dark-green rounded-md border-0 py-2"
+                                class="w-full bg-anti-flash-white placeholder:text-manatee text-manatee rounded-md border-0 py-2"
                             />
                             <Message
                                 v-if="$form.variant2?.invalid"
@@ -125,7 +125,7 @@
                                     v-model="initialValues.quantity"
                                     name="quantity"
                                     type="number"
-                                    class="w-9 bg-anti-flash-white placeholder:text-manatee text-dark-green rounded-md border-0"
+                                    class="w-9 bg-anti-flash-white placeholder:text-manatee text-manatee rounded-md border-0"
                                     fluid
                                     :min="0"
                                 />
