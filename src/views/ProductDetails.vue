@@ -1,0 +1,213 @@
+<template>
+    <div class="flex flex-col w-screen h-screen overflow-y-hidden">
+        <Navbar />
+        <section class="overflow-y-auto flex-1">
+            <div
+                class="p-4 last-of-type:min-h-185"
+                v-for="filteredProduct in productStore.filteredProducts"
+                :key="filteredProduct.id"
+                :id="filteredProduct.id"
+            >
+                <div class="w-full h-100 rounded-lg">
+                    <img
+                        :src="filteredProduct.image"
+                        alt="product image"
+                        class="w-full h-full object-cover rounded-lg"
+                    />
+                </div>
+
+                <div class="flex py-3 justify-between items-center">
+                    <h5 class="font-normal max-w-[80%]">{{ filteredProduct.product_name }}</h5>
+                    <div>
+                        <button
+                            class="rounded-full w-10 h-10 border-platinum border flex justify-center items-center cursor-pointer"
+                        >
+                            <svg
+                                width="18"
+                                height="18"
+                                viewBox="0 0 18 18"
+                                fill="none"
+                                class="w-6 h-6"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path
+                                    opacity="0.4"
+                                    d="M12.1428 1.5H5.86532C3.13532 1.5 1.50781 3.1275 1.50781 5.8575V12.135C1.50781 14.865 3.13532 16.4925 5.86532 16.4925H12.1428C14.8728 16.4925 16.5003 14.865 16.5003 12.135V5.8575C16.5003 3.1275 14.8728 1.5 12.1428 1.5Z"
+                                    fill="#000002"
+                                />
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M8.60225 4.48458C8.82192 4.26491 9.17808 4.26491 9.39775 4.48458L11.6477 6.73458C11.8674 6.95425 11.8674 7.3104 11.6477 7.53007C11.4281 7.74974 11.0719 7.74974 10.8523 7.53007L9 5.67782L7.14775 7.53007C6.92808 7.74974 6.57192 7.74974 6.35225 7.53007C6.13258 7.3104 6.13258 6.95425 6.35225 6.73458L8.60225 4.48458Z"
+                                    fill="#000002"
+                                />
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M9 4.31982C9.31066 4.31982 9.5625 4.57166 9.5625 4.88232V10.8823C9.5625 11.193 9.31066 11.4448 9 11.4448C8.68934 11.4448 8.4375 11.193 8.4375 10.8823V4.88232C8.4375 4.57166 8.68934 4.31982 9 4.31982Z"
+                                    fill="#000002"
+                                />
+                                <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M3.96666 12.2042C4.06512 11.9095 4.3838 11.7505 4.67844 11.849C7.48023 12.7853 10.5201 12.7853 13.3219 11.849C13.6165 11.7505 13.9352 11.9095 14.0336 12.2042C14.1321 12.4988 13.9731 12.8175 13.6784 12.916C10.6452 13.9296 7.35508 13.9296 4.32186 12.916C4.02722 12.8175 3.86819 12.4988 3.96666 12.2042Z"
+                                    fill="#000002"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <h5><small class="me-0.5">N</small>{{ filteredProduct.price }}<small>.00</small></h5>
+
+                <Toast />
+
+                <Form
+                    v-slot="$form"
+                    :initialValues
+                    :resolver
+                    :validateOnValueUpdate="false"
+                    :validateOnBlur="false"
+                    @submit="onFormSubmit"
+                    class="flex flex-col gap-4 w-full py-4"
+                >
+                    <div class="flex justify-between w-full gap-2">
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="variant1" class="text-manatee pb-1">{{ filteredProduct.options1.name }}</label>
+                            <Select
+                                :options="filteredProduct.options1.options"
+                                v-model="initialValues.variant1"
+                                name="variant1"
+                                type="text"
+                                :placeholder="filteredProduct.options1.name"
+                                class="w-full bg-anti-flash-white placeholder:text-manatee text-dark-green rounded-md border-0 py-2"
+                            />
+                            <Message
+                                v-if="$form.variant1?.invalid"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                class="mt-1"
+                                >{{ $form.variant1.error.message }}</Message
+                            >
+                        </div>
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="variant1" class="text-manatee pb-1">{{ filteredProduct.options2.name }}</label>
+                            <Select
+                                :options="filteredProduct.options2.options"
+                                v-model="initialValues.variant2"
+                                name="variant2"
+                                type="text"
+                                :placeholder="filteredProduct.options2.name"
+                                class="w-full bg-anti-flash-white placeholder:text-manatee text-dark-green rounded-md border-0 py-2"
+                            />
+                            <Message
+                                v-if="$form.variant2?.invalid"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                class="mt-1"
+                                >{{ $form.variant2.error.message }}</Message
+                            >
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <div class="flex flex-col gap-1 w-32">
+                            <div class="flex gap-1.5 items-center pt-2 pb-2.5">
+                                <button
+                                    type="button"
+                                    class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
+                                    @click="increaseQuantity"
+                                >
+                                    <Plus class="w-5 h-5" />
+                                </button>
+                                <InputNumber
+                                    v-model="initialValues.quantity"
+                                    name="quantity"
+                                    type="number"
+                                    class="w-9 bg-anti-flash-white placeholder:text-manatee text-dark-green rounded-md border-0"
+                                    fluid
+                                    :min="0"
+                                />
+                                <button
+                                    type="button"
+                                    class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
+                                    @click="decreaseQuantity"
+                                >
+                                    <Minus class="w-5 h-5" />
+                                </button>
+                            </div>
+                            <Message v-if="$form.quantity?.invalid" severity="error" size="small" variant="simple" class="text-center">{{
+                                $form.quantity.error.message
+                            }}</Message>
+                        </div>
+                        <Button type="submit" severity="secondary" class="bg-black text-white h-13 w-full rounded-md cursor-pointer">
+                            Add to Basket
+                        </Button>
+                    </div>
+                </Form>
+            </div>
+        </section>
+    </div>
+</template>
+
+<script setup>
+import { ref, onMounted, nextTick, watch, reactive } from "vue";
+import { useRoute } from "vue-router";
+import Navbar from "../components/product/ProductNavbar.vue";
+import { useProductStore } from "../stores/product";
+import { useStoreInfo } from "../composables/useStoreInfo";
+import { useToast } from "primevue/usetoast";
+import { Minus, Plus } from "lucide-vue-next";
+
+const toast = useToast();
+
+const increaseQuantity = () => {
+    initialValues.quantity += 1;
+};
+
+const decreaseQuantity = () => {
+    if (initialValues.quantity > 0) {
+        initialValues.quantity -= 1;
+    }
+};
+
+const initialValues = reactive({
+    variant1: "",
+    variant2: "",
+    quantity: 0,
+});
+
+const resolver = () => {
+    const errors = {};
+
+    if (!initialValues.variant1) {
+        errors.variant1 = [{ message: "This field is required." }];
+    }
+
+    if (!initialValues.variant2) {
+        errors.variant2 = [{ message: "This field is required." }];
+    }
+
+    if (initialValues.quantity === 0) {
+        errors.quantity = [{ message: "Quantity must be at least 1." }];
+    }
+
+    return {
+        errors,
+    };
+};
+
+const onFormSubmit = ({ valid }) => {
+    if (valid) {
+        toast.add({ severity: "success", summary: "Form is submitted.", life: 3000 });
+
+        console.log(initialValues);
+    }
+};
+
+const route = useRoute();
+const productId = ref(route.params.id);
+const productStore = useProductStore();
+const { storeInfo } = useStoreInfo();
+</script>

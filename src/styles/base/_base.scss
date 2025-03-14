@@ -32,6 +32,10 @@ p {
 small {
     $vw: 100vw;
     font-size: calc($vw / 375px * 10px);
+
+    &.smaller {
+        font-size: calc($vw / 375px * 7px);
+    }
 }
 
 h1 {
@@ -79,4 +83,15 @@ a {
 
 img {
     vertical-align: middle;
+}
+
+input {
+    background-color: #EFF1F3 !important;
+    color: #002E22 !important;
+    border-radius: 0.5rem !important;
+    border: none !important;
+
+    &::placeholder {
+        color: #97a1ac !important;
+    }
 }

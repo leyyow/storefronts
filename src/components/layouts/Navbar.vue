@@ -18,7 +18,7 @@
         </nav>
         <div
             v-if="navIsOpen"
-            class="nav__menu border-t-2 border-columbia-blue flex-1 bg-white fixed h-screen w-screen z-10"
+            class="nav__menu border-t-2 border-platinum flex-1 bg-white fixed h-screen w-screen z-10"
         >
             <div class="py-8 px-6 flex flex-col">
                 <router-link to="#" class="mb-4 text-xl">Why Us?</router-link>

@@ -51,7 +51,7 @@
             <h3 class="mb-3">Best-Selling Products You’ll Love</h3>
             <p class="text-granite-gray py-3">Shop our most popular items, loved by customers like you</p>
 
-            <div class="flex flex-wrap justify-between">
+            <div class="flex flex-wrap gap-1">
                 <ProductCard v-for="product in storeInfo.best_sellers" :key="product.id" :product="product" />
             </div>
 
