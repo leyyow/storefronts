@@ -60,15 +60,34 @@
 
                 <h5><small class="me-0.5">N</small>{{ filteredProduct.price }}<small>.00</small></h5>
 
-                <Toast />
+                <Toast position="top-center" group="headless" @close="visible = false">
+                    <template #container="{ message, closeCallback }">
+                        <section class="w-full flex justify-center bg-transparent">
+                            <div class="bg-white rounded-4xl py-2 px-2.5 w-8/12 border border-platinum">
+                                <div class="flex justify-between items-center">
+                                    <div
+                                        class="w-10 h-10 bg-anti-flash-white rounded-full flex justify-center items-center"
+                                    >
+                                        <div
+                                            class="rounded-full w-6 h-6 flex justify-center items-center text-spanish-viridian bg-spanish-viridian/30"
+                                        >
+                                            <Check />
+                                        </div>
+                                    </div>
+                                    <p class="pe-2">Item added to basket</p>
+                                </div>
+                            </div>
+                        </section>
+                    </template>
+                </Toast>
 
                 <Form
                     v-slot="$form"
-                    :initialValues
+                    :initialValues="getInitialValues(filteredProduct.id)"
                     :resolver
                     :validateOnValueUpdate="true"
                     :validateOnBlur="false"
-                    @submit="onFormSubmit"
+                    @submit="onFormSubmit($event, filteredProduct)"
                     class="flex flex-col gap-4 w-full py-4"
                 >
                     <div class="flex justify-between w-full gap-2">
@@ -76,7 +95,7 @@
                             <label for="variant1" class="text-manatee pb-1">{{ filteredProduct.options1.name }}</label>
                             <Select
                                 :options="filteredProduct.options1.options"
-                                v-model="initialValues.variant1"
+                                v-model="formState[filteredProduct.id].variant1"
                                 name="variant1"
                                 type="text"
                                 :placeholder="filteredProduct.options1.name"
@@ -95,7 +114,7 @@
                             <label for="variant1" class="text-manatee pb-1">{{ filteredProduct.options2.name }}</label>
                             <Select
                                 :options="filteredProduct.options2.options"
-                                v-model="initialValues.variant2"
+                                v-model="formState[filteredProduct.id].variant2"
                                 name="variant2"
                                 type="text"
                                 :placeholder="filteredProduct.options2.name"
@@ -117,32 +136,63 @@
                                 <button
                                     type="button"
                                     class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
-                                    @click="increaseQuantity"
+                                    @click="increaseQuantity(filteredProduct.id)"
                                 >
                                     <Plus class="w-5 h-5" />
                                 </button>
                                 <InputNumber
-                                    v-model="initialValues.quantity"
+                                    v-model="formState[filteredProduct.id].quantity"
                                     name="quantity"
                                     type="number"
-                                    class="w-9 bg-anti-flash-white placeholder:text-manatee text-manatee rounded-md border-0"
+                                    class="w-9 bg-anti-flash-white placeholder:text-manatee text-manatee rounded-sm border-0"
                                     fluid
-                                    :min="0"
+                                    :min="1"
                                 />
                                 <button
                                     type="button"
                                     class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
-                                    @click="decreaseQuantity"
+                                    @click="decreaseQuantity(filteredProduct.id)"
                                 >
                                     <Minus class="w-5 h-5" />
                                 </button>
                             </div>
-                            <Message v-if="$form.quantity?.invalid" severity="error" size="small" variant="simple" class="text-center">{{
-                                $form.quantity.error.message
-                            }}</Message>
+                            <Message
+                                v-if="$form.quantity?.invalid"
+                                severity="error"
+                                size="small"
+                                variant="simple"
+                                class="text-center"
+                                >{{ $form.quantity.error.message }}</Message
+                            >
                         </div>
-                        <Button type="submit" severity="secondary" class="bg-black text-white h-13 w-full rounded-md cursor-pointer">
-                            Add to Basket
+                        <Button
+                            type="submit"
+                            severity="secondary"
+                            class="bg-black text-white h-13 w-full rounded-md cursor-pointer flex items-center"
+                        >
+                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id])">Add to Basket</span>
+                            <span v-else>{{ cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id]) }} in Basket</span>
+                            <div class="relative">
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    class="h-5 w-5"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        opacity="0.4"
+                                        d="M12.8263 3.71988H12.5597L10.3063 1.46654C10.1263 1.28654 9.83301 1.28654 9.64634 1.46654C9.46634 1.64654 9.46634 1.93988 9.64634 2.12654L11.2397 3.71988H4.75967L6.35301 2.12654C6.53301 1.94654 6.53301 1.65321 6.35301 1.46654C6.17301 1.28654 5.87967 1.28654 5.69301 1.46654L3.44634 3.71988H3.17967C2.57967 3.71988 1.33301 3.71988 1.33301 5.42654C1.33301 6.07321 1.46634 6.49988 1.74634 6.77988C1.90634 6.94654 2.09967 7.03321 2.30634 7.07988C2.49967 7.12654 2.70634 7.13321 2.90634 7.13321H13.093C13.2997 7.13321 13.493 7.11988 13.6797 7.07988C14.2397 6.94654 14.6663 6.54654 14.6663 5.42654C14.6663 3.71988 13.4197 3.71988 12.8263 3.71988Z"
+                                        fill="white"
+                                    />
+                                    <path
+                                        d="M13.1 7.13341H2.90664C2.70664 7.13341 2.49997 7.12674 2.30664 7.08008L3.14664 12.2001C3.33331 13.3467 3.83331 14.6667 6.05331 14.6667H9.79331C12.04 14.6667 12.44 13.5401 12.68 12.2801L13.6866 7.08008C13.5 7.12008 13.3 7.13341 13.1 7.13341ZM7.07331 11.4401C7.07331 11.7001 6.86664 11.9067 6.60664 11.9067C6.34664 11.9067 6.13997 11.7001 6.13997 11.4401V9.24008C6.13997 8.98008 6.34664 8.77341 6.60664 8.77341C6.86664 8.77341 7.07331 8.98008 7.07331 9.24008V11.4401ZM9.92664 11.4401C9.92664 11.7001 9.71997 11.9067 9.45997 11.9067C9.19997 11.9067 8.99331 11.7001 8.99331 11.4401V9.24008C8.99331 8.98008 9.19997 8.77341 9.45997 8.77341C9.71997 8.77341 9.92664 8.98008 9.92664 9.24008V11.4401Z"
+                                        fill="white"
+                                    />
+                                </svg>
+
+                            </div>
                         </Button>
                     </div>
                 </Form>
@@ -158,56 +208,76 @@ import Navbar from "../components/product/ProductNavbar.vue";
 import { useProductStore } from "../stores/product";
 import { useStoreInfo } from "../composables/useStoreInfo";
 import { useToast } from "primevue/usetoast";
-import { Minus, Plus } from "lucide-vue-next";
-
-const toast = useToast();
-
-const increaseQuantity = () => {
-    initialValues.quantity += 1;
-};
-
-const decreaseQuantity = () => {
-    if (initialValues.quantity > 0) {
-        initialValues.quantity -= 1;
-    }
-};
-
-const initialValues = reactive({
-    variant1: "",
-    variant2: "",
-    quantity: 0,
-});
-
-const resolver = () => {
-    const errors = {};
-
-    if (!initialValues.variant1) {
-        errors.variant1 = [{ message: "This field is required." }];
-    }
-
-    if (!initialValues.variant2) {
-        errors.variant2 = [{ message: "This field is required." }];
-    }
-
-    if (initialValues.quantity === 0) {
-        errors.quantity = [{ message: "Quantity must be at least 1." }];
-    }
-
-    return {
-        errors,
-    };
-};
-
-const onFormSubmit = ({ valid }) => {
-    if (valid) {
-        toast.add({ severity: "success", summary: "Form is submitted.", life: 3000 });
-
-        console.log(initialValues);
-    }
-};
+import { Minus, Plus, Check } from "lucide-vue-next";
+import { useCartStore } from "../stores/cart";
 
 const route = useRoute();
 const productId = ref(route.params.id);
 const productStore = useProductStore();
+const cartStore = useCartStore();
 const { storeInfo } = useStoreInfo();
+const toast = useToast();
+const visible = ref(false);
+
+const formState = reactive({});
+
+const getInitialValues = (productId) => {
+    if (!formState[productId]) {
+        formState[productId] = {
+            variant1: "",
+            variant2: "",
+            quantity: 1,
+        };
+    }
+    return formState[productId];
+};
+
+const resolver = ({ values }) => {
+    const errors = {};
+
+    if (!values.variant1) {
+        errors.variant1 = [{ message: "This field is required." }];
+    }
+
+    if (!values.variant2) {
+        errors.variant2 = [{ message: "This field is required." }];
+    }
+
+    return {
+        errors,
+        values,
+    };
+};
+
+const increaseQuantity = (productId) => {
+    if (formState[productId]) {
+        formState[productId].quantity += 1;
+    }
+};
+
+const decreaseQuantity = (productId) => {
+    if (formState[productId] && formState[productId].quantity > 1) {
+        formState[productId].quantity -= 1;
+    }
+};
+
+const onFormSubmit = ({ valid, values }, product) => {
+    if (valid && !visible.value) {
+        toast.add({
+            severity: "custom",
+            life: 2000,
+            group: "headless",
+            styleClass: "w-full",
+        });
+        visible.value = true;
+        
+        cartStore.addToCart(product, formState[product.id]);
+        console.log(cartStore.cart);
+        console.log(cartStore.cartTotal);
+
+        setTimeout(() => {
+            visible.value = false;
+        }, 1000);
+    }
+};
 </script>

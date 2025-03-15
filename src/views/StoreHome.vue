@@ -105,7 +105,7 @@
                         />
                     </svg>
                     <div class="py-0.5 px-1 bg-lava flex items-center justify-center rounded-sm text-white absolute top-0.5 right-0.5">
-                        <small class="smaller">13</small>
+                        <small class="smaller">{{ cartStore.cartLength }}</small>
                     </div>
                 </button>
             </div>
@@ -124,9 +124,11 @@ import { ref, computed } from "vue";
 import { useStoreInfo } from "../composables/useStoreInfo";
 import ProductCard from "../components/ProductCard.vue";
 import { useProductStore } from "../stores/product";
+import { useCartStore } from "../stores/cart";
 
 const { storeInfo } = useStoreInfo();
 const productStore = useProductStore();
+const cartStore = useCartStore();
 </script>
 
 <style>

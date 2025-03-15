@@ -8,7 +8,7 @@ import App from "./App.vue";
 import router from "./router";
 import PrimeVue from "primevue/config";
 import ToastService from "primevue/toastservice";
-import Nora from "@primeuix/themes/nora";
+import Aura from "@primeuix/themes/aura";
 
 const pinia = createPinia();
 pinia.use(piniaPersist);
@@ -17,7 +17,7 @@ const app = createApp(App);
 
 app.use(PrimeVue, {
     theme: {
-        preset: Nora,
+        preset: Aura,
         options: {
             darkModeSelector: ".my-app-dark",
             cssLayer: false,

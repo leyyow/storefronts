@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
     Dropdown: typeof import('primevue/dropdown')['default']
     FooterComponent: typeof import('./src/components/layouts/FooterComponent.vue')['default']
@@ -18,6 +19,7 @@ declare module 'vue' {
     Navbar: typeof import('./src/components/layouts/Navbar.vue')['default']
     ProductCard: typeof import('./src/components/ProductCard.vue')['default']
     ProductNavbar: typeof import('./src/components/product/ProductNavbar.vue')['default']
+    ProgressBar: typeof import('primevue/progressbar')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']
