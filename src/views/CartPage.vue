@@ -140,8 +140,14 @@
                 <p><small class="me-0.5 font-bold">N</small>12,750<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
-                <button class="w-[35%] bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
-                <button class="w-[63%] bg-black text-white py-3 rounded-md">Proceed to Shipping</button>
+                <router-link :to="{ name: 'Store' }" class="w-[35%]">
+                    <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
+                </router-link>
+                <router-link :to="{ name: 'ShippingDetails' }" class="w-[63%]">
+                    <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Shipping</button>
+                </router-link>
+                
+                
             </div>
         </div>
     </div>

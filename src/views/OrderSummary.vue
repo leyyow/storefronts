@@ -149,7 +149,14 @@
 
                     <!-- pickup -->
                     <div class="flex items-center text-granite-gray">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-1 h-4 w-4">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="me-1 h-4 w-4"
+                        >
                             <path
                                 opacity="0.4"
                                 d="M13.7467 5.63341C13.0467 2.55341 10.3601 1.16675 8.00006 1.16675C8.00006 1.16675 8.00006 1.16675 7.9934 1.16675C5.64006 1.16675 2.94673 2.54675 2.24673 5.62675C1.46673 9.06675 3.5734 11.9801 5.48006 13.8134C6.18673 14.4934 7.0934 14.8334 8.00006 14.8334C8.90673 14.8334 9.8134 14.4934 10.5134 13.8134C12.4201 11.9801 14.5267 9.07341 13.7467 5.63341Z"
@@ -167,22 +174,26 @@
             </div>
         </div>
 
-        <div class="h-43 shadow-[0px_-4px_8px_0px_#00000014] p-4">
-            <div class="flex justify-between mb-3">
-                <input
-                    type="text"
-                    placeholder="Enter Coupon Code"
-                    class="rounded-md w-[75%] bg-anti-flash-white placeholder:text-manatee text-manatee p-3 focus:outline-manatee"
-                />
-                <button class="w-[23%] bg-black text-white py-3 rounded-md">Apply</button>
-            </div>
-            <div class="flex justify-between pb-3 border-b border-platinum">
+        <div class="h-43 shadow-[0px_-4px_8px_0px_#00000014] px-4 py-2.5">
+            <div class="flex justify-between pb-1.5">
                 <p class="text-granite-gray">SubTotal (1 item):</p>
                 <p><small class="me-0.5">N</small>12,750<small>.00</small></p>
             </div>
+            <div class="flex justify-between pb-3 border-b border-platinum">
+                <p class="text-granite-gray">Shipping (Badagry):</p>
+                <p><small class="me-0.5">N</small>5000<small>.00</small></p>
+            </div>
+            <div class="flex justify-between pt-2 font-bold">
+                <p class="text-granite-gray">Total Amount:</p>
+                <p class="text-feldgrau"><small class="me-0.5">N</small>17,750<small>.00</small></p>
+            </div>
             <div class="flex justify-between py-3">
-                <button class="w-[35%] bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
-                <button class="w-[63%] bg-black text-white py-3 rounded-md">Proceed to Shipping</button>
+                <router-link :to="{ name: 'Store' }" class="w-[35%]">
+                    <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
+                </router-link>
+                <router-link :to="{ name: 'ShippingDetails' }" class="w-[63%]">
+                    <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Shipping</button>
+                </router-link>
             </div>
         </div>
     </div>
