@@ -58,7 +58,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large, xl",
                 variants: "Color",
-                combinations: "0,4000,4;1,3000,6;2,4500,5;3,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Ball",
@@ -119,7 +119,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
         ],
         reviews: [
@@ -193,7 +193,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large, xl",
                 variants: "Color",
-                combinations: "0,4000,4;1,3000,6;2,4500,5;3,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Ball",
@@ -223,7 +223,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Cat",
@@ -253,7 +253,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "",
             },
             {
                 product_name: "Dog",
@@ -283,7 +283,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Eraser",
@@ -313,7 +313,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Fruit",
@@ -343,7 +343,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Goat",
@@ -373,7 +373,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Horse",
@@ -403,7 +403,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Ink",
@@ -433,7 +433,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Jug",
@@ -463,7 +463,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Knife",
@@ -493,7 +493,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Lemon",
@@ -523,7 +523,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Men's Blue Knight Trad with Agbada",
@@ -553,7 +553,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Ninja",
@@ -583,7 +583,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Orange",
@@ -613,7 +613,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Pawpaw",
@@ -643,7 +643,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Queen",
@@ -673,7 +673,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Rice",
@@ -703,7 +703,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations: "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
         ],
         store: {
