@@ -5,7 +5,7 @@ export const useCartStore = defineStore(
     "cart",
     () => {
         const cart = ref<any[]>([]);
-        const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + (item.variant_price || item.price) * item.selected_quantity, 0));
+        const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + (item.variant_price * item.selected_quantity), 0));
         const cartLength = computed(() => cart.value.length);
 
         // 🛒 Add items to the cart
@@ -30,7 +30,7 @@ export const useCartStore = defineStore(
                 cartItem.selected_quantity = selections.quantity;
                 cartItem.variant_price = price;
                 cartItem.variant_total_stock = stockLeft;
-                cartItem.itemTotal = product.price * selections.quantity;
+                cartItem.itemTotal = price * selections.quantity;
                 cart.value.push(cartItem);
             }
         }
@@ -47,24 +47,24 @@ export const useCartStore = defineStore(
         }
 
         // ✅ Remove a specific selection from the cart
-        function removeSelection(product: any, selections: { variant1: string; variant2: string }) {
-            cart.value = cart.value.filter(
+        function removeSelection(cartItem: any) {
+            const del = cart.value.find(
                 (i) =>
-                    !(
-                        i.id === product.id &&
-                        i.selected_variant1 === selections.variant1 &&
-                        i.selected_variant2 === selections.variant2
-                    ),
+                    i.id === cartItem.id &&
+                    (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
             );
+            const index = cart.value.indexOf(del)
+            cart.value.splice(index, 1)
         }
 
         // ➕ Increase quantity of a selection
-        function increaseSelectionQuantity(product: any, selections: { variant1: string; variant2: string }) {
+        function increaseSelectionQuantity(cartItem: any) {
             const item = cart.value.find(
                 (i) =>
-                    i.id === product.id &&
-                    i.selected_variant1 === selections.variant1 &&
-                    i.selected_variant2 === selections.variant2,
+                    i.id === cartItem.id &&
+                    (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
             );
             if (item) {
                 if (item.selected_quantity < (item.variant_total_stock || item.total_stock)) {
@@ -75,17 +75,17 @@ export const useCartStore = defineStore(
         }
 
         // ➖ Decrease quantity of a selection (removes item if quantity reaches 0)
-        function decreaseSelectionQuantity(product: any, selections: { variant1: string; variant2: string }) {
+        function decreaseSelectionQuantity(cartItem: any) {
             const item = cart.value.find(
                 (i) =>
-                    i.id === product.id &&
-                    i.selected_variant1 === selections.variant1 &&
-                    i.selected_variant2 === selections.variant2,
+                    i.id === cartItem.id &&
+                    (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
             );
             if (item) {
                 item.selected_quantity -= 1;
                 if (item.selected_quantity <= 0) {
-                    removeSelection(product, selections);
+                    removeSelection(cartItem);
                 } else {
                     item.itemTotal = item.variant_price * item.selected_quantity;
                 }

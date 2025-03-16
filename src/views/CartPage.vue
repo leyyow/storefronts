@@ -1,27 +1,28 @@
 <template>
     <div class="flex flex-col h-screen w-screen overflow-y-hidden">
         <div class="h-16 px-4 flex items-center">
-            <h6 class="font-normal">Basket (1)</h6>
+            <h6 class="font-normal">Basket ({{ cartLength }})</h6>
         </div>
 
         <div class="flex-1 overflow-y-auto px-4 py-2">
-            <div class="flex gap-2 mb-2" v-for="item in 10">
-                <img
-                    src="https://loremflickr.com/1280/720"
-                    alt="product image"
-                    class="w-16 h-16 object-cover rounded-sm"
-                />
+            <div class="flex gap-2 mb-2" v-for="item in cart">
+                <img :src="item.image" alt="product image" class="w-16 h-16 object-cover rounded-sm" />
 
-                <div class="flex flex-col gap-2 flex-1">
+                <div class="flex flex-col gap-2 flex-1 justify-between">
                     <div class="flex gap-1.5">
                         <div class="w-[75%]">
-                            <p v-if="trimmedString" class="leading-none">{{ trimmedString }}...</p>
-                            <p class="leading-none" v-else>{{ str }}</p>
+                            <p v-if="trimmedString(item.product_name)" class="leading-none">
+                                {{ trimmedString(item.product_name) }}...
+                            </p>
+                            <p class="leading-none" v-else>{{ item.product_name }}</p>
 
-                            <p class="text-granite-gray">Large, Green</p>
+                            <p class="text-granite-gray">
+                                <span v-if="item.selected_variant1">{{ item.selected_variant1 }}</span
+                                ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
+                            </p>
                         </div>
                         <div class="w-[25%]">
-                            <p class="leading-none"><small class="me-0.5">N</small>12,750<small>.00</small></p>
+                            <p class="leading-none"><small class="me-0.5">N</small>{{ item.itemTotal }}<small>.00</small></p>
                         </div>
                     </div>
                     <div class="flex justify-between items-center">
@@ -29,22 +30,24 @@
                             <button
                                 type="button"
                                 class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
+                                @click="increaseSelectionQuantity(item)"
                             >
                                 <Plus class="w-2 h-2" />
                             </button>
                             <div
                                 class="w-auto px-2 py-1 bg-anti-flash-white text-black rounded-sm border-0 flex items-center justify-center"
                             >
-                                <small class="">1</small>
+                                <small class="">{{ item.selected_quantity }}</small>
                             </div>
                             <button
                                 class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
+                                @click="decreaseSelectionQuantity(item)"
                             >
                                 <Minus class="w-2 h-2" />
                             </button>
                         </div>
 
-                        <button class="cursor-pointer">
+                        <button class="cursor-pointer" @click="removeSelection(item)">
                             <svg
                                 width="20"
                                 height="20"
@@ -136,8 +139,8 @@
                 <button class="w-[23%] bg-black text-white py-3 rounded-md">Apply</button>
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum">
-                <p class="text-granite-gray">SubTotal (1 item):</p>
-                <p><small class="me-0.5 font-bold">N</small>12,750<small>.00</small></p>
+                <p class="text-granite-gray">SubTotal ({{ cartLength }} item<span v-if="cartLength > 0">s</span>):</p>
+                <p><small class="me-0.5 font-bold">N</small>{{ cartTotal }}<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
@@ -146,8 +149,6 @@
                 <router-link :to="{ name: 'ShippingDetails' }" class="w-[63%]">
                     <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Shipping</button>
                 </router-link>
-                
-                
             </div>
         </div>
     </div>
@@ -155,14 +156,15 @@
 <script setup>
 import { computed } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
+import { useCartStore } from "../stores/cart";
 
-const str = "23 Seamless Tank Top with agbada";
+const { cart, cartTotal, cartLength, increaseSelectionQuantity, decreaseSelectionQuantity, removeSelection } = useCartStore();
 
-const trimmedString = computed(() => {
-    if (str.length < 23) {
+const trimmedString = (string) => {
+    if (string.length < 23) {
         return false;
     }
-    return str.substring(0, 23);
-});
+    return string.substring(0, 23);
+};
 </script>
 <style></style>

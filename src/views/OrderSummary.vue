@@ -6,27 +6,28 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
-            <div class="flex gap-2 mb-2" v-for="item in 2">
-                <img
-                    src="https://loremflickr.com/1280/720"
-                    alt="product image"
-                    class="w-16 h-16 object-cover rounded-sm"
-                />
+            <div class="flex gap-2 mb-2" v-for="item in cart">
+                <img :src="item.image" alt="product image" class="w-16 h-16 object-cover rounded-sm" />
 
                 <div class="flex flex-col gap-2 flex-1">
                     <div class="flex gap-1.5">
                         <div class="w-[75%]">
-                            <p v-if="trimmedString" class="leading-none pt-2 pb-3">{{ trimmedString }}...</p>
-                            <p class="leading-none pt-2 pb-3" v-else>{{ str }}</p>
+                            <p v-if="trimmedString(item.product_name)" class="leading-none pt-2 pb-3">
+                                {{ trimmedString(item.product_name) }}...
+                            </p>
+                            <p class="leading-none pt-2 pb-3" v-else>{{ item.product_name }}</p>
 
-                            <p class="text-granite-gray">Large, Green</p>
+                            <p class="text-granite-gray">
+                                <span v-if="item.selected_variant1">{{ item.selected_variant1 }}</span
+                                ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
+                            </p>
                         </div>
                         <div class="w-[25%]">
                             <p class="leading-none pt-2 pb-3 font-bold">
-                                <small class="me-0.5">N</small>12,750<small>.00</small>
+                                <small class="me-0.5">N</small>{{ item.itemTotal }}<small>.00</small>
                             </p>
 
-                            <p class="text-granite-gray w-full flex justify-end">Qty: 1</p>
+                            <p class="text-granite-gray w-full flex justify-end">Qty: {{ item.selected_quantity }}</p>
                         </div>
                     </div>
                 </div>
@@ -98,11 +99,14 @@
                 </div>
 
                 <div class="flex justify-between items-center mt-2">
-                    <p  v-if="shippingDetails.shippingMethod === 'Delivery'">{{ shippingDetails.address }}</p>
+                    <p v-if="shippingDetails.shippingMethod === 'Delivery'">{{ shippingDetails.address }}</p>
                     <p v-else>{{ storeInfo.store.address }}</p>
 
                     <!-- delivery -->
-                    <div class="flex items-center text-granite-gray" v-if="shippingDetails.shippingMethod === 'Delivery'">
+                    <div
+                        class="flex items-center text-granite-gray"
+                        v-if="shippingDetails.shippingMethod === 'Delivery'"
+                    >
                         <svg
                             width="16"
                             height="16"
@@ -177,16 +181,25 @@
 
         <div class="h-43 shadow-[0px_-4px_8px_0px_#00000014] px-4 py-2.5">
             <div class="flex justify-between pb-1.5">
-                <p class="text-granite-gray">SubTotal (1 item):</p>
-                <p><small class="me-0.5">N</small>12,750<small>.00</small></p>
+                <p class="text-granite-gray">SubTotal ({{ cartLength }} item<span v-if="cartLength > 0">s</span>):</p>
+                <p><small class="me-0.5">N</small>{{ cartTotal }}<small>.00</small></p>
             </div>
-            <div class="flex justify-between pb-3 border-b border-platinum">
+
+            <div class="flex justify-between pb-3 border-b border-platinum" v-if="shippingDetails.shippingMethod === 'Delivery'">
                 <p class="text-granite-gray">Shipping ({{ shippingDetails.location }}):</p>
                 <p><small class="me-0.5">N</small>{{ deliveryFee }}<small>.00</small></p>
             </div>
+            <div class="flex justify-between pb-3 border-b border-platinum" v-else>
+                <p class="text-granite-gray">Pickup</p>
+                <p><small class="me-0.5">N</small>00<small>.00</small></p>
+            </div>
+
             <div class="flex justify-between pt-2 font-bold">
                 <p class="text-granite-gray">Total Amount:</p>
-                <p class="text-feldgrau"><small class="me-0.5">N</small>17,750<small>.00</small></p>
+                <p class="text-feldgrau">
+                    <small class="me-0.5">N</small>{{ deliveryFee ? deliveryFee + cartTotal : cartTotal
+                    }}<small>.00</small>
+                </p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
@@ -204,16 +217,17 @@ import { computed } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../composables/useStoreInfo";
+import { useCartStore } from "../stores/cart";
 
-const str = "23 Seamless Tank Top with agbada";
 const { shippingDetails, deliveryFee } = useOrderStore();
+const { cart, cartLength, cartTotal } = useCartStore();
 const { storeInfo } = useStoreInfo();
 
-const trimmedString = computed(() => {
-    if (str.length < 23) {
+const trimmedString = (string) => {
+    if (string.length < 23) {
         return false;
     }
-    return str.substring(0, 23);
-});
+    return string.substring(0, 23);
+};
 </script>
 <style></style>
