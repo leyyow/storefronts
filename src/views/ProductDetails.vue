@@ -58,7 +58,8 @@
                     </div>
                 </div>
 
-                <h5><small class="me-0.5">N</small>{{ filteredProduct.price }}<small>.00</small></h5>
+                <h5 v-if="price(filteredProduct) !== null"><small class="me-0.5">N</small>{{ price(filteredProduct) }}<small>.00</small></h5>
+                <h5 v-else><small class="me-0.5">N</small>{{ filteredProduct.price }}<small>.00</small></h5>
 
                 <Toast position="top-center" group="headless" @close="visible = false">
                     <template #container="{ message, closeCallback }">
@@ -87,19 +88,18 @@
                     :resolver
                     :validateOnValueUpdate="true"
                     :validateOnBlur="false"
-                    @submit="onFormSubmit($event, filteredProduct)"
+                    @submit="onFormSubmit($event, filteredProduct, price(filteredProduct) ? price(filteredProduct) : filteredProduct.price, stock(filteredProduct)? stock(filteredProduct) : filteredProduct.total_stock)"
                     class="flex flex-col gap-4 w-full py-4"
                 >
                     <div class="flex justify-between w-full gap-2">
-                        <div class="flex flex-col gap-1 w-full">
-                            <label for="variant1" class="text-manatee pb-1">{{ filteredProduct.options1.name }}</label>
+                        <div v-if="variantNames(filteredProduct)[0]" class="flex flex-col gap-1 w-full">
+                            <label for="variant1">{{ variantNames(filteredProduct)[0] }}</label>
                             <Select
-                                :options="filteredProduct.options1.options"
                                 v-model="formState[filteredProduct.id].variant1"
+                                :options="options1Array(filteredProduct)"
                                 name="variant1"
-                                type="text"
-                                :placeholder="filteredProduct.options1.name"
-                                class="w-full bg-anti-flash-white placeholder:text-manatee text-manatee rounded-md border-0 py-2"
+                                :placeholder="variantNames(filteredProduct)[0]"
+                                class="w-full bg-white border rounded-md p-2"
                             />
                             <Message
                                 v-if="$form.variant1?.invalid"
@@ -110,15 +110,15 @@
                                 >{{ $form.variant1.error.message }}</Message
                             >
                         </div>
-                        <div class="flex flex-col gap-1 w-full">
-                            <label for="variant1" class="text-manatee pb-1">{{ filteredProduct.options2.name }}</label>
+
+                        <div v-if="variantNames(filteredProduct)[1]" class="flex flex-col gap-1 w-full">
+                            <label for="variant2">{{ variantNames(filteredProduct)[1] }}</label>
                             <Select
-                                :options="filteredProduct.options2.options"
                                 v-model="formState[filteredProduct.id].variant2"
+                                :options="options2Array(filteredProduct)"
                                 name="variant2"
-                                type="text"
-                                :placeholder="filteredProduct.options2.name"
-                                class="w-full bg-anti-flash-white placeholder:text-manatee text-manatee rounded-md border-0 py-2"
+                                :placeholder="variantNames(filteredProduct)[1]"
+                                class="w-full bg-white border rounded-md p-2"
                             />
                             <Message
                                 v-if="$form.variant2?.invalid"
@@ -130,13 +130,18 @@
                             >
                         </div>
                     </div>
+
+                    <div class="text-lg font-semibold">
+                        Stock: {{ variantNames(filteredProduct).length? stock(filteredProduct) : filteredProduct.total_stock }}
+                    </div>
+
                     <div class="flex gap-2">
                         <div class="flex flex-col gap-1 w-32">
                             <div class="flex gap-1.5 items-center pt-2 pb-2.5">
                                 <button
                                     type="button"
                                     class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
-                                    @click="increaseQuantity(filteredProduct.id)"
+                                    @click="increaseQuantity(filteredProduct.id, variantNames(filteredProduct).length? stock(filteredProduct) : filteredProduct.total_stock)"
                                 >
                                     <Plus class="w-5 h-5" />
                                 </button>
@@ -147,6 +152,7 @@
                                     class="w-9 bg-anti-flash-white placeholder:text-manatee text-manatee rounded-sm border-0"
                                     fluid
                                     :min="1"
+                                    :max="stock(filteredProduct)"
                                 />
                                 <button
                                     type="button"
@@ -170,8 +176,8 @@
                             severity="secondary"
                             class="bg-black text-white h-13 w-full rounded-md cursor-pointer flex items-center"
                         >
-                            <!-- <span v-if="!cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id])">Add to Basket</span>
-                            <span v-else>{{ cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id]) }} in Basket</span> -->
+                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id])">Add to Basket</span>
+                            <span v-else>{{ cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id]) }} in Basket</span>
                             <div class="relative">
                                 <svg
                                     width="16"
@@ -191,7 +197,6 @@
                                         fill="white"
                                     />
                                 </svg>
-
                             </div>
                         </Button>
                     </div>
@@ -219,7 +224,82 @@ const { storeInfo } = useStoreInfo();
 const toast = useToast();
 const visible = ref(false);
 
-const formState = reactive({});
+const variantNames = (product) => {
+    const names = product.variants.split(",").filter(Boolean);
+    return names;
+};
+
+const options1Array = (product) => {
+    const options = product.options1.split(",").filter(Boolean);
+    return options;
+};
+
+const options2Array = (product) => {
+    const options = product.options2.split(",").filter(Boolean);
+    return options;
+};
+
+const combinationsArray = (product) => {
+    const combinations = product.combinations.split(";").map((combo) => {
+        const parts = combo.split(",").map(Number);
+
+        if (parts.length === 3) {
+            // Single variant case
+            const [index1, price, stock] = parts;
+            return { index1, price, stock };
+        } else if (parts.length === 4) {
+            // Two variant case
+            const [index1, index2, price, stock] = parts;
+            return { index1, index2, price, stock };
+        }
+
+        return null; // Handle unexpected cases
+    }).filter(Boolean);
+
+    return combinations;
+};
+
+const price = (product) => {
+    getInitialValues(product.id);
+    const index1 = options1Array(product).indexOf(formState[product.id].variant1);
+    const index2 = options2Array(product).indexOf(formState[product.id].variant2);
+
+    const combinations = combinationsArray(product);
+
+    const combination = combinations.find((c) => {
+        if ("index2" in c) {
+            // Two variant case
+            return c.index1 === index1 && c.index2 === index2;
+        } else {
+            // Single variant case
+            return c.index1 === index1;
+        }
+    });
+
+    return combination ? combination.price : null;
+};
+
+const stock = (product) => {
+    getInitialValues(product.id);
+    const index1 = options1Array(product).indexOf(formState[product.id].variant1);
+    const index2 = options2Array(product).indexOf(formState[product.id].variant2);
+
+    const combinations = combinationsArray(product);
+
+    const combination = combinations.find((c) => {
+        if ("index2" in c) {
+            // Two variant case
+            return c.index1 === index1 && c.index2 === index2;
+        } else {
+            // Single variant case
+            return c.index1 === index1;
+        }
+    });
+
+    return combination ? combination.stock : null;
+};
+
+const formState = reactive({default: { variant1: "", variant2: "", quantity: 1 }});
 
 const getInitialValues = (productId) => {
     if (!formState[productId]) {
@@ -249,8 +329,8 @@ const resolver = ({ values }) => {
     };
 };
 
-const increaseQuantity = (productId) => {
-    if (formState[productId]) {
+const increaseQuantity = (productId, stockLeft) => {
+    if (formState[productId] && (formState[productId].quantity < stockLeft)) {
         formState[productId].quantity += 1;
     }
 };
@@ -261,7 +341,7 @@ const decreaseQuantity = (productId) => {
     }
 };
 
-const onFormSubmit = ({ valid, values }, product) => {
+const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
     if (valid && !visible.value) {
         toast.add({
             severity: "custom",
@@ -270,8 +350,8 @@ const onFormSubmit = ({ valid, values }, product) => {
             styleClass: "w-full",
         });
         visible.value = true;
-        
-        cartStore.addToCart(product, formState[product.id]);
+
+        cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft);
         console.log(cartStore.cart);
         console.log(cartStore.cartTotal);
 
