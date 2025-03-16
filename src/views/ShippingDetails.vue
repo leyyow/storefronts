@@ -6,17 +6,17 @@
         <Form v-slot="$form" :initialValues :resolver :validateOnValueUpdate="false" :validateOnBlur="true" @submit="onFormSubmit" class="flex flex-col gap-5 w-full mt-5">
             <div class="flex flex-col gap-1">
                 <label for="name" class="mb-1">Name</label>
-                <InputText name="name" type="text" placeholder="eg: Temi John" fluid class="px-4 py-3" />
+                <InputText v-model="initialValues.name" name="name" type="text" placeholder="eg: Temi John" fluid class="px-4 py-3" />
                 <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">{{ $form.name.error.message }}</Message>
             </div>
             <div class="flex flex-col gap-1">
                 <label for="email" class="mb-1">Email</label>
-                <InputText name="email" type="text" placeholder="example@gmail.com" fluid class="px-4 py-3" :formControl="{ validateOnValueUpdate: true }" />
+                <InputText v-model="initialValues.email" name="email" type="text" placeholder="example@gmail.com" fluid class="px-4 py-3" :formControl="{ validateOnValueUpdate: true }" />
                 <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{ $form.email.error.message }}</Message>
             </div>
             <div class="flex flex-col gap-1">
                 <label for="phoneNumber" class="mb-1">Phone Number</label>
-                <InputNumber name="phoneNumber" prefix="+" :useGrouping="false" placeholder="+2348076963928" fluid />
+                <InputNumber v-model="initialValues.phoneNumber" name="phoneNumber" prefix="+" :useGrouping="false" placeholder="+2348076963928" fluid />
                 <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple">{{ $form.phoneNumber.error.message }}</Message>
             </div>
 
@@ -43,14 +43,14 @@
             <div class="bg-anti-flash-white rounded-md px-3 w-full" v-if="initialValues.shippingMethod === 'Delivery'">
                 <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="item in 4">
                     <label for="Badagry">Badagry - <span class="font-bold"><small class="me-0.5">N</small>5000<small>.00</small></span></label>
-                    <RadioButton inputId="Badagry" name="location" value="Badagry" />
+                    <RadioButton v-model="initialValues.location" inputId="Badagry" name="location" value="Badagry" />
                 </div>
                 <Message v-if="$form.location?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{ $form.location.error.message }}</Message>
             </div>
 
             <div class="flex flex-col gap-1" v-if="initialValues.shippingMethod === 'Delivery'">
                 <label for="address" class="mb-1">Address</label>
-                <InputText name="address" type="text" placeholder="12, Ogun Street, Opebi" fluid class="px-4 py-3" :formControl="{ validateOnValueUpdate: true }" />
+                <InputText v-model="initialValues.address" name="address" type="text" placeholder="12, Ogun Street, Opebi" fluid class="px-4 py-3" :formControl="{ validateOnValueUpdate: true }" />
                 <Message v-if="$form.address?.invalid" severity="error" size="small" variant="simple">{{ $form.address.error.message }}</Message>
             </div>
 
@@ -61,17 +61,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
+import { useOrderStore } from '../stores/order';
+import { useRouter } from 'vue-router';
 
-const toast = useToast();
-
-const initialValues = ref({
-    name: '',
-    email: '',
-    phoneNumber: '',
-    shippingMethod: '',
-    location: '',
-    address: '',
-});
+const router = useRouter();
+const { shippingDetails: initialValues } = useOrderStore();
 
 const resolver = ({ values }) => {
     const errors = {};
@@ -102,13 +96,12 @@ const resolver = ({ values }) => {
 
     return {
         errors,
-        values
     };
 };
 
-const onFormSubmit = ({ valid, values }) => {
+const onFormSubmit = ({ valid }) => {
     if (valid) {
-        console.log('formData:', values);
+        router.push({ name: 'OrderSummary' });
     }
 }
 </script>

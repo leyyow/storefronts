@@ -35,7 +35,7 @@
             <div class="py-4 my-4 border-platinum border-t border-b flex flex-col gap-2.5">
                 <div class="flex justify-between items-center mb-1">
                     <h6>Shipping Information</h6>
-                    <button class="cursor-pointer">
+                    <router-link :to="{ name: 'ShippingDetails' }" class="cursor-pointer">
                         <svg
                             width="20"
                             height="20"
@@ -59,18 +59,18 @@
                                 fill="#445B54"
                             />
                         </svg>
-                    </button>
+                    </router-link>
                 </div>
 
-                <p>Adebola Adeola</p>
-                <p>Debo@leyyow.com</p>
-                <p>+2348082848122</p>
+                <p>{{ shippingDetails.name }}</p>
+                <p>{{ shippingDetails.email }}</p>
+                <p>{{ shippingDetails.phoneNumber }}</p>
             </div>
 
             <div>
                 <div class="flex justify-between items-center mb-1">
                     <p class="text-manatee">Shipping Method</p>
-                    <button class="cursor-pointer">
+                    <router-link :to="{ name: 'ShippingDetails' }" class="cursor-pointer">
                         <svg
                             width="20"
                             height="20"
@@ -94,14 +94,15 @@
                                 fill="#445B54"
                             />
                         </svg>
-                    </button>
+                    </router-link>
                 </div>
 
                 <div class="flex justify-between items-center mt-2">
-                    <p>Badagry - 12A Lasu ojo</p>
+                    <p  v-if="shippingDetails.shippingMethod === 'Delivery'">{{ shippingDetails.address }}</p>
+                    <p v-else>Badagry - 12A Lasu ojo</p>
 
                     <!-- delivery -->
-                    <div class="flex items-center text-granite-gray" v-if="false">
+                    <div class="flex items-center text-granite-gray" v-if="shippingDetails.shippingMethod === 'Delivery'">
                         <svg
                             width="16"
                             height="16"
@@ -148,7 +149,7 @@
                     </div>
 
                     <!-- pickup -->
-                    <div class="flex items-center text-granite-gray">
+                    <div class="flex items-center text-granite-gray" v-else>
                         <svg
                             width="16"
                             height="16"
@@ -192,7 +193,7 @@
                     <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
                 </router-link>
                 <router-link :to="{ name: 'ShippingDetails' }" class="w-[63%]">
-                    <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Shipping</button>
+                    <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Checkout</button>
                 </router-link>
             </div>
         </div>
@@ -201,8 +202,10 @@
 <script setup>
 import { computed } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
+import { useOrderStore } from "../stores/order";
 
 const str = "23 Seamless Tank Top with agbada";
+const { shippingDetails } = useOrderStore();
 
 const trimmedString = computed(() => {
     if (str.length < 23) {
