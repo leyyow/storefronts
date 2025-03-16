@@ -22,7 +22,7 @@
             </SwiperCarousel>
         </section>
         <!--  -->
-        <section class="px-4 py-12 bg-black text-white">
+        <section class="px-4 py-12 bg-black text-white" id="why-us">
             <h3 class="mb-3">{{ storeInfo.fold.title }}</h3>
             <p class="text-crayola py-3 w-11/12">{{ storeInfo.fold.content }}</p>
 
@@ -47,7 +47,7 @@
             </div>
         </section>
         <!--  -->
-        <section class="py-12 px-4">
+        <section class="py-12 px-4" id="best-sellers">
             <h3 class="mb-3">Best-Selling Products You’ll Love</h3>
             <p class="text-granite-gray py-3">Shop our most popular items, loved by customers like you</p>
 
@@ -60,7 +60,7 @@
             </RouterLink>
         </section>
         <!--  -->
-        <section class="py-12 px-4 text-white bg-black">
+        <section class="py-12 px-4 text-white bg-black" id="testimonials">
             <h3 class="pb-5">What Our Customers Are Saying</h3>
 
             <div class="mt-5">

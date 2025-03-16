@@ -16,21 +16,22 @@
                 <X class="h-6 w-6" v-else />
             </div>
         </nav>
-        <div
-            v-if="navIsOpen"
-            class="nav__menu border-t-2 border-platinum flex-1 bg-white fixed h-screen w-screen z-10"
-        >
+        <div v-if="navIsOpen" class="nav__menu border-t-2 border-platinum flex-1 bg-white fixed h-screen w-screen z-10">
             <div class="py-8 px-6 flex flex-col">
-                <router-link to="#" class="mb-4 text-xl">Why Us?</router-link>
-                <router-link to="#" class="mb-4 text-xl">Shop Now</router-link>
-                <router-link to="#" class="mb-4 text-xl">Best Selling Products</router-link>
-                <router-link to="#" class="mb-4 text-xl">Return Policy</router-link>
+                <router-link @click="toggleNav" to="#why-us" class="mb-4 text-xl">Why Us?</router-link>
+                <router-link @click="toggleNav" :to="{ name: 'Store' }" class="mb-4 text-xl">Shop Now</router-link>
+                <router-link @click="toggleNav" to="#best-sellers" class="mb-4 text-xl"
+                    >Best Selling Products</router-link
+                >
+                <router-link @click="toggleNav" to="#" class="mb-4 text-xl">Return Policy</router-link>
                 <div class="flex gap-3 pt-2">
-                    <RouterLink to="/store" class="w-full">
+                    <RouterLink @click="toggleNav" to="/store" class="w-full">
                         <button class="py-4 w-full bg-black text-white rounded-lg">Start Shopping Now</button>
                     </RouterLink>
 
-                    <button class="py-4 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
+                    <router-link @click="toggleNav" to="#testimonials" class="w-full">
+                        <button class="py-4 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
+                    </router-link>
                 </div>
             </div>
         </div>
