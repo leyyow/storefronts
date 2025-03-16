@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 export const useCartStore = defineStore(
     "cart",
@@ -100,6 +100,14 @@ export const useCartStore = defineStore(
             const uniqueIds = new Set(cart.value.map((i) => i.id));
             return uniqueIds.size;
         }
+
+        watch(cartLength, (newLength) => {
+            console.log("Cart length changed:", newLength);
+        });
+
+        watch(cartTotal, (newTotal) => {
+            console.log("Cart total changed:", newTotal);
+        });
 
         return {
             cart,

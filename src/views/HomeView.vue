@@ -19,7 +19,7 @@
                     :key="index"
                     class="flex justify-center items-center"
                 >
-                    <img :src="item" alt="Slide Image" class="rounded-lg shadow-lg object-cover h-80 w-full" />
+                    <img :src="item" alt="Slide Image" class="rounded-lg shadow-lg object-cover h-80 w-full bg-manatee" />
                 </SwiperSlide>
             </SwiperCarousel>
         </section>
