@@ -20,6 +20,7 @@ declare module 'vue' {
     ProductCard: typeof import('./src/components/ProductCard.vue')['default']
     ProductNavbar: typeof import('./src/components/product/ProductNavbar.vue')['default']
     ProgressBar: typeof import('primevue/progressbar')['default']
+    RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']

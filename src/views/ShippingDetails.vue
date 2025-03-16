@@ -1,10 +1,116 @@
 <template>
-    <div class="px-4 py-2">
-        
+    <div class="px-4 pb-2 pt-4">
+        <h5 class="font-normal py-2">Shipping Details</h5>
+        <p class="text-granite-gray">Kindly input your information</p>
+
+        <Form v-slot="$form" :initialValues :resolver :validateOnValueUpdate="false" :validateOnBlur="true" @submit="onFormSubmit" class="flex flex-col gap-5 w-full mt-5">
+            <div class="flex flex-col gap-1">
+                <label for="name" class="mb-1">Name</label>
+                <InputText name="name" type="text" placeholder="eg: Temi John" fluid class="px-4 py-3" />
+                <Message v-if="$form.name?.invalid" severity="error" size="small" variant="simple">{{ $form.name.error.message }}</Message>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="email" class="mb-1">Email</label>
+                <InputText name="email" type="text" placeholder="example@gmail.com" fluid class="px-4 py-3" :formControl="{ validateOnValueUpdate: true }" />
+                <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{ $form.email.error.message }}</Message>
+            </div>
+            <div class="flex flex-col gap-1">
+                <label for="phoneNumber" class="mb-1">Phone Number</label>
+                <InputNumber name="phoneNumber" prefix="+" :useGrouping="false" placeholder="+2348076963928" fluid />
+                <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple">{{ $form.phoneNumber.error.message }}</Message>
+            </div>
+
+            <div>
+                <div class="flex gap-3">
+                    <div class="w-full p-3 rounded-md bg-anti-flash-white">
+                        <div class="flex justify-between">
+                            <label for="Delivery">Delivery</label>
+                            <RadioButton v-model="initialValues.shippingMethod" inputId="Delivery" name="shippingMethod" value="Delivery" />
+                        </div>
+                        <p class="text-granite-gray leading-none text-xs mt-2">Delivered to your door, hassle-free.</p>
+                    </div>
+                    <div class="w-full p-3 rounded-md bg-anti-flash-white">
+                        <div class="flex justify-between">
+                            <label for="Pickup">Pickup</label>
+                            <RadioButton v-model="initialValues.shippingMethod" inputId="Pickup" name="shippingMethod" value="Pickup" />
+                        </div>
+                        <p class="text-granite-gray leading-none text-xs mt-2">Pick up your order at your convenience</p>
+                    </div>
+                </div>
+                <Message v-if="$form.shippingMethod?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{ $form.shippingMethod.error.message }}</Message>
+            </div>
+
+            <div class="bg-anti-flash-white rounded-md px-3 w-full" v-if="initialValues.shippingMethod === 'Delivery'">
+                <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="item in 4">
+                    <label for="Badagry">Badagry - <span class="font-bold"><small class="me-0.5">N</small>5000<small>.00</small></span></label>
+                    <RadioButton inputId="Badagry" name="location" value="Badagry" />
+                </div>
+                <Message v-if="$form.location?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{ $form.location.error.message }}</Message>
+            </div>
+
+            <div class="flex flex-col gap-1" v-if="initialValues.shippingMethod === 'Delivery'">
+                <label for="address" class="mb-1">Address</label>
+                <InputText name="address" type="text" placeholder="12, Ogun Street, Opebi" fluid class="px-4 py-3" :formControl="{ validateOnValueUpdate: true }" />
+                <Message v-if="$form.address?.invalid" severity="error" size="small" variant="simple">{{ $form.address.error.message }}</Message>
+            </div>
+
+            <Button type="submit" severity="secondary" label="Proceed to Checkout" class="py-3 bg-black text-white" />
+        </Form>
     </div>
 </template>
 <script setup>
+import { ref } from 'vue';
+import { useToast } from 'primevue/usetoast';
 
+const toast = useToast();
+
+const initialValues = ref({
+    name: '',
+    email: '',
+    phoneNumber: '',
+    shippingMethod: '',
+    location: '',
+    address: '',
+});
+
+const resolver = ({ values }) => {
+    const errors = {};
+
+    if (!values.name) {
+        errors.name = [{ message: 'Name is required.' }];
+    }
+
+    if (!values.name) {
+        errors.email = [{ message: 'Email is required.' }];
+    }
+
+    if (!values.phoneNumber) {
+        errors.phoneNumber = [{ message: 'Phone number is required.' }];
+    }
+
+    if (!values.shippingMethod) {
+        errors.shippingMethod = [{ message: 'Shipping method is required.' }];
+    }
+
+    if (values.shippingMethod === 'Delivery' && !values.location) {
+        errors.location = [{ message: 'Location is required.' }];
+    }
+
+    if (values.shippingMethod === 'Delivery' && !values.address) {
+        errors.address = [{ message: 'Address is required.' }];
+    }
+
+    return {
+        errors,
+        values
+    };
+};
+
+const onFormSubmit = ({ valid, values }) => {
+    if (valid) {
+        console.log('formData:', values);
+    }
+}
 </script>
 <style>
     
