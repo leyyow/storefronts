@@ -88,7 +88,8 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large",
                 variants: "Color,Size",
-                combinations: "0,0,4000,4;0,1,3000,6;1,0,4500,5;1,1,3200,7",
+                combinations:
+                    "0,0,2000,4;0,1,3000,6;0,2,3500,5;1,0,3000,7;1,1,4000,4;1,2,5000,6;2,0,4200,5;2,1,5200,7;2,2,6200,7;",
             },
             {
                 product_name: "Cat",

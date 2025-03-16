@@ -26,7 +26,7 @@
                 <router-link @click="toggleNav" to="#" class="mb-4 text-xl">Return Policy</router-link>
                 <div class="flex gap-3 pt-2">
                     <RouterLink @click="toggleNav" to="/store" class="w-full">
-                        <button class="py-4 w-full bg-black text-white rounded-lg">Start Shopping Now</button>
+                        <button class="py-4 w-full bg-black text-white rounded-lg">Enter Shop</button>
                     </RouterLink>
 
                     <router-link @click="toggleNav" to="#testimonials" class="w-full">

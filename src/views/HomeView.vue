@@ -5,7 +5,7 @@
             <p class="text-granite-gray py-3 w-10/12">{{ storeInfo.sub_title }}</p>
             <div class="flex gap-3 pt-3 pb-6">
                 <RouterLink to="/store" class="w-full">
-                    <button class="py-5 w-full bg-black text-white rounded-lg">Start Shopping Now</button>
+                    <button class="py-5 w-full bg-black text-white rounded-lg">Enter Shop</button>
                 </RouterLink>
 
                 <router-link to="#testimonials" class="w-full">
@@ -19,7 +19,11 @@
                     :key="index"
                     class="flex justify-center items-center"
                 >
-                    <img :src="item" alt="Slide Image" class="rounded-lg shadow-lg object-cover h-80 w-full bg-manatee" />
+                    <img
+                        :src="item"
+                        alt="Slide Image"
+                        class="rounded-lg shadow-lg object-cover h-80 w-full bg-manatee"
+                    />
                 </SwiperSlide>
             </SwiperCarousel>
         </section>
@@ -58,12 +62,12 @@
             </div>
 
             <RouterLink to="/store" class="w-full flex justify-center pt-4">
-                <button class="py-5 w-2/3 bg-black text-white rounded-lg">Start Shopping Now</button>
+                <button class="py-5 w-2/3 bg-black text-white rounded-lg">Enter Shop</button>
             </RouterLink>
         </section>
         <!--  -->
         <section class="py-12 px-4 text-white bg-black" id="testimonials">
-            <h3 class="pb-5">What Our Customers Are Saying</h3>
+            <h3 class="pb-5">What Our Customers Say About Us</h3>
 
             <div class="mt-5">
                 <SwiperCarousel :theme="'dark'" :slidesPerView="1.07">

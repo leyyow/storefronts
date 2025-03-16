@@ -205,7 +205,7 @@
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
                     <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
                 </router-link>
-                <router-link :to="{ name: 'OrderSuccesssful', params: { id: 1 } }" class="w-[63%]">
+                <router-link :to="{ name: 'OrderSuccessful', params: { id: 1 } }" class="w-[63%]">
                     <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Checkout</button>
                 </router-link>
             </div>
