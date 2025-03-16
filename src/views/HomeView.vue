@@ -8,7 +8,9 @@
                     <button class="py-5 w-full bg-black text-white rounded-lg">Start Shopping Now</button>
                 </RouterLink>
 
-                <button class="py-5 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
+                <router-link to="#testimonials" class="w-full">
+                    <button class="py-5 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
+                </router-link>
             </div>
 
             <SwiperCarousel>
