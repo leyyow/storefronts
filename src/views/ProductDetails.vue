@@ -342,7 +342,7 @@ const decreaseQuantity = (productId) => {
 };
 
 const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
-    if (valid && !visible.value) {
+    if (valid && !visible.value && (formState[product.id].quantity <= stockLeft)) {
         toast.add({
             severity: "custom",
             life: 2000,

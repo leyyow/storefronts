@@ -122,7 +122,6 @@ export const useCartStore = defineStore(
             decreaseSelectionQuantity,
         };
     },
-
     {
         persist: {
             key: "cartStore",

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col h-screen w-screen overflow-y-hidden">
         <div class="h-16 px-4 flex items-center">
-            <h6 class="font-normal">Basket ({{ cartLength }})</h6>
+            <h6 class="font-normal">Basket ({{ cart.length ? cart.length : 0 }})</h6>
         </div>
 
         <div class="flex-1 overflow-y-auto px-4 py-2">
@@ -139,8 +139,8 @@
                 <button class="w-[23%] bg-black text-white py-3 rounded-md">Apply</button>
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum">
-                <p class="text-granite-gray">SubTotal ({{ cartLength }} item<span v-if="cartLength > 0">s</span>):</p>
-                <p><small class="me-0.5 font-bold">N</small>{{ cartTotal }}<small>.00</small></p>
+                <p class="text-granite-gray">SubTotal ({{ cart.length ? cart.length : 0 }} item<span v-if="cartLength > 0">s</span>):</p>
+                <p><small class="me-0.5 font-bold">N</small>{{ totalAmount }}<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
@@ -166,5 +166,7 @@ const trimmedString = (string) => {
     }
     return string.substring(0, 23);
 };
+
+const totalAmount = computed(() => cart.reduce((sum, item) => sum + (item.variant_price * item.selected_quantity), 0))
 </script>
 <style></style>
