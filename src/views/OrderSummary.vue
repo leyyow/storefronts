@@ -99,7 +99,7 @@
 
                 <div class="flex justify-between items-center mt-2">
                     <p  v-if="shippingDetails.shippingMethod === 'Delivery'">{{ shippingDetails.address }}</p>
-                    <p v-else>Badagry - 12A Lasu ojo</p>
+                    <p v-else>{{ storeInfo.store.address }}</p>
 
                     <!-- delivery -->
                     <div class="flex items-center text-granite-gray" v-if="shippingDetails.shippingMethod === 'Delivery'">
@@ -181,8 +181,8 @@
                 <p><small class="me-0.5">N</small>12,750<small>.00</small></p>
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum">
-                <p class="text-granite-gray">Shipping (Badagry):</p>
-                <p><small class="me-0.5">N</small>5000<small>.00</small></p>
+                <p class="text-granite-gray">Shipping ({{ shippingDetails.location }}):</p>
+                <p><small class="me-0.5">N</small>{{ deliveryFee }}<small>.00</small></p>
             </div>
             <div class="flex justify-between pt-2 font-bold">
                 <p class="text-granite-gray">Total Amount:</p>
@@ -203,9 +203,11 @@
 import { computed } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useOrderStore } from "../stores/order";
+import { useStoreInfo } from "../composables/useStoreInfo";
 
 const str = "23 Seamless Tank Top with agbada";
-const { shippingDetails } = useOrderStore();
+const { shippingDetails, deliveryFee } = useOrderStore();
+const { storeInfo } = useStoreInfo();
 
 const trimmedString = computed(() => {
     if (str.length < 23) {

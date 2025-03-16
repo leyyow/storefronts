@@ -170,8 +170,8 @@
                             severity="secondary"
                             class="bg-black text-white h-13 w-full rounded-md cursor-pointer flex items-center"
                         >
-                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id])">Add to Basket</span>
-                            <span v-else>{{ cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id]) }} in Basket</span>
+                            <!-- <span v-if="!cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id])">Add to Basket</span>
+                            <span v-else>{{ cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id]) }} in Basket</span> -->
                             <div class="relative">
                                 <svg
                                     width="16"

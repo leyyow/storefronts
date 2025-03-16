@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
-import { shallowReactive } from "vue";
+import { shallowReactive, computed } from "vue";
+import { useStoreInfo } from "../composables/useStoreInfo";
+
+const { storeInfo } = useStoreInfo();
 
 export const useOrderStore = defineStore(
     "order",
@@ -11,6 +14,14 @@ export const useOrderStore = defineStore(
             shippingMethod: "",
             location: "",
             address: "",
+        });
+
+        const deliveryFee = computed(() => {
+            const x = storeInfo.value.store.delivery_price.find((area: any) => {
+                return area.location === shippingDetails.location;
+            });
+
+            return x?.price;
         });
 
         const resetShippingDetails = () => {
@@ -26,6 +37,7 @@ export const useOrderStore = defineStore(
 
         return {
             shippingDetails,
+            deliveryFee,
             resetShippingDetails,
         };
     },

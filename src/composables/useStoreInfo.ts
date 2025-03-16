@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ref, computed, onMounted, shallowReactive } from "vue";
+import { ref, computed, shallowReactive } from "vue";
 
 export function useStoreInfo() {
     let storeInfo = shallowReactive({
@@ -57,11 +57,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -93,11 +93,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -129,11 +129,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -209,11 +209,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -245,11 +245,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -281,11 +281,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -317,11 +317,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -353,11 +353,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -389,11 +389,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -425,11 +425,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -461,11 +461,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -497,11 +497,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -533,11 +533,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -569,11 +569,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -605,11 +605,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -641,11 +641,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -677,11 +677,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -713,11 +713,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -749,11 +749,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -785,11 +785,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -821,11 +821,11 @@ export function useStoreInfo() {
                 owner: null,
                 options1: {
                     name: "size",
-                    options: ["small", "medium", "large", "xl"]
+                    options: ["small", "medium", "large", "xl"],
                 },
                 options2: {
                     name: "color",
-                    options: ["blue", "black", "white"]
+                    options: ["blue", "black", "white"],
                 },
                 variants: ",",
                 combinations: "",
@@ -845,10 +845,24 @@ export function useStoreInfo() {
             tel: "08098765463",
             address: "1 This street, Some place, Ikeja",
             courier: 0,
-            delivery_price: {
-                location: 4500,
-                Ikeja: 5000,
-            },
+            delivery_price: [
+                {
+                    location: "Badagry",
+                    price: 5000,
+                },
+                {
+                    location: "Ikeja",
+                    price: 4500,
+                },
+                {
+                    location: "Shomolu",
+                    price: 3000,
+                },
+                {
+                    location: "Yaba",
+                    price: 2500,
+                },
+            ],
         },
     });
     const isLoading = ref(true);
@@ -866,7 +880,7 @@ export function useStoreInfo() {
         }
     };
 
-    onMounted(fetchStoreInfo);
+    // onMounted(fetchStoreInfo);
 
     return {
         storeInfo: computed(() => storeInfo), // shallowReactive store info

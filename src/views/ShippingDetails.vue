@@ -41,9 +41,9 @@
             </div>
 
             <div class="bg-anti-flash-white rounded-md px-3 w-full" v-if="initialValues.shippingMethod === 'Delivery'">
-                <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="item in 4">
-                    <label for="Badagry">Badagry - <span class="font-bold"><small class="me-0.5">N</small>5000<small>.00</small></span></label>
-                    <RadioButton v-model="initialValues.location" inputId="Badagry" name="location" value="Badagry" />
+                <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="location in storeInfo.store.delivery_price">
+                    <label for="Badagry">{{ location.location }} - <span class="font-bold"><small class="me-0.5">N</small>{{ location.price }}<small>.00</small></span></label>
+                    <RadioButton v-model="initialValues.location" :inputId="location.location" name="location" :value="location.location" />
                 </div>
                 <Message v-if="$form.location?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{ $form.location.error.message }}</Message>
             </div>
@@ -62,10 +62,12 @@
 import { ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useOrderStore } from '../stores/order';
+import { useStoreInfo } from '../composables/useStoreInfo';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const { shippingDetails: initialValues } = useOrderStore();
+const { storeInfo } = useStoreInfo();
 
 const resolver = ({ values }) => {
     const errors = {};
