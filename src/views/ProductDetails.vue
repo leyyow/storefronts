@@ -21,6 +21,7 @@
                     <div>
                         <button
                             class="rounded-full w-10 h-10 border-platinum border flex justify-center items-center cursor-pointer"
+                            @click="shareUrl"
                         >
                             <svg
                                 width="18"
@@ -83,6 +84,8 @@
                         </section>
                     </template>
                 </Toast>
+
+                <Toast class="w-8/9 flex items-center" :visible="error" />
 
                 <Form
                     v-slot="$form"
@@ -287,7 +290,10 @@ const productStore = useProductStore();
 const cartStore = useCartStore();
 const { storeInfo } = useStoreInfo();
 const toast = useToast();
+
 const visible = ref(false);
+const error = ref(false)
+const formState = reactive({ default: { variant1: "", variant2: "", quantity: 1 } });
 
 const variantNames = (product) => {
     const names = product.variants.split(",").filter(Boolean);
@@ -367,8 +373,6 @@ const stock = (product) => {
     return combination ? combination.stock : null;
 };
 
-const formState = reactive({ default: { variant1: "", variant2: "", quantity: 1 } });
-
 const getInitialValues = (productId) => {
     if (!formState[productId]) {
         formState[productId] = {
@@ -409,6 +413,19 @@ const decreaseQuantity = (productId) => {
     }
 };
 
+const shareUrl = () => {
+    if (navigator.share) {
+        navigator.share({
+            title: document.title,
+            url: window.location.href,
+        })
+        .then(() => console.log('Successfully shared'))
+        .catch((error) => console.error('Error sharing', error));
+    } else {
+        console.error('Web Share API not supported in this browser');
+    }
+};
+
 const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
     if (valid && !visible.value && formState[product.id].quantity <= stockLeft) {
         toast.add({
@@ -424,7 +441,8 @@ const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
 
         visible.value = false;
     } else {
-        console.log('All available items in your cart');
+        error.value = true;
+        toast.add({ severity: 'info', detail: 'All available stock are in your cart', life: 1000 });
     }
 };
 

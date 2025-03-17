@@ -30,7 +30,7 @@
                     </RouterLink>
 
                     <router-link @click="toggleNav" to="#testimonials" class="w-full" v-if="storeInfo.reviews.length > 0">
-                        <button class="py-4 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
+                        <button class="py-4 w-full bg-anti-flash-white rounded-lg">Testimonials</button>
                     </router-link>
                 </div>
             </div>

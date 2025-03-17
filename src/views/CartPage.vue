@@ -11,9 +11,7 @@
                 <div class="flex flex-col gap-2 flex-1 justify-between">
                     <div class="flex gap-1.5">
                         <div class="w-[75%]">
-                            <p v-if="trimmedString(item.product_name)">
-                                {{ trimmedString(item.product_name) }}...
-                            </p>
+                            <p v-if="trimmedString(item.product_name)">{{ trimmedString(item.product_name) }}...</p>
                             <p v-else>{{ item.product_name }}</p>
 
                             <p class="text-granite-gray pt-1">
@@ -22,7 +20,9 @@
                             </p>
                         </div>
                         <div class="w-[25%]">
-                            <p><small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small></p>
+                            <p>
+                                <small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small>
+                            </p>
                         </div>
                     </div>
                     <div class="flex justify-between items-center">
@@ -47,7 +47,7 @@
                             </button>
                         </div>
 
-                        <button class="cursor-pointer" @click="removeSelection(item)">
+                        <button class="cursor-pointer" @click="visible = true">
                             <svg
                                 width="20"
                                 height="20"
@@ -124,6 +124,18 @@
                                 </defs>
                             </svg>
                         </button>
+                        <Dialog v-model:visible="visible" modal header="Confirm Removal" :style="{ width: '80%' }">
+                            <p>Are you sure you want to remove this item from your cart?</p>
+
+                            <div class="flex gap-2 mt-4">
+                                <button class="w-full py-2 bg-black text-white rounded-sm" @click="visible = false">
+                                    cancel
+                                </button>
+                                <button class="w-full py-2 bg-lava text-white rounded-sm" @click="() => {removeSelection(item); visible = false}">
+                                    remove
+                                </button>
+                            </div>
+                        </Dialog>
                     </div>
                 </div>
             </div>
@@ -139,7 +151,9 @@
                 <button class="w-[23%] bg-black text-white py-3 rounded-md">Apply</button>
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum">
-                <p class="text-granite-gray">SubTotal ({{ cart.length ? cart.length : 0 }} item<span v-if="cartLength > 0">s</span>):</p>
+                <p class="text-granite-gray">
+                    SubTotal ({{ cart.length ? cart.length : 0 }} item<span v-if="cartLength > 0">s</span>):
+                </p>
                 <p><small class="me-0.5 font-bold">₦</small>{{ totalAmount.toLocaleString() }}<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
@@ -154,11 +168,13 @@
     </div>
 </template>
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
 
-const { cart, cartTotal, cartLength, increaseSelectionQuantity, decreaseSelectionQuantity, removeSelection } = useCartStore();
+const visible = ref(false);
+const { cart, cartTotal, cartLength, increaseSelectionQuantity, decreaseSelectionQuantity, removeSelection } =
+    useCartStore();
 
 const trimmedString = (string) => {
     if (string.length < 23) {
@@ -167,6 +183,6 @@ const trimmedString = (string) => {
     return string.substring(0, 23);
 };
 
-const totalAmount = computed(() => cart.reduce((sum, item) => sum + (item.variant_price * item.selected_quantity), 0))
+const totalAmount = computed(() => cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0));
 </script>
 <style></style>

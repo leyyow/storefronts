@@ -1,8 +1,11 @@
 <template>
     <div class="flex flex-col h-screen w-screen overflow-y-hidden">
         <div class="flex-1 overflow-y-auto flex justify-center items-center">
+
             <div class="flex flex-col items-center text-center p-4">
-                <img src="../assets/order-successful.png" alt="carboard box gif">
+                <Toast class="w-8/9" />
+                
+                <img src="../assets/order-successful.png" alt="carboard box gif" />
 
                 <h6 class="py-3">Order placed successfully</h6>
 
@@ -17,8 +20,8 @@
                 >
                     <p>Order Number</p>
                     <div class="flex gap-1 items-center">
-                        <p class="font-bold">#3857849390274894</p>
-                        <button class="cursor-pointer">
+                        <p class="font-bold">#{{ orderId }}</p>
+                        <button class="cursor-pointer" @click="copy">
                             <svg
                                 width="16"
                                 height="16"
@@ -50,5 +53,21 @@
         </div>
     </div>
 </template>
-<script setup></script>
+<script setup>
+import { useToast } from "primevue/usetoast";
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const orderId = route.params.id;
+
+const toast = useToast();
+
+const copy = () => {
+    navigator.clipboard.writeText(`#${orderId}`).then(() => {
+        toast.add({ severity: 'success', summary: 'Copied', detail: 'Order ID copied to clipboard!' });
+    }).catch(err => {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to copy Order ID' });
+    });
+}
+</script>
 <style lang=""></style>
