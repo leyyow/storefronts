@@ -82,13 +82,9 @@ export const useCartStore = defineStore(
                     (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
                     (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
             );
-            if (item) {
+            if (item && item.selected_quantity > 1) {
                 item.selected_quantity -= 1;
-                if (item.selected_quantity <= 0) {
-                    removeSelection(cartItem);
-                } else {
-                    item.itemTotal = item.variant_price * item.selected_quantity;
-                }
+                item.itemTotal = item.variant_price * item.selected_quantity;
             }
         }
 

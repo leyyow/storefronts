@@ -28,11 +28,10 @@
                     <div class="flex justify-between items-center">
                         <div class="flex gap-1 items-center">
                             <button
-                                type="button"
                                 class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
-                                @click="increaseSelectionQuantity(item)"
+                                @click="decreaseSelectionQuantity(item)"
                             >
-                                <Plus class="w-2 h-2" />
+                                <Minus class="w-2 h-2" />
                             </button>
                             <div
                                 class="w-auto px-2 py-1 bg-anti-flash-white text-black rounded-sm border-0 flex items-center justify-center"
@@ -40,10 +39,11 @@
                                 <small>{{ item.selected_quantity }}</small>
                             </div>
                             <button
+                                type="button"
                                 class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
-                                @click="decreaseSelectionQuantity(item)"
+                                @click="increaseSelectionQuantity(item)"
                             >
-                                <Minus class="w-2 h-2" />
+                                <Plus class="w-2 h-2" />
                             </button>
                         </div>
 

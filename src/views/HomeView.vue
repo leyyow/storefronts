@@ -8,8 +8,8 @@
                     <button class="py-5 w-full bg-black text-white rounded-lg">Enter Shop</button>
                 </RouterLink>
 
-                <router-link to="#testimonials" class="w-full">
-                    <button class="py-5 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
+                <router-link to="#testimonials" class="w-full" v-if="storeInfo.reviews.length > 0">
+                    <button class="py-5 w-full bg-anti-flash-white rounded-lg">Testimonials</button>
                 </router-link>
             </div>
 
@@ -54,7 +54,7 @@
         </section>
         <!--  -->
         <section class="py-12 px-4" id="best-sellers">
-            <h3 class="mb-3">Best-Selling Products You’ll Love</h3>
+            <h3 class="mb-3">Our Most Loved Products</h3>
             <p class="text-granite-gray py-3">Shop our most popular items, loved by customers like you</p>
 
             <div class="flex flex-wrap gap-1">
@@ -66,7 +66,7 @@
             </RouterLink>
         </section>
         <!--  -->
-        <section class="py-12 px-4 text-white bg-black" id="testimonials">
+        <section class="py-12 px-4 text-white bg-black" id="testimonials" v-if="storeInfo.reviews.length > 0">
             <h3 class="pb-5">What Our Customers Say About Us</h3>
 
             <div class="mt-5">

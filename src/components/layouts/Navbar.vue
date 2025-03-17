@@ -29,7 +29,7 @@
                         <button class="py-4 w-full bg-black text-white rounded-lg">Enter Shop</button>
                     </RouterLink>
 
-                    <router-link @click="toggleNav" to="#testimonials" class="w-full">
+                    <router-link @click="toggleNav" to="#testimonials" class="w-full" v-if="storeInfo.reviews.length > 0">
                         <button class="py-4 w-full bg-anti-flash-white rounded-lg">View Testimonial</button>
                     </router-link>
                 </div>
@@ -41,8 +41,10 @@
 <script setup>
 import { Menu, X } from "lucide-vue-next";
 import { ref } from "vue";
+import { useStoreInfo } from "../../composables/useStoreInfo";
 
 const navIsOpen = ref(false);
+const { storeInfo } = useStoreInfo();
 
 const toggleNav = () => {
     navIsOpen.value = !navIsOpen.value;
