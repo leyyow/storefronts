@@ -6,44 +6,44 @@
 
         <div class="flex-1 overflow-y-auto px-4 py-2">
             <div class="flex gap-2 mb-2" v-for="item in cart">
-                <img :src="item.image" alt="product image" class="w-16 h-16 object-cover rounded-sm" />
+                <img :src="item.image" alt="product image" class="w-24 h-24 object-cover rounded-sm" />
 
                 <div class="flex flex-col gap-2 flex-1 justify-between">
                     <div class="flex gap-1.5">
                         <div class="w-[75%]">
-                            <p v-if="trimmedString(item.product_name)" class="leading-none">
+                            <p v-if="trimmedString(item.product_name)">
                                 {{ trimmedString(item.product_name) }}...
                             </p>
-                            <p class="leading-none" v-else>{{ item.product_name }}</p>
+                            <p v-else>{{ item.product_name }}</p>
 
-                            <p class="text-granite-gray">
+                            <p class="text-granite-gray pt-1">
                                 <span v-if="item.selected_variant1">{{ item.selected_variant1 }}</span
                                 ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
                             </p>
                         </div>
                         <div class="w-[25%]">
-                            <p class="leading-none"><small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small></p>
+                            <p><small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small></p>
                         </div>
                     </div>
                     <div class="flex justify-between items-center">
                         <div class="flex gap-1 items-center">
                             <button
-                                class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
+                                class="text-feldgrau bg-granite-gray/50 w-6 h-6 flex justify-center items-center rounded-sm cursor-pointer"
                                 @click="decreaseSelectionQuantity(item)"
                             >
-                                <Minus class="w-2 h-2" />
+                                <Minus class="w-4 h-4" />
                             </button>
                             <div
-                                class="w-auto px-2 py-1 bg-anti-flash-white text-black rounded-sm border-0 flex items-center justify-center"
+                                class="h-8 w-8 px-2 py-1 bg-anti-flash-white text-black rounded-sm border-0 flex items-center justify-center"
                             >
                                 <small>{{ item.selected_quantity }}</small>
                             </div>
                             <button
                                 type="button"
-                                class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
+                                class="text-feldgrau bg-granite-gray/50 w-6 h-6 flex justify-center items-center rounded-sm cursor-pointer"
                                 @click="increaseSelectionQuantity(item)"
                             >
-                                <Plus class="w-2 h-2" />
+                                <Plus class="w-4 h-4" />
                             </button>
                         </div>
 

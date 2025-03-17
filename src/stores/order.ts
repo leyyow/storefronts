@@ -45,7 +45,7 @@ export const useOrderStore = defineStore(
     {
         persist: {
             key: "orderStore",
-            storage: localStorage,
+            storage: sessionStorage,
         },
     },
 );

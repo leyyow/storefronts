@@ -58,7 +58,7 @@ export const useProductStore = defineStore(
     {
         persist: {
             key: "productStore",
-            storage: localStorage,
+            storage: sessionStorage,
         },
     },
 );

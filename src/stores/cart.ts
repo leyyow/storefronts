@@ -27,7 +27,7 @@ export const useCartStore = defineStore(
                 const cartItem = { ...product } as any;
                 cartItem.selected_variant1 = selections.variant1;
                 cartItem.selected_variant2 = selections.variant2;
-                cartItem.selected_quantity = selections.quantity;
+                cartItem.selected_quantity = 1;
                 cartItem.variant_price = price;
                 cartItem.variant_total_stock = stockLeft;
                 cartItem.itemTotal = price * selections.quantity;
@@ -121,7 +121,7 @@ export const useCartStore = defineStore(
     {
         persist: {
             key: "cartStore",
-            storage: localStorage,
+            storage: sessionStorage,
         },
     },
 );

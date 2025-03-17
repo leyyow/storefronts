@@ -1,5 +1,5 @@
 <template>
-    <div class="store-home">
+    <div class="store-home pb-4">
         <div class="ps-4 flex overflow-x-auto scrollbar-hide">
             <div
                 :class="[
