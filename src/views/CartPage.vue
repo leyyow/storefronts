@@ -22,7 +22,7 @@
                             </p>
                         </div>
                         <div class="w-[25%]">
-                            <p class="leading-none"><small class="me-0.5">N</small>{{ item.itemTotal }}<small>.00</small></p>
+                            <p class="leading-none"><small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small></p>
                         </div>
                     </div>
                     <div class="flex justify-between items-center">
@@ -37,7 +37,7 @@
                             <div
                                 class="w-auto px-2 py-1 bg-anti-flash-white text-black rounded-sm border-0 flex items-center justify-center"
                             >
-                                <small class="">{{ item.selected_quantity }}</small>
+                                <small>{{ item.selected_quantity }}</small>
                             </div>
                             <button
                                 class="text-feldgrau bg-granite-gray/50 w-4 h-4 flex justify-center items-center rounded-sm cursor-pointer"
@@ -140,7 +140,7 @@
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum">
                 <p class="text-granite-gray">SubTotal ({{ cart.length ? cart.length : 0 }} item<span v-if="cartLength > 0">s</span>):</p>
-                <p><small class="me-0.5 font-bold">N</small>{{ totalAmount }}<small>.00</small></p>
+                <p><small class="me-0.5 font-bold">₦</small>{{ totalAmount.toLocaleString() }}<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">

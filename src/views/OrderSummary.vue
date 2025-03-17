@@ -24,7 +24,7 @@
                         </div>
                         <div class="w-[25%]">
                             <p class="leading-none pt-2 pb-3 font-bold">
-                                <small class="me-0.5">N</small>{{ item.itemTotal }}<small>.00</small>
+                                <small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small>
                             </p>
 
                             <p class="text-granite-gray w-full flex justify-end">Qty: {{ item.selected_quantity }}</p>
@@ -182,22 +182,25 @@
         <div class="h-43 shadow-[0px_-4px_8px_0px_#00000014] px-4 py-2.5">
             <div class="flex justify-between pb-1.5">
                 <p class="text-granite-gray">SubTotal ({{ cartLength }} item<span v-if="cartLength > 0">s</span>):</p>
-                <p><small class="me-0.5">N</small>{{ cartTotal }}<small>.00</small></p>
+                <p><small class="me-0.5">₦</small>{{ cartTotal.toLocaleString() }}<small>.00</small></p>
             </div>
 
-            <div class="flex justify-between pb-3 border-b border-platinum" v-if="shippingDetails.shippingMethod === 'Delivery'">
+            <div
+                class="flex justify-between pb-3 border-b border-platinum"
+                v-if="shippingDetails.shippingMethod === 'Delivery'"
+            >
                 <p class="text-granite-gray">Shipping ({{ shippingDetails.location }}):</p>
-                <p><small class="me-0.5">N</small>{{ deliveryFee }}<small>.00</small></p>
+                <p><small class="me-0.5">₦</small>{{ deliveryFee.toLocaleString() }}<small>.00</small></p>
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum" v-else>
                 <p class="text-granite-gray">Pickup</p>
-                <p><small class="me-0.5">N</small>00<small>.00</small></p>
+                <p><small class="me-0.5">₦</small>00<small>.00</small></p>
             </div>
 
             <div class="flex justify-between pt-2 font-bold">
                 <p class="text-granite-gray">Total Amount:</p>
                 <p class="text-feldgrau">
-                    <small class="me-0.5">N</small>{{ deliveryFee ? deliveryFee + cartTotal : cartTotal
+                    <small class="me-0.5">₦</small>{{ totalAmount
                     }}<small>.00</small>
                 </p>
             </div>
@@ -222,6 +225,10 @@ import { useCartStore } from "../stores/cart";
 const { shippingDetails, deliveryFee } = useOrderStore();
 const { cart, cartLength, cartTotal } = useCartStore();
 const { storeInfo } = useStoreInfo();
+
+const totalAmount = computed(() => {
+    return (deliveryFee ? deliveryFee + cartTotal : cartTotal).toLocaleString();
+});
 
 const trimmedString = (string) => {
     if (string.length < 23) {

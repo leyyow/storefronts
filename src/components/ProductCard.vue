@@ -24,7 +24,7 @@ defineProps({
         <!-- Price -->
         <div class="w-full relative bottom-8 z-5 h-6 p-1">
             <p class="bg-white w-full text-center rounded-sm">
-                <small>N</small><span>{{ product.price }}</span
+                <small>₦</small><span>{{ product.price.toLocaleString() }}</span
                 ><small>.00</small>
             </p>
         </div>
