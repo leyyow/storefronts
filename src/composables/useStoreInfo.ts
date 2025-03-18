@@ -166,7 +166,7 @@ export function useStoreInfo() {
         categories: ["abstract", "accessories", "abstracts", "access", "mens", "womens", "kids", "geezers"],
         inventory: [
             {
-                product_name: "Apple with a hint of bapple",
+                product_name: "Apple with a hint of Apple",
                 image: "https://res.cloudinary.com/du5cun8t9/image/upload/v1689341264/samples/shoe.jpg",
                 product_type: "",
                 description: "",
@@ -193,7 +193,7 @@ export function useStoreInfo() {
                 options1: "Red,Blue,Green", // Example
                 options2: "Small,Medium,Large, xl",
                 variants: "Color",
-                combinations: "0,200,4;1,400,6;2,500,5;",
+                combinations: "0,200,4;1,400,0;2,500,5;",
             },
             {
                 product_name: "Ball",
