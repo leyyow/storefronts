@@ -67,7 +67,7 @@
                 <Toast position="top-center" group="headless" @close="visible = false">
                     <template #container="{ message, closeCallback }">
                         <section class="w-full flex justify-center bg-transparent">
-                            <div class="bg-white rounded-4xl py-2 px-2.5 w-8/12 border border-platinum">
+                            <div class="bg-white rounded-4xl py-2 px-2.5 w-5/8 border border-platinum">
                                 <div class="flex justify-between items-center">
                                     <div
                                         class="w-10 h-10 bg-anti-flash-white rounded-full flex justify-center items-center"
@@ -436,8 +436,6 @@ const shareUrl = () => {
 };
 
 const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
-    console.log(stockLeft);
-    
     if (stockLeft === 0) {
         return;
     } else if (valid && !visible.value && formState[product.id].quantity <= stockLeft) {

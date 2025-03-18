@@ -38,21 +38,12 @@ export const useProductStore = defineStore(
             return products;
         });
 
-        const updateStock = (product: any, selections: { variant1: string; variant2: string; quantity: number }) => {
-            const i = filteredProducts.value.find((item: any) => {
-                return item.id === product.id;
-            });
-
-            i.total_stock - selections.quantity;
-        };
-
         return {
             activeTab,
             searchInput,
             toggleTab,
             filteredProducts,
             inventory, // Make sure inventory is persisted
-            updateStock,
         };
     },
     {

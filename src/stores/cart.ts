@@ -88,6 +88,21 @@ export const useCartStore = defineStore(
             }
         }
 
+        function updateSelectionQuantity(cartItem: any, quantity: number) {
+            const item = cart.value.find(
+                (i) =>
+                    i.id === cartItem.id &&
+                    (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
+            );
+            if (quantity > item.variant_total_stock) {
+                item.selected_quantity = item.variant_total_stock;
+            } else {
+                item.selected_quantity = quantity
+            }
+            item.itemTotal = item.variant_price * item.selected_quantity;
+        }
+
         function isProductInCart(product: any) {
             return cart.value.some((i) => i.id === product.id);
         }
@@ -116,6 +131,7 @@ export const useCartStore = defineStore(
             removeSelection,
             increaseSelectionQuantity,
             decreaseSelectionQuantity,
+            updateSelectionQuantity,
         };
     },
     {
