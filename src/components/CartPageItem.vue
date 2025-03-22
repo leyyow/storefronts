@@ -41,6 +41,7 @@
                                 @submit="onFormSubmit"
                                 class="flex flex-col gap-4 w-full sm:w-56"
                             >
+                                <p>Stock: {{ item.variant_total_stock }}</p>
                                 <div class="flex flex-col gap-1">
                                     <InputNumber
                                         name="quantity"
