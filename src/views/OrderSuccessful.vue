@@ -1,10 +1,9 @@
 <template>
-    <div class="flex flex-col h-screen w-screen overflow-y-hidden">
+    <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="flex-1 overflow-y-auto flex justify-center items-center">
-
             <div class="flex flex-col items-center text-center p-4">
                 <Toast class="w-8/9" />
-                
+
                 <img src="../assets/order-successful.png" alt="carboard box gif" />
 
                 <h6 class="py-3">Order placed successfully</h6>
@@ -55,7 +54,13 @@
 </template>
 <script setup>
 import { useToast } from "primevue/usetoast";
-import { useRoute } from 'vue-router';
+import { useRoute } from "vue-router";
+import { useCartStore } from "../stores/cart";
+import { onMounted } from "vue";
+
+onMounted(() => {
+    useCartStore().clearCart();
+})
 
 const route = useRoute();
 const orderId = route.params.id;
@@ -63,11 +68,14 @@ const orderId = route.params.id;
 const toast = useToast();
 
 const copy = () => {
-    navigator.clipboard.writeText(`#${orderId}`).then(() => {
-        toast.add({ severity: 'success', summary: 'Copied', detail: 'Order ID copied to clipboard!' });
-    }).catch(err => {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to copy Order ID' });
-    });
-}
+    navigator.clipboard
+        .writeText(`#${orderId}`)
+        .then(() => {
+            toast.add({ severity: "success", summary: "Copied", detail: "Order reference copied to clipboard!" });
+        })
+        .catch((err) => {
+            toast.add({ severity: "error", summary: "Error", detail: "Failed to copy Order ID" });
+        });
+};
 </script>
 <style lang=""></style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-screen h-screen overflow-y-hidden">
+    <div class="flex flex-col w-full h-dvh overflow-y-hidden">
         <Navbar />
         <section class="overflow-y-auto flex-1">
             <div
@@ -60,9 +60,9 @@
                 </div>
 
                 <h5 v-if="price(filteredProduct) !== null">
-                    <small class="me-0.5">N</small>{{ price(filteredProduct) }}<small>.00</small>
+                    <small class="me-0.5">₦</small>{{ price(filteredProduct) }}<small>.00</small>
                 </h5>
-                <h5 v-else><small class="me-0.5">N</small>{{ filteredProduct.price }}<small>.00</small></h5>
+                <h5 v-else><small class="me-0.5">₦</small>{{ filteredProduct.price.toLocaleString() }}<small>.00</small></h5>
 
                 <Toast position="top-center" group="headless" @close="visible = false">
                     <template #container="{ message, closeCallback }">
@@ -151,58 +151,16 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <!-- <div class="flex flex-col gap-1 w-32">
-                            <div class="flex gap-1.5 items-center pt-2 pb-2.5">
-                                <button
-                                    type="button"
-                                    class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
-                                    @click="
-                                        increaseQuantity(
-                                            filteredProduct.id,
-                                            variantNames(filteredProduct).length
-                                                ? stock(filteredProduct)
-                                                : filteredProduct.total_stock,
-                                        )
-                                    "
-                                >
-                                    <Plus class="w-5 h-5" />
-                                </button>
-                                <InputNumber
-                                    v-model="formState[filteredProduct.id].quantity"
-                                    name="quantity"
-                                    type="number"
-                                    class="w-9 bg-anti-flash-white placeholder:text-manatee text-manatee rounded-sm border-0"
-                                    fluid
-                                    :min="1"
-                                    :max="stock(filteredProduct)"
-                                />
-                                <button
-                                    type="button"
-                                    class="text-feldgrau bg-granite-gray/50 w-7 h-7 flex justify-center items-center rounded-md cursor-pointer"
-                                    @click="decreaseQuantity(filteredProduct.id)"
-                                >
-                                    <Minus class="w-5 h-5" />
-                                </button>
-                            </div>
-                            <Message
-                                v-if="$form.quantity?.invalid"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                class="text-center"
-                                >{{ $form.quantity.error.message }}</Message
-                            >
-                        </div> -->
                         <Button
                             type="submit"
                             severity="secondary"
                             class="bg-black text-white h-13 w-full rounded-md cursor-pointer flex items-center"
                         >
-                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id])"
+                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct)"
                                 >Add to Basket</span
                             >
                             <span v-else
-                                >{{ cartStore.getCartItemQuantity(filteredProduct, formState[filteredProduct.id]) }} in
+                                >{{ cartStore.getCartItemQuantity(filteredProduct) }} in
                                 Basket</span
                             >
                             <div class="relative">
@@ -231,15 +189,15 @@
             </div>
         </section>
         <!--  -->
-        <div class="h-25 shadow-[0px_-4px_8px_0px_#00000014] p-4 flex items-center">
+        <div class="h-15 shadow-[0px_-4px_8px_0px_#00000014] p-4 flex items-center">
             <div class="flex justify-between items-center w-full">
                 <div class="flex flex-col gap-2">
-                    <p class="text-manatee">
+                    <!-- <p class="text-manatee">
                         Sub Total ({{ cartStore.cart.length }}) item<span v-if="cartStore.cart.length">s</span>
                     </p>
                     <p class="text-feldgrau font-bold">
                         <small>₦</small>{{ totalAmount.toLocaleString() }}<small>.00</small>
-                    </p>
+                    </p> -->
                 </div>
                 <div class="w-10 h-10">
                     <router-link :to="{ name: 'Cart' }">
@@ -266,9 +224,9 @@
                             </svg>
                             <div
                                 class="py-1 px-1.5 bg-lava flex items-center justify-center rounded-sm text-white absolute top-1 right-1"
-                                v-if="cartStore.cart.length"
+                                v-if="totalProducts"
                             >
-                                <small class="smaller">{{ cartStore.cart.length }}</small>
+                                <small class="smaller">{{ totalProducts }}</small>
                             </div>
                         </button>
                     </router-link>
@@ -302,6 +260,8 @@ const formState = reactive({ default: { variant1: "", variant2: "", quantity: 1 
 const totalAmount = computed(() =>
     cartStore.cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0),
 );
+
+const totalProducts = computed(() => cartStore.cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
 const variantNames = (product) => {
     const names = product.variants.split(",").filter(Boolean);
@@ -409,18 +369,6 @@ const resolver = ({ values }) => {
     };
 };
 
-const increaseQuantity = (productId, stockLeft) => {
-    if (formState[productId] && formState[productId].quantity < stockLeft) {
-        formState[productId].quantity += 1;
-    }
-};
-
-const decreaseQuantity = (productId) => {
-    if (formState[productId] && formState[productId].quantity > 1) {
-        formState[productId].quantity -= 1;
-    }
-};
-
 const shareUrl = () => {
     if (navigator.share) {
         navigator
@@ -437,8 +385,10 @@ const shareUrl = () => {
 
 const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
     if (stockLeft === 0) {
+        error.value = true;
+        toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
         return;
-    } else if (valid && !visible.value && formState[product.id].quantity <= stockLeft) {
+    } else if (valid) {
         toast.add({
             severity: "custom",
             life: 2000,
@@ -446,9 +396,7 @@ const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
             styleClass: "w-full",
         });
         visible.value = true;
-
         cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft);
-        formState[product.id].quantity += 1;
 
         visible.value = false;
     } else {

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-screen w-screen overflow-y-hidden">
+    <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="h-16 px-4 flex justify-between items-center">
             <h6 class="font-normal">Order Summary</h6>
             <router-link to="/store/cart" class="underline text-spanish-viridian text-xs">Edit All</router-link>
@@ -199,10 +199,7 @@
 
             <div class="flex justify-between pt-2 font-bold">
                 <p class="text-granite-gray">Total Amount:</p>
-                <p class="text-feldgrau">
-                    <small class="me-0.5">₦</small>{{ totalAmount
-                    }}<small>.00</small>
-                </p>
+                <p class="text-feldgrau"><small class="me-0.5">₦</small>{{ totalAmount }}<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">

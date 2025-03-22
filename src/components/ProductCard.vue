@@ -17,7 +17,7 @@ defineProps({
 <template>
     <RouterLink
         :to="{ path: '/store/product', hash: `#${product.id}` }"
-        class="w-[32.5%] h-32 mb-0.5 rounded-sm bg-granite-gray relative"
+        class="w-[32.5%] h-32 md:h-40 mb-0.5 rounded-sm bg-granite-gray relative"
     >
         <img :src="product.image" alt="product image" class="w-full h-full object-cover rounded-sm" />
 

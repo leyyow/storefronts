@@ -13,6 +13,10 @@ body {
     $vw: 100vw;
     font-size: calc($vw / 375px * 16px);
     font-weight: 400;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 16px);
+    }
 }
 
 p {
@@ -21,11 +25,19 @@ p {
     &.big {
         $vw: 100vw;
         font-size: calc($vw / 375px * 20px);
+
+        @include media(">=phone") {
+            font-size: calc($vw / 992px * 20px);
+        }
     }
 
     &.bigger {
         $vw: 100vw;
         font-size: calc($vw / 375px * 24px);
+
+        @include media(">=phone") {
+            font-size: calc($vw / 992px * 24px);
+        }
     }
 }
 
@@ -33,8 +45,16 @@ small {
     $vw: 100vw;
     font-size: calc($vw / 375px * 10px);
 
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 10px);
+    }
+
     &.smaller {
         font-size: calc($vw / 375px * 7px);
+
+        @include media(">=phone") {
+            font-size: calc($vw / 992px * 7px);
+        }
     }
 }
 
@@ -43,36 +63,60 @@ h1 {
     $vw: 100vw;
     font-size: calc($vw / 375px * 50px);
     font-weight: 500;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 50px);
+    }
 }
 
 h2 {
     $vw: 100vw;
     font-size: calc($vw / 375px * 45px);
     font-weight: 500;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 45px);
+    }
 }
 
 h3 {
     $vw: 100vw;
     font-size: calc($vw / 375px * 40px);
     font-weight: 500;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 40px);
+    }
 }
 
 h4 {
     $vw: 100vw;
     font-size: calc($vw / 375px * 35px);
     font-weight: 500;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 35px);
+    }
 }
 
 h5 {
     $vw: 100vw;
     font-size: calc($vw / 375px * 28px);
     font-weight: 500;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 28px);
+    }
 }
 
 h6 {
     $vw: 100vw;
     font-size: calc($vw / 375px * 20px);
     font-weight: 500;
+
+    @include media(">=phone") {
+        font-size: calc($vw / 992px * 20px);
+    }
 }
 
 a {
@@ -86,12 +130,21 @@ img {
 }
 
 input {
-    background-color: #EFF1F3 !important;
-    color: #002E22 !important;
+    background-color: #eff1f3 !important;
+    color: #002e22 !important;
     border-radius: 0.5rem !important;
     border: none !important;
 
     &::placeholder {
         color: #97a1ac !important;
     }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+  scrollbar-width: none;  /* Hide scrollbar for Firefox */
 }

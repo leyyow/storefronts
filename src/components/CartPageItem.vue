@@ -1,10 +1,10 @@
 <template>
-    <div class="flex gap-2 mb-2">
-        <img :src="item.image" alt="product image" class="w-24 h-24 object-cover rounded-sm" />
+    <div class="flex gap-2 mb-5">
+        <img :src="item.image" alt="product image" class="w-24 h-24 min-h-full object-cover rounded-sm" />
 
         <div class="flex flex-col gap-2 flex-1 justify-between">
             <div class="flex gap-1.5">
-                <div class="w-[70%]">
+                <div class="w-[65%]">
                     <p v-if="trimmedString(item.product_name)">{{ trimmedString(item.product_name) }}...</p>
                     <p v-else>{{ item.product_name }}</p>
 
@@ -13,8 +13,11 @@
                         ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
                     </p>
                 </div>
-                <div class="w-[30%]">
-                    <p><small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small></p>
+                <div class="w-[30%] font-bold">
+                    <p>
+                        <small class="me-0.5">₦</small
+                        >{{ (item.variant_price * item.selected_quantity).toLocaleString() }}<small>.00</small>
+                    </p>
                 </div>
             </div>
             <div class="flex justify-between items-center">
@@ -25,16 +28,39 @@
                     >
                         <Minus class="w-4 h-4" />
                     </button>
-                    <InputNumber
-                        v-model="localQuantity"
-                        name="quantity"
-                        type="number"
-                        class="w-11 text-center"
-                        fluid
-                        :min="1"
-                        :max="item.variant_total_stock"
-                        @blur="updateSelectionQuantity(item, localQuantity)"
-                    />
+                    <div
+                        class="h-8.5 min-w-8.5 px-2 py-1 bg-anti-flash-white text-black rounded-sm border-0 flex items-center justify-center"
+                        @click="quantityPopupIsOpen = true"
+                    >
+                        <p>{{ item.selected_quantity }}</p>
+                        <Dialog v-model:visible="quantityPopupIsOpen" modal header="Enter quantity" class="w-11/12">
+                            <Form
+                                v-slot="$form"
+                                :initialValues
+                                :resolver
+                                @submit="onFormSubmit"
+                                class="flex flex-col gap-4 w-full sm:w-56"
+                            >
+                                <div class="flex flex-col gap-1">
+                                    <InputNumber
+                                        name="quantity"
+                                        type="number"
+                                        class="w-full text-center"
+                                        fluid
+                                        :min="0"
+                                    />
+                                    <Message
+                                        v-if="$form.quantity?.invalid"
+                                        severity="error"
+                                        size="small"
+                                        variant="simple"
+                                        >{{ $form.quantity.error?.message }}</Message
+                                    >
+                                </div>
+                                <Button type="submit" severity="secondary" label="Submit" class="bg-black text-white py-3" />
+                            </Form>
+                        </Dialog>
+                    </div>
                     <button
                         type="button"
                         class="text-feldgrau bg-granite-gray/50 w-6 h-6 flex justify-center items-center rounded-sm cursor-pointer"
@@ -140,27 +166,66 @@
     </div>
 </template>
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, reactive } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
 
 const props = defineProps({
-  item: Object,
+    item: Object,
 });
 
+// const localQuantity = computed({
+//     get: () => props.item.selected_quantity,
+//     set: (value) => updateSelectionQuantity(props.item, value),
+// });
 
-const localQuantity = computed({
-    get: () => props.item.selected_quantity,
-    set: (value) => updateSelectionQuantity(props.item, value),
+// watch(
+//     () => props.item.selected_quantity,
+//     (newValue) => {
+//         localQuantity.value = newValue;
+//     },
+// );
+
+const initialValues = reactive({
+    quantity: props.item.selected_quantity,
 });
 
-watch(() => props.item.selected_quantity, (newValue) => {
-    localQuantity.value = newValue;
-});
+const resolver = ({ values }) => {
+    const errors = {};
 
+    if (values.quantity > props.item.variant_total_stock) {
+        errors.quantity = [{ message: 'Not enough stock available' }];
+    }
+
+    if (values.quantity === 0) {
+        errors.quantity = [{ message: 'Please enter a valid quantity' }];
+    }
+
+    return {
+        values, // (Optional) Used to pass current form values to submit event.
+        errors
+    };
+};
+
+const onFormSubmit = ({ valid, values }) => {
+    if (valid) {
+        updateSelectionQuantity(props.item, values.quantity);
+        quantityPopupIsOpen.value = false;
+        initialValues.quantity = values.quantity;
+    }
+};
+
+const quantityPopupIsOpen = ref(false);
 const visible = ref(false);
-const { cart, cartTotal, cartLength, increaseSelectionQuantity, decreaseSelectionQuantity, removeSelection, updateSelectionQuantity } =
-    useCartStore();
+const {
+    cart,
+    cartTotal,
+    cartLength,
+    increaseSelectionQuantity,
+    decreaseSelectionQuantity,
+    removeSelection,
+    updateSelectionQuantity,
+} = useCartStore();
 
 const trimmedString = (string) => {
     if (string.length < 20) {

@@ -13,6 +13,7 @@ declare module 'vue' {
     CartPageItem: typeof import('./src/components/CartPageItem.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
     Dropdown: typeof import('primevue/dropdown')['default']
+    FilterPopup: typeof import('./src/components/FilterPopup.vue')['default']
     FooterComponent: typeof import('./src/components/layouts/FooterComponent.vue')['default']
     Form: typeof import('@primevue/forms/form')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']

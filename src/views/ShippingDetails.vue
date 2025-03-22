@@ -54,6 +54,10 @@
                 <Message v-if="$form.address?.invalid" severity="error" size="small" variant="simple">{{ $form.address.error.message }}</Message>
             </div>
 
+            <div v-if="initialValues.shippingMethod === 'Pickup'">
+                <p><span class="font-bold">Pickup at:</span> {{ storeInfo.store.address }}</p>
+            </div>
+
             <Button type="submit" severity="secondary" label="Proceed to Checkout" class="py-3 bg-black text-white" />
         </Form>
     </div>

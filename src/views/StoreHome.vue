@@ -62,6 +62,7 @@
             <div class="w-10 h-10">
                 <button
                     class="bg-anti-flash-white rounded-sm w-full h-full flex items-center justify-center cursor-pointer"
+                    @click="filterIsOpen = true"
                 >
                     <svg
                         width="16"
@@ -90,6 +91,10 @@
                         />
                     </svg>
                 </button>
+
+                <Dialog v-model:visible="filterIsOpen" modal header="Sorting by" class="w-11/12">
+                    <FilterPopup />
+                </Dialog>
             </div>
 
             <!-- cart  -->
@@ -116,12 +121,12 @@
                                 fill="#445B54"
                             />
                         </svg>
-                        <div
+                        <!-- <div
                             class="py-1 px-1.5 bg-lava flex items-center justify-center rounded-sm text-white absolute top-1 right-1"
                             v-if="cartStore.cartLength"
                         >
                             <small class="smaller">{{ cartStore.cartLength }}</small>
-                        </div>
+                        </div> -->
                     </button>
                 </router-link>
             </div>
@@ -141,7 +146,9 @@ import { useStoreInfo } from "../composables/useStoreInfo";
 import ProductCard from "../components/ProductCard.vue";
 import { useProductStore } from "../stores/product";
 import { useCartStore } from "../stores/cart";
+import FilterPopup from "../components/FilterPopup.vue";
 
+const filterIsOpen = ref(false);
 const { storeInfo } = useStoreInfo();
 const productStore = useProductStore();
 const cartStore = useCartStore();

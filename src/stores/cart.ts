@@ -22,7 +22,11 @@ export const useCartStore = defineStore(
                     i.selected_variant2 === selections.variant2,
             );
             if (item) {
-                item.selected_quantity = selections.quantity;
+                if (item.selected_quantity < item.variant_total_stock) {
+                    item.selected_quantity += 1;
+                } else {
+                    console.log("Item out of stock"); 
+                }
             } else {
                 const cartItem = { ...product } as any;
                 cartItem.selected_variant1 = selections.variant1;
@@ -36,14 +40,9 @@ export const useCartStore = defineStore(
         }
 
         // 🔍 Check if a product with exact variants is in the cart
-        function getCartItemQuantity(product: any, selections: { variant1: string; variant2: string }) {
-            const item = cart.value.find(
-                (i) =>
-                    i.id === product.id &&
-                    i.selected_variant1 === selections.variant1 &&
-                    i.selected_variant2 === selections.variant2,
-            );
-            return item ? item.selected_quantity : 0;
+        function getCartItemQuantity(product: any) {
+            const items = cart.value.filter((i) => i.id === product.id);
+            return items.reduce((sum, item) => sum + item.selected_quantity, 0);
         }
 
         // ✅ Remove a specific selection from the cart
@@ -112,6 +111,14 @@ export const useCartStore = defineStore(
             return uniqueIds.size;
         }
 
+        function totalProductsCount() { 
+            return cart.value.reduce((sum, item) => sum + item.selected_quantity, 0);
+        }
+
+        function clearCart() {
+            cart.value = [];
+        }
+
         watch(cartLength, (newLength) => {
             console.log("Cart length changed:", newLength);
         });
@@ -132,6 +139,8 @@ export const useCartStore = defineStore(
             increaseSelectionQuantity,
             decreaseSelectionQuantity,
             updateSelectionQuantity,
+            clearCart,
+            totalProductsCount,
         };
     },
     {

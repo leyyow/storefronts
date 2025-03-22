@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-screen w-screen overflow-y-hidden">
+    <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="h-16 px-4 flex items-center">
             <h6 class="font-normal">Basket ({{ cart.length ? cart.length : 0 }})</h6>
         </div>
@@ -27,7 +27,9 @@
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
                     <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
                 </router-link>
-                <button class="w-[63%] bg-black text-white py-3 rounded-md" @click="proceedToShipping">Proceed to Shipping</button>
+                <button class="w-[63%] bg-black text-white py-3 rounded-md" @click="proceedToShipping">
+                    Proceed to Shipping
+                </button>
             </div>
         </div>
     </div>
@@ -43,9 +45,9 @@ const { cart, cartLength } = useCartStore();
 
 const proceedToShipping = () => {
     if (cart.length !== 0) {
-        router.push({ name: 'ShippingDetails' })
+        router.push({ name: "ShippingDetails" });
     }
-}
+};
 
 const totalAmount = computed(() => cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0));
 </script>
