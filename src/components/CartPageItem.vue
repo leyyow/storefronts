@@ -1,5 +1,7 @@
 <template>
     <div class="flex gap-2 mb-5">
+        <Toast class="w-8/9 flex items-center" :visible="error" />
+
         <img :src="item.image" alt="product image" class="w-24 h-24 min-h-full object-cover rounded-sm" />
 
         <div class="flex flex-col gap-2 flex-1 justify-between">
@@ -41,7 +43,7 @@
                                 @submit="onFormSubmit"
                                 class="flex flex-col gap-4 w-full sm:w-56"
                             >
-                                <p>Stock: {{ item.variant_total_stock }}</p>
+                                <p>In Stock: {{ item.variant_total_stock }}</p>
                                 <div class="flex flex-col gap-1">
                                     <InputNumber
                                         name="quantity"
@@ -58,14 +60,19 @@
                                         >{{ $form.quantity.error?.message }}</Message
                                     >
                                 </div>
-                                <Button type="submit" severity="secondary" label="Submit" class="bg-black text-white py-3" />
+                                <Button
+                                    type="submit"
+                                    severity="secondary"
+                                    label="Submit"
+                                    class="bg-black text-white py-3"
+                                />
                             </Form>
                         </Dialog>
                     </div>
                     <button
                         type="button"
                         class="text-feldgrau bg-granite-gray/50 w-6 h-6 flex justify-center items-center rounded-sm cursor-pointer"
-                        @click="increaseSelectionQuantity(item)"
+                        @click="increaseQuantity(item)"
                     >
                         <Plus class="w-4 h-4" />
                     </button>
@@ -170,22 +177,22 @@
 import { computed, ref, watch, reactive } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
+import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
     item: Object,
 });
 
-// const localQuantity = computed({
-//     get: () => props.item.selected_quantity,
-//     set: (value) => updateSelectionQuantity(props.item, value),
-// });
+const toast = useToast();
+const error = ref(false);
 
-// watch(
-//     () => props.item.selected_quantity,
-//     (newValue) => {
-//         localQuantity.value = newValue;
-//     },
-// );
+const increaseQuantity = (cartItem) => {
+    increaseSelectionQuantity(cartItem);
+    if (cartItem.variant_total_stock === cartItem.selected_quantity) {
+        error.value = true;
+        toast.add({ severity: "info", detail: "All available stock are in your cart", life: 1000 });
+    }
+}
 
 const initialValues = reactive({
     quantity: props.item.selected_quantity,

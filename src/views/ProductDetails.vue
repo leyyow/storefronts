@@ -384,11 +384,13 @@ const shareUrl = () => {
 };
 
 const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
+    console.log(cartStore.isInStock(product, formState[product.id], stockLeft));
+    
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
         return;
-    } else if (valid) {
+    } else if (valid && cartStore.isInStock(product, formState[product.id], stockLeft)) {
         toast.add({
             severity: "custom",
             life: 2000,

@@ -25,7 +25,7 @@ export const useCartStore = defineStore(
                 if (item.selected_quantity < item.variant_total_stock) {
                     item.selected_quantity += 1;
                 } else {
-                    console.log("Item out of stock"); 
+                    return
                 }
             } else {
                 const cartItem = { ...product } as any;
@@ -106,9 +106,23 @@ export const useCartStore = defineStore(
             return cart.value.some((i) => i.id === product.id);
         }
 
-        function uniqueProductsCount() {
-            const uniqueIds = new Set(cart.value.map((i) => i.id));
-            return uniqueIds.size;
+        function isInStock(
+            product: any,
+            selections: { variant1: string; variant2: string; quantity: number },
+        ) {
+            const item = cart.value.find(
+                (i) =>
+                    i.id === product.id &&
+                    i.selected_variant1 === selections.variant1 &&
+                    i.selected_variant2 === selections.variant2,
+            );
+
+            if (item) {
+                console.log(`Variant total stock: ${item.variant_total_stock}, Selected quantity: ${item.selected_quantity}`);
+                return item.variant_total_stock > item.selected_quantity;
+            } else {
+                return true;
+            }
         }
 
         function totalProductsCount() { 
@@ -134,7 +148,7 @@ export const useCartStore = defineStore(
             addToCart,
             getCartItemQuantity,
             isProductInCart,
-            uniqueProductsCount,
+            isInStock,
             removeSelection,
             increaseSelectionQuantity,
             decreaseSelectionQuantity,
