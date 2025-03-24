@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col w-full h-dvh overflow-y-hidden">
+    <div class="flex flex-col w-full h-screen overflow-y-hidden">
         <Navbar />
         <section class="overflow-y-auto flex-1">
             <div
