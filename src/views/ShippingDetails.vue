@@ -66,7 +66,7 @@
 import { ref } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useOrderStore } from '../stores/order';
-import { useStoreInfo } from '../composables/useStoreInfo';
+import { useStoreInfo } from '../stores/storeInfo';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

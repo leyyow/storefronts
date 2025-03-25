@@ -46,7 +46,7 @@
 <script setup>
 import { Menu, X } from "lucide-vue-next";
 import { ref } from "vue";
-import { useStoreInfo } from "../../composables/useStoreInfo";
+import { useStoreInfo } from "../../stores/storeInfo";
 
 const navIsOpen = ref(false);
 const { storeInfo } = useStoreInfo();

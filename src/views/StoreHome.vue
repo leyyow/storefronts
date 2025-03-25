@@ -142,7 +142,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useStoreInfo } from "../composables/useStoreInfo";
+import { useStoreInfo } from "../stores/storeInfo";
 import ProductCard from "../components/ProductCard.vue";
 import { useProductStore } from "../stores/product";
 import { useCartStore } from "../stores/cart";

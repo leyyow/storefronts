@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { useStoreInfo } from "../composables/useStoreInfo";
+import { useStoreInfo } from "../stores/storeInfo";
 import { SwiperSlide } from "swiper/vue";
 import { Minus } from "lucide-vue-next";
 import SwiperCarousel from "../components/SwiperCarousel.vue";

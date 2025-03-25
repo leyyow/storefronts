@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import piniaPersist from "pinia-plugin-persistedstate";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import "./styles/index.scss";
 import "./style.css";
 import App from "./App.vue";
@@ -23,6 +24,7 @@ app.use(PrimeVue, {
         },
     },
 });
+app.use(VueQueryPlugin);
 app.use(ToastService);
 app.use(pinia);
 app.use(router);

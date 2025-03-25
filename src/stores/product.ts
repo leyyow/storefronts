@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed, watchEffect } from "vue";
-import { useStoreInfo } from "../composables/useStoreInfo";
+import { useStoreInfo } from "../stores/storeInfo";
 
 export const useProductStore = defineStore(
     "product",
@@ -12,8 +12,8 @@ export const useProductStore = defineStore(
 
         // Watch storeInfo and update inventory when it changes
         watchEffect(() => {
-            if (storeInfo.value?.inventory) {
-                inventory.value = storeInfo.value.inventory;
+            if (storeInfo?.inventory) {
+                inventory.value = storeInfo.inventory;
             }
         });
 

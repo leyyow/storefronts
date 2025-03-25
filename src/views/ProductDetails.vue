@@ -241,7 +241,7 @@ import { ref, onMounted, nextTick, watch, reactive, computed } from "vue";
 import { useRoute } from "vue-router";
 import Navbar from "../components/product/ProductNavbar.vue";
 import { useProductStore } from "../stores/product";
-import { useStoreInfo } from "../composables/useStoreInfo";
+import { useStoreInfo } from "../stores/storeInfo";
 import { useToast } from "primevue/usetoast";
 import { Minus, Plus, Check } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";

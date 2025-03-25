@@ -216,7 +216,7 @@
 import { computed } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useOrderStore } from "../stores/order";
-import { useStoreInfo } from "../composables/useStoreInfo";
+import { useStoreInfo } from "../stores/storeInfo";
 import { useCartStore } from "../stores/cart";
 
 const { shippingDetails, deliveryFee } = useOrderStore();
