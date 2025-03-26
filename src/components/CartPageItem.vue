@@ -15,7 +15,7 @@
                         ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
                     </p>
                 </div>
-                <div class="w-[30%] font-bold">
+                <div class="w-[33%] font-bold">
                     <p>
                         <small class="me-0.5">₦</small
                         >{{ (item.variant_price * item.selected_quantity).toLocaleString() }}<small>.00</small>

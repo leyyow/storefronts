@@ -24,6 +24,7 @@ export const useCartStore = defineStore(
             if (item) {
                 if (item.selected_quantity < item.variant_total_stock) {
                     item.selected_quantity += 1;
+                    item.itemTotal = item.variant_price * item.selected_quantity;
                 } else {
                     return
                 }

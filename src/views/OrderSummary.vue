@@ -11,7 +11,7 @@
 
                 <div class="flex flex-col gap-2 flex-1">
                     <div class="flex gap-1.5">
-                        <div class="w-[75%]">
+                        <div class="w-[65%]">
                             <p v-if="trimmedString(item.product_name)" class="leading-none pt-2 pb-3">
                                 {{ trimmedString(item.product_name) }}...
                             </p>
@@ -22,7 +22,7 @@
                                 ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
                             </p>
                         </div>
-                        <div class="w-[25%]">
+                        <div class="w-[33%]">
                             <p class="leading-none pt-2 pb-3 font-bold">
                                 <small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small>
                             </p>
@@ -230,10 +230,10 @@ const totalAmount = computed(() => {
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
 const trimmedString = (string) => {
-    if (string.length < 23) {
+    if (string.length < 20) {
         return false;
     }
-    return string.substring(0, 23);
+    return string.substring(0, 20);
 };
 </script>
 <style></style>
