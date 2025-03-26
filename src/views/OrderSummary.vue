@@ -181,7 +181,7 @@
 
         <div class="h-43 shadow-[0px_-4px_8px_0px_#00000014] px-4 py-2.5">
             <div class="flex justify-between pb-1.5">
-                <p class="text-granite-gray">SubTotal ({{ cartLength }} item<span v-if="cartLength > 0">s</span>):</p>
+                <p class="text-granite-gray">SubTotal ({{ totalProducts }} item<span v-if="totalProducts > 0">s</span>):</p>
                 <p><small class="me-0.5">₦</small>{{ cartTotal.toLocaleString() }}<small>.00</small></p>
             </div>
 
@@ -226,6 +226,8 @@ const { storeInfo } = useStoreInfo();
 const totalAmount = computed(() => {
     return (deliveryFee ? deliveryFee + cartTotal : cartTotal).toLocaleString();
 });
+
+const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
 const trimmedString = (string) => {
     if (string.length < 23) {

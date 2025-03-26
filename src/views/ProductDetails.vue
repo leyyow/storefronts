@@ -59,8 +59,8 @@
                     </div>
                 </div>
 
-                <h5 v-if="price(filteredProduct) !== null">
-                    <small class="me-0.5">₦</small>{{ price(filteredProduct) }}<small>.00</small>
+                <h5 v-if="price(filteredProduct)">
+                    <small class="me-0.5">₦</small>{{ price(filteredProduct).toLocaleString() }}<small>.00</small>
                 </h5>
                 <h5 v-else><small class="me-0.5">₦</small>{{ filteredProduct.price.toLocaleString() }}<small>.00</small></h5>
 
@@ -143,12 +143,12 @@
                         </div>
                     </div>
 
-                    <div class="text-lg font-semibold">
+                    <!-- <div class="text-lg font-semibold">
                         Stock:
                         {{
                             variantNames(filteredProduct).length ? stock(filteredProduct) : filteredProduct.total_stock
                         }}
-                    </div>
+                    </div> -->
 
                     <div class="flex gap-2">
                         <Button

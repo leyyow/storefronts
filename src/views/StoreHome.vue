@@ -121,12 +121,12 @@
                                 fill="#445B54"
                             />
                         </svg>
-                        <!-- <div
+                        <div
                             class="py-1 px-1.5 bg-lava flex items-center justify-center rounded-sm text-white absolute top-1 right-1"
-                            v-if="cartStore.cartLength"
+                            v-if="totalProducts"
                         >
-                            <small class="smaller">{{ cartStore.cartLength }}</small>
-                        </div> -->
+                            <small class="smaller">{{ totalProducts }}</small>
+                        </div>
                     </button>
                 </router-link>
             </div>
@@ -152,6 +152,8 @@ const sortIsOpen = ref(false);
 const { storeInfo } = useStoreInfo();
 const productStore = useProductStore();
 const cartStore = useCartStore();
+
+const totalProducts = computed(() => cartStore.cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 </script>
 
 <style>

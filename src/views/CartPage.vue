@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-col h-dvh w-full overflow-y-hidden">
-        <div class="h-16 px-4 flex items-center">
+        <!-- <div class="h-16 px-4 flex items-center">
             <h6 class="font-normal">Basket ({{ cart.length ? cart.length : 0 }})</h6>
-        </div>
+        </div> -->
 
-        <div class="flex-1 overflow-y-auto px-4 py-2">
+        <div class="flex-1 overflow-y-auto px-4 py-2 mt-3">
             <CartPageItem v-for="item in cart" :key="item.id" :item="item" />
         </div>
 
@@ -19,7 +19,7 @@
             </div>
             <div class="flex justify-between pb-3 border-b border-platinum">
                 <p class="text-granite-gray">
-                    SubTotal ({{ cart.length ? cart.length : 0 }} item<span v-if="cartLength > 0">s</span>):
+                    SubTotal ({{ totalProducts ? totalProducts : 0 }} item<span v-if="totalProducts > 0">s</span>):
                 </p>
                 <p><small class="me-0.5 font-bold">₦</small>{{ totalAmount.toLocaleString() }}<small>.00</small></p>
             </div>
@@ -57,5 +57,6 @@ const proceedToShipping = () => {
 };
 
 const totalAmount = computed(() => cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0));
+const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 </script>
 <style></style>
