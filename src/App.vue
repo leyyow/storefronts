@@ -1,8 +1,7 @@
 <template>
     <div class="font-aeonik h-screen flex justify-center items-center">
         <div class="md:w-lg lg:w-sm w-full h-full max-h-screen overflow-y-auto scrollbar-hide">
-            <!-- the rest of the skeletons will go here  -->
-            <div v-if="isLoading">
+            <div v-if="isLoading && routeName">
                 <HomeSkeleton v-if="routeName === 'Home'" />
                 <StoreHomeSkeleton v-else />
             </div>
@@ -19,16 +18,18 @@
 import { ref, watchEffect, onMounted, computed, watch } from "vue";
 import { useStoreInfo } from "./stores/storeInfo.ts";
 import { useApiCalls } from "./composables/useApiCalls.ts";
-import { useQueryClient } from "@tanstack/vue-query";
 import { useRoute } from "vue-router";
 import HomeSkeleton from "./components/skeletons/HomeSkeleton.vue";
 import StoreHomeSkeleton from "./components/skeletons/StoreHomeSkeleton.vue";
 
 const { storeInfo, updateStoreInfo } = useStoreInfo();
 const { fetchStoreInfo } = useApiCalls();
-const queryClient = useQueryClient();
 const route = useRoute();
 const routeName = ref("");
+const merchantSlug = ref("");
+const isLoading = ref(false);
+
+// Watch for route changes
 watch(
     () => route.name,
     (newRouteName) => {
@@ -38,49 +39,28 @@ watch(
     { immediate: true }
 );
 
-const merchantSlug = ref("");
-
 // Extract merchant slug from subdomain
 onMounted(() => {
     const hostname = window.location.hostname; // e.g., "merchant_slug.leyyow.com"
     const parts = hostname.split(".");
-
     if (parts.length > 2) {
-        merchantSlug.value = parts[0]; // Set the subdomain as the merchantSlug
+        merchantSlug.value = parts[0]; // Extract subdomain as merchantSlug
     }
-
     console.log("Merchant Slug:", merchantSlug.value);
 });
 
-// Function to fetch or invalidate store info
-const fetchOrInvalidateStoreInfo = () => {
-    if (storeInfo) {
-        // If storeInfo exists, invalidate the query to fetch fresh data
-        queryClient.invalidateQueries({ queryKey: ["storeInfo"] });
-    } else {
-        // Otherwise, fetch store info
-        storeQuery.refetch();
+// Fetch store info when `merchantSlug` is set
+watchEffect(() => {
+    if (merchantSlug.value) {
+        const storeQuery = fetchStoreInfo(merchantSlug.value);
+        isLoading.value = storeQuery.isLoading.value;
+
+        watchEffect(() => {
+            if (storeQuery.data.value) {
+                updateStoreInfo(storeQuery.data.value);
+                console.log("Store Info updated:", storeQuery.data.value);
+            }
+        });
     }
-};
-
-// Fetch store info reactively when `merchantSlug` changes
-const storeQuery = fetchStoreInfo(merchantSlug);
-
-// Get `isLoading` from the query result
-const isLoading = computed(() => storeQuery.isLoading.value);
-
-// Watch `merchantSlug` and trigger fetch or invalidate logic
-// watchEffect(() => {
-//     if (merchantSlug.value) {
-//         fetchOrInvalidateStoreInfo();
-//     }
-// });
-
-// Update store when data is fetched
-// watchEffect(() => {
-//     if (storeQuery.data.value) {
-//         updateStoreInfo(storeQuery.data.value);
-//         console.log("Store Info updated:", storeQuery.data.value);
-//     }
-// });
+});
 </script>
