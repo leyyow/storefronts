@@ -16,6 +16,7 @@ declare module 'vue' {
     FilterPopup: typeof import('./src/components/FilterPopup.vue')['default']
     FooterComponent: typeof import('./src/components/layouts/FooterComponent.vue')['default']
     Form: typeof import('@primevue/forms/form')['default']
+    HomeSkeleton: typeof import('./src/components/skeletons/HomeSkeleton.vue')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
     Message: typeof import('primevue/message')['default']
@@ -27,6 +28,9 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Select: typeof import('primevue/select')['default']
+    Skeleton: typeof import('primevue/skeleton')['default']
+    SortPopup: typeof import('./src/components/SortPopup.vue')['default']
+    StoreHomeSkeleton: typeof import('./src/components/skeletons/StoreHomeSkeleton.vue')['default']
     SwiperCarousel: typeof import('./src/components/SwiperCarousel.vue')['default']
     Toast: typeof import('primevue/toast')['default']
   }

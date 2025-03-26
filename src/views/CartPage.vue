@@ -35,10 +35,17 @@
     </div>
 </template>
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useCartStore } from "../stores/cart";
 import CartPageItem from "../components/CartPageItem.vue";
 import { useRouter } from "vue-router";
+import { useQueryClient } from "@tanstack/vue-query";
+
+const queryClient = useQueryClient();
+
+onMounted(() => {
+    queryClient.invalidateQueries({ queryKey: ["storeInfo"] })
+});
 
 const router = useRouter();
 const { cart, cartLength } = useCartStore();

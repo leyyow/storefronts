@@ -62,7 +62,7 @@
             <div class="w-10 h-10">
                 <button
                     class="bg-anti-flash-white rounded-sm w-full h-full flex items-center justify-center cursor-pointer"
-                    @click="filterIsOpen = true"
+                    @click="sortIsOpen = true"
                 >
                     <svg
                         width="16"
@@ -92,8 +92,8 @@
                     </svg>
                 </button>
 
-                <Dialog v-model:visible="filterIsOpen" modal header="Sorting by" class="w-11/12">
-                    <FilterPopup />
+                <Dialog v-model:visible="sortIsOpen" modal header="Sorting by" class="w-11/12">
+                    <SortPopup @closePopup="sortIsOpen = false" />
                 </Dialog>
             </div>
 
@@ -146,9 +146,9 @@ import { useStoreInfo } from "../stores/storeInfo";
 import ProductCard from "../components/ProductCard.vue";
 import { useProductStore } from "../stores/product";
 import { useCartStore } from "../stores/cart";
-import FilterPopup from "../components/FilterPopup.vue";
+import SortPopup from "../components/SortPopup.vue";
 
-const filterIsOpen = ref(false);
+const sortIsOpen = ref(false);
 const { storeInfo } = useStoreInfo();
 const productStore = useProductStore();
 const cartStore = useCartStore();

@@ -33,22 +33,14 @@
             <p class="text-crayola py-3 w-11/12">{{ storeInfo.fold.content }}</p>
 
             <div class="flex flex-col gap-4">
-                <div class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5">
+                <div
+                    v-for="(reason, index) in storeInfo.fold.reasons"
+                    :key="index"
+                    class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5"
+                >
                     <img src="../assets/box.svg" alt="image of a black box" class="w-10 h-10" />
-                    <h6>{{ storeInfo.fold.reason_1.title }}</h6>
-                    <p class="text-crayola">{{ storeInfo.fold.reason_1.content }}</p>
-                </div>
-
-                <div class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5">
-                    <img src="../assets/box.svg" alt="image of a black box" class="w-10 h-10" />
-                    <h6>{{ storeInfo.fold.reason_2.title }}</h6>
-                    <p class="text-crayola">{{ storeInfo.fold.reason_2.content }}</p>
-                </div>
-
-                <div class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5">
-                    <img src="../assets/box.svg" alt="image of a black box" class="w-10 h-10" />
-                    <h6>{{ storeInfo.fold.reason_3.title }}</h6>
-                    <p class="text-crayola">{{ storeInfo.fold.reason_3.content }}</p>
+                    <h6>{{ reason.title }}</h6>
+                    <p class="text-crayola">{{ reason.content }}</p>
                 </div>
             </div>
         </section>
