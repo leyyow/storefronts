@@ -8,11 +8,16 @@
                 :key="filteredProduct.id"
                 :id="filteredProduct.id"
             >
+                <!-- product image  -->
                 <div class="w-full h-100 rounded-lg">
                     <img
-                        :src="filteredProduct.image"
+                        :src="
+                            filteredProduct.images.length
+                                ? filteredProduct.images[0].image
+                                : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
+                        "
                         alt="product image"
-                        class="w-full h-full object-cover rounded-lg"
+                        class="w-full h-full object-cover rounded-lg bg-granite-gray"
                     />
                 </div>
 
@@ -59,10 +64,8 @@
                     </div>
                 </div>
 
-                <h5 v-if="price(filteredProduct)">
-                    <small class="me-0.5">₦</small>{{ price(filteredProduct).toLocaleString() }}<small>.00</small>
-                </h5>
-                <h5 v-else><small class="me-0.5">₦</small>{{ filteredProduct.price.toLocaleString() }}<small>.00</small></h5>
+                <h5><small class="me-0.5">₦</small>{{ (price(filteredProduct)/100).toLocaleString() }}<small>.00</small></h5>
+                <!-- <h5 v-else><small class="me-0.5">₦</small>{{ filteredProduct.price.toLocaleString() }}<small>.00</small></h5> -->
 
                 <Toast position="top-center" group="headless" @close="visible = false">
                     <template #container="{ message, closeCallback }">
@@ -97,58 +100,46 @@
                         onFormSubmit(
                             $event,
                             filteredProduct,
-                            variantNames(filteredProduct).length ? price(filteredProduct) : filteredProduct.price,
-                            variantNames(filteredProduct).length ? stock(filteredProduct) : filteredProduct.total_stock,
+                            price(filteredProduct),
+                            stock(filteredProduct)
                         )
                     "
                     class="flex flex-col gap-4 w-full py-4"
                 >
-                    <div class="flex justify-between w-full gap-2">
-                        <div v-if="variantNames(filteredProduct)[0]" class="flex flex-col gap-1 w-full">
-                            <label for="variant1">{{ variantNames(filteredProduct)[0] }}</label>
+                    <div class="flex flex-wrap w-full gap-2">
+                        <div
+                            v-for="(variant, index) in variantNames(filteredProduct)"
+                            :key="index"
+                            :class="[
+                                'flex flex-col gap-1',
+                                variantNames(filteredProduct).length === 1
+                                    ? 'w-full'
+                                    : variantNames(filteredProduct).length === 2
+                                    ? 'w-[calc(50%-0.25rem)]'
+                                    : index < 2
+                                    ? 'w-[calc(50%-0.25rem)]'
+                                    : 'w-full',
+                            ]"
+                        >
+                            <label :for="`variant${index + 1}`">{{ variant }}</label>
                             <Select
-                                v-model="formState[filteredProduct.id].variant1"
-                                :options="options1Array(filteredProduct)"
-                                name="variant1"
-                                :placeholder="variantNames(filteredProduct)[0]"
-                                class="w-full bg-white border rounded-md p-2"
+                                v-model="formState[filteredProduct.id][`variant${index + 1}`]"
+                                :options="optionsArray(filteredProduct[`options${index + 1}`])"
+                                :name="`variant${index + 1}`"
+                                :placeholder="variant"
+                                class="bg-white border rounded-md p-2"
                             />
                             <Message
-                                v-if="$form.variant1?.invalid"
+                                v-if="$form[`variant${index + 1}`]?.invalid"
                                 severity="error"
                                 size="small"
                                 variant="simple"
                                 class="mt-1"
-                                >{{ $form.variant1.error.message }}</Message
                             >
-                        </div>
-
-                        <div v-if="variantNames(filteredProduct)[1]" class="flex flex-col gap-1 w-full">
-                            <label for="variant2">{{ variantNames(filteredProduct)[1] }}</label>
-                            <Select
-                                v-model="formState[filteredProduct.id].variant2"
-                                :options="options2Array(filteredProduct)"
-                                name="variant2"
-                                :placeholder="variantNames(filteredProduct)[1]"
-                                class="w-full bg-white border rounded-md p-2"
-                            />
-                            <Message
-                                v-if="$form.variant2?.invalid"
-                                severity="error"
-                                size="small"
-                                variant="simple"
-                                class="mt-1"
-                                >{{ $form.variant2.error.message }}</Message
-                            >
+                                {{ $form[`variant${index + 1}`].error.message }}
+                            </Message>
                         </div>
                     </div>
-
-                    <!-- <div class="text-lg font-semibold">
-                        Stock:
-                        {{
-                            variantNames(filteredProduct).length ? stock(filteredProduct) : filteredProduct.total_stock
-                        }}
-                    </div> -->
 
                     <div class="flex gap-2">
                         <Button
@@ -156,13 +147,8 @@
                             severity="secondary"
                             class="bg-black text-white h-13 w-full rounded-md cursor-pointer flex items-center"
                         >
-                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct)"
-                                >Add to Basket</span
-                            >
-                            <span v-else
-                                >{{ cartStore.getCartItemQuantity(filteredProduct) }} in
-                                Basket</span
-                            >
+                            <span v-if="!cartStore.getCartItemQuantity(filteredProduct)">Add to Basket</span>
+                            <span v-else>{{ cartStore.getCartItemQuantity(filteredProduct) }} in Basket</span>
                             <div class="relative">
                                 <svg
                                     width="16"
@@ -190,15 +176,7 @@
         </section>
         <!--  -->
         <div class="h-15 shadow-[0px_-4px_8px_0px_#00000014] p-4 flex items-center">
-            <div class="flex justify-between items-center w-full">
-                <div class="flex flex-col gap-2">
-                    <!-- <p class="text-manatee">
-                        Sub Total ({{ cartStore.cart.length }}) item<span v-if="cartStore.cart.length">s</span>
-                    </p>
-                    <p class="text-feldgrau font-bold">
-                        <small>₦</small>{{ totalAmount.toLocaleString() }}<small>.00</small>
-                    </p> -->
-                </div>
+            <div class="flex justify-end items-center w-full">
                 <div class="w-10 h-10">
                     <router-link :to="{ name: 'Cart' }">
                         <button
@@ -268,77 +246,68 @@ const variantNames = (product) => {
     return names;
 };
 
-const options1Array = (product) => {
-    const options = product.options1.split(",").filter(Boolean);
+const optionsArray = (option) => {
+    const options = option.split(",").filter(Boolean);
     return options;
 };
 
-const options2Array = (product) => {
-    const options = product.options2.split(",").filter(Boolean);
-    return options;
-};
+// const combinationsArray = (product) => {
+//     const combinations = product.combinations
+//         .split(";")
+//         .map((combo) => {
+//             const parts = combo.split(",").map(Number);
 
-const combinationsArray = (product) => {
-    const combinations = product.combinations
-        .split(";")
-        .map((combo) => {
-            const parts = combo.split(",").map(Number);
+//             if (parts.length === 3) {
+//                 // Single variant case
+//                 const [index1, price, stock] = parts;
+//                 return { index1, price, stock };
+//             } else if (parts.length === 4) {
+//                 // Two variant case
+//                 const [index1, index2, price, stock] = parts;
+//                 return { index1, index2, price, stock };
+//             }
 
-            if (parts.length === 3) {
-                // Single variant case
-                const [index1, price, stock] = parts;
-                return { index1, price, stock };
-            } else if (parts.length === 4) {
-                // Two variant case
-                const [index1, index2, price, stock] = parts;
-                return { index1, index2, price, stock };
-            }
+//             return null; // Handle unexpected cases
+//         })
+//         .filter(Boolean);
 
-            return null; // Handle unexpected cases
-        })
-        .filter(Boolean);
-
-    return combinations;
-};
+//     return combinations;
+// };
 
 const price = (product) => {
     getInitialValues(product.id);
-    const index1 = options1Array(product).indexOf(formState[product.id].variant1);
-    const index2 = options2Array(product).indexOf(formState[product.id].variant2);
+    let skuObject = null;
 
-    const combinations = combinationsArray(product);
+    if (variantNames(product).length) {
+        skuObject = product.sku.find((item) => {
+            return (
+                item.option1 === formState[product.id].variant1 &&
+                item.option2 === formState[product.id].variant2 &&
+                item.option3 === formState[product.id].variant3
+            );
+        });
+    }
 
-    const combination = combinations.find((c) => {
-        if ("index2" in c) {
-            // Two variant case
-            return c.index1 === index1 && c.index2 === index2;
-        } else {
-            // Single variant case
-            return c.index1 === index1;
-        }
-    });
-
-    return combination ? combination.price : null;
+    return skuObject ? skuObject.price : product.price;
 };
 
 const stock = (product) => {
     getInitialValues(product.id);
-    const index1 = options1Array(product).indexOf(formState[product.id].variant1);
-    const index2 = options2Array(product).indexOf(formState[product.id].variant2);
+    let skuObject = null;
 
-    const combinations = combinationsArray(product);
+    if (variantNames(product).length) {
+        skuObject = (product.sku || []).find((item) => {
+            return (
+                item.option1 === formState[product.id].variant1 &&
+                item.option2 === formState[product.id].variant2 &&
+                item.option3 === formState[product.id].variant3
+            );
+        });
 
-    const combination = combinations.find((c) => {
-        if ("index2" in c) {
-            // Two variant case
-            return c.index1 === index1 && c.index2 === index2;
-        } else {
-            // Single variant case
-            return c.index1 === index1;
-        }
-    });
+        console.log('skuObject', skuObject);
+    }
 
-    return combination ? combination.stock : null;
+    return skuObject ? skuObject.qty : product.total_stock;
 };
 
 const getInitialValues = (productId) => {
@@ -346,6 +315,7 @@ const getInitialValues = (productId) => {
         formState[productId] = {
             variant1: "",
             variant2: "",
+            variant3: "",
             quantity: 1,
         };
     }
@@ -361,6 +331,10 @@ const resolver = ({ values }) => {
 
     if (!values.variant2) {
         errors.variant2 = [{ message: "This field is required." }];
+    }
+
+    if (!values.variant3) {
+        errors.variant3 = [{ message: "This field is required." }];
     }
 
     return {
@@ -385,7 +359,7 @@ const shareUrl = () => {
 
 const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
     console.log(cartStore.isInStock(product, formState[product.id], stockLeft));
-    
+
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });

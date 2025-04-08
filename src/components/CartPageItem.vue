@@ -2,7 +2,7 @@
     <div class="flex gap-2 mb-5">
         <Toast class="w-8/9 flex items-center" :visible="error" />
 
-        <img :src="item.image" alt="product image" class="w-24 h-24 min-h-full object-cover rounded-sm" />
+        <img :src="item.images.length ? item.images[0].image : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'" alt="product image" class="w-24 h-24 min-h-full object-cover rounded-sm" />
 
         <div class="flex flex-col gap-2 flex-1 justify-between">
             <div class="flex gap-1.5">
@@ -13,12 +13,13 @@
                     <p class="text-granite-gray pt-1">
                         <span v-if="item.selected_variant1">{{ item.selected_variant1 }}</span
                         ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
+                        <span v-if="item.selected_variant3">, {{ item.selected_variant3 }}</span>
                     </p>
                 </div>
                 <div class="w-[33%] font-bold">
                     <p>
                         <small class="me-0.5">₦</small
-                        >{{ (item.variant_price * item.selected_quantity).toLocaleString() }}<small>.00</small>
+                        >{{ ((item.variant_price * item.selected_quantity)/100).toLocaleString() }}<small>.00</small>
                     </p>
                 </div>
             </div>

@@ -11,7 +11,7 @@ export const useCartStore = defineStore(
         // 🛒 Add items to the cart
         function addToCart(
             product: any,
-            selections: { variant1: string; variant2: string; quantity: number },
+            selections: { variant1: string; variant2: string; variant3: string; quantity: number },
             price: number,
             stockLeft: number,
         ) {
@@ -19,19 +19,21 @@ export const useCartStore = defineStore(
                 (i) =>
                     i.id === product.id &&
                     i.selected_variant1 === selections.variant1 &&
-                    i.selected_variant2 === selections.variant2,
+                    i.selected_variant2 === selections.variant2 &&
+                    i.selected_variant3 === selections.variant3
             );
             if (item) {
                 if (item.selected_quantity < item.variant_total_stock) {
                     item.selected_quantity += 1;
                     item.itemTotal = item.variant_price * item.selected_quantity;
                 } else {
-                    return
+                    return;
                 }
             } else {
                 const cartItem = { ...product } as any;
                 cartItem.selected_variant1 = selections.variant1;
                 cartItem.selected_variant2 = selections.variant2;
+                cartItem.selected_variant3 = selections.variant3;
                 cartItem.selected_quantity = 1;
                 cartItem.variant_price = price;
                 cartItem.variant_total_stock = stockLeft;
@@ -52,7 +54,8 @@ export const useCartStore = defineStore(
                 (i) =>
                     i.id === cartItem.id &&
                     (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
-                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true) &&
+                    (cartItem.selected_variant3 ? i.selected_variant3 === cartItem.selected_variant3 : true),
             );
             const index = cart.value.indexOf(del)
             cart.value.splice(index, 1)
@@ -64,7 +67,8 @@ export const useCartStore = defineStore(
                 (i) =>
                     i.id === cartItem.id &&
                     (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
-                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true) &&
+                    (cartItem.selected_variant3 ? i.selected_variant3 === cartItem.selected_variant3 : true),
             );
             if (item) {
                 if (item.selected_quantity < (item.variant_total_stock || item.total_stock)) {
@@ -80,7 +84,8 @@ export const useCartStore = defineStore(
                 (i) =>
                     i.id === cartItem.id &&
                     (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
-                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true) &&
+                    (cartItem.selected_variant3 ? i.selected_variant3 === cartItem.selected_variant3 : true),
             );
             if (item && item.selected_quantity > 1) {
                 item.selected_quantity -= 1;
@@ -93,7 +98,8 @@ export const useCartStore = defineStore(
                 (i) =>
                     i.id === cartItem.id &&
                     (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
-                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true),
+                    (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true) &&
+                    (cartItem.selected_variant3 ? i.selected_variant3 === cartItem.selected_variant3 : true),
             );
             if (quantity > item.variant_total_stock) {
                 item.selected_quantity = item.variant_total_stock;
@@ -109,17 +115,20 @@ export const useCartStore = defineStore(
 
         function isInStock(
             product: any,
-            selections: { variant1: string; variant2: string; quantity: number },
+            selections: { variant1: string; variant2: string; variant3: string; quantity: number },
         ) {
             const item = cart.value.find(
                 (i) =>
                     i.id === product.id &&
                     i.selected_variant1 === selections.variant1 &&
-                    i.selected_variant2 === selections.variant2,
+                    i.selected_variant2 === selections.variant2 &&
+                    i.selected_variant3 === selections.variant3,
             );
 
             if (item) {
-                console.log(`Variant total stock: ${item.variant_total_stock}, Selected quantity: ${item.selected_quantity}`);
+                console.log(
+                    `Variant total stock: ${item.variant_total_stock}, Selected quantity: ${item.selected_quantity}`,
+                );
                 return item.variant_total_stock > item.selected_quantity;
             } else {
                 return true;

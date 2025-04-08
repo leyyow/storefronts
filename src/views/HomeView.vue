@@ -2,20 +2,20 @@
     <div>
         <section class="p-4">
             <h1 class="py-5">{{ storeInfo.title }}</h1>
-            <p class="text-granite-gray py-3 w-10/12">{{ storeInfo.sub_title }}</p>
+            <p class="text-granite-gray py-3 w-10/12">{{ storeInfo.subtitle }}</p>
             <div class="flex gap-3 pt-3 pb-6">
                 <RouterLink to="/store" class="w-full">
                     <button class="py-5 w-full bg-black text-white rounded-lg">Enter Shop</button>
                 </RouterLink>
 
-                <router-link to="#testimonials" class="w-full" v-if="storeInfo.reviews.length > 0">
+                <router-link to="#testimonials" class="w-full" v-if="storeInfo.length > 0">
                     <button class="py-5 w-full bg-anti-flash-white rounded-lg">Testimonials</button>
                 </router-link>
             </div>
 
             <SwiperCarousel>
                 <SwiperSlide
-                    v-for="(item, index) in storeInfo.landing_images"
+                    v-for="(item, index) in landing_images"
                     :key="index"
                     class="flex justify-center items-center"
                 >
@@ -29,12 +29,12 @@
         </section>
         <!--  -->
         <section class="px-4 py-12 bg-black text-white" id="why-us">
-            <h3 class="mb-3">{{ storeInfo.fold.title }}</h3>
-            <p class="text-crayola py-3 w-11/12">{{ storeInfo.fold.content }}</p>
+            <h3 class="mb-3">{{ storeInfo.benefit_page_title }}</h3>
+            <p class="text-crayola py-3 w-11/12">{{ storeInfo.benefit_page_subtitle }}</p>
 
             <div class="flex flex-col gap-4">
                 <div
-                    v-for="(reason, index) in storeInfo.fold.reasons"
+                    v-for="(reason, index) in storeInfo.pages"
                     :key="index"
                     class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5"
                 >
@@ -95,4 +95,12 @@ import ProductCard from "../components/ProductCard.vue";
 import FooterComponent from "../components/layouts/FooterComponent.vue";
 
 const { storeInfo } = useStoreInfo();
+
+const landing_images = [
+    storeInfo.image1,
+    storeInfo.image2,
+    storeInfo.image3,
+    storeInfo.image4,
+    storeInfo.image5,
+].filter(image => image !== null);
 </script>

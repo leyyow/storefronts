@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted, computed, watch } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { useStoreInfo } from "./stores/storeInfo.ts";
 import { useApiCalls } from "./composables/useApiCalls.ts";
 import { useRoute } from "vue-router";
@@ -26,42 +26,27 @@ import StoreHomeSkeleton from "./components/skeletons/StoreHomeSkeleton.vue";
 const { storeInfo, updateStoreInfo } = useStoreInfo();
 const { fetchStoreInfo } = useApiCalls();
 const route = useRoute();
-const routeName = ref("");
-const merchantSlug = ref("");
-const isLoading = ref(false);
 
-// Watch for route changes
+const routeName = ref("");
+
+// Track route changes
 watch(
-    () => route.name,
-    (newRouteName) => {
-        routeName.value = newRouteName;
-        console.log("Route Name:", routeName.value);
-    },
-    { immediate: true }
+  () => route.name,
+  (newRouteName) => {
+    routeName.value = newRouteName;
+    console.log("Route Name:", routeName.value);
+  },
+  { immediate: true }
 );
 
-// Extract merchant slug from subdomain
-onMounted(() => {
-    const hostname = window.location.hostname; // e.g., "merchant_slug.leyyow.com"
-    const parts = hostname.split(".");
-    if (parts.length > 2) {
-        merchantSlug.value = parts[0]; // Extract subdomain as merchantSlug
-    }
-    console.log("Merchant Slug:", merchantSlug.value);
-});
+// Get the slug directly
+const hostname = window.location.hostname;
+const parts = hostname.split(".");
+const merchantSlug = parts.length > 2 ? parts[0] : "demo";
 
-// Fetch store info when `merchantSlug` is set
-watchEffect(() => {
-    if (merchantSlug.value) {
-        const storeQuery = fetchStoreInfo(merchantSlug.value);
-        isLoading.value = storeQuery.isLoading.value;
+// Call the composable directly during setup
+const storeQuery = fetchStoreInfo(merchantSlug);
 
-        watchEffect(() => {
-            if (storeQuery.data.value) {
-                updateStoreInfo(storeQuery.data.value);
-                console.log("Store Info updated:", storeQuery.data.value);
-            }
-        });
-    }
-});
+const isLoading = computed(() => storeQuery.isLoading.value);
+
 </script>

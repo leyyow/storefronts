@@ -21,7 +21,7 @@
                 <p class="text-granite-gray">
                     SubTotal ({{ totalProducts ? totalProducts : 0 }} item<span v-if="totalProducts > 0">s</span>):
                 </p>
-                <p><small class="me-0.5 font-bold">₦</small>{{ totalAmount.toLocaleString() }}<small>.00</small></p>
+                <p><small class="me-0.5 font-bold">₦</small>{{ (totalAmount/100).toLocaleString() }}<small>.00</small></p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">

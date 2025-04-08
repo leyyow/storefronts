@@ -3,7 +3,7 @@ import { ref, computed, watch } from "vue";
 import { useStoreInfo } from "../stores/storeInfo";
 
 export const useProductStore = defineStore("product", () => {
-    const { storeInfo } = useStoreInfo();
+    const { storeInfo } = useStoreInfo() as unknown as { storeInfo: { products: any[] } };
     const activeTab = ref("all");
     const searchInput = ref("");
     const inventory = ref<any[]>([]); // This will hold the modified list
@@ -12,7 +12,7 @@ export const useProductStore = defineStore("product", () => {
 
     // Watch storeInfo and update inventory when it changes
     watch(
-        () => storeInfo?.inventory,
+        () => storeInfo?.products,
         (newInventory) => {
             if (newInventory) {
                 originalInventory.value = [...newInventory]; // Store original order

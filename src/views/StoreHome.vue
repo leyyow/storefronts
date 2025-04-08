@@ -16,13 +16,13 @@
                 v-for="category in storeInfo.categories"
                 :class="[
                     'tab border-b-2 py-2 px-3 cursor-pointer',
-                    productStore.activeTab === category
+                    productStore.activeTab === category.category
                         ? 'text-spanish-viridian border-spanish-viridian'
                         : 'text-manatee border-manatee',
                 ]"
-                @click="productStore.toggleTab(category)"
+                @click="productStore.toggleTab(category.category)"
             >
-                {{ category }}
+                {{ category.category }}
             </div>
         </div>
 

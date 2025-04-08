@@ -18,8 +18,10 @@ defineProps({
     <RouterLink
         :to="{ path: '/store/product', hash: `#${product.id}` }"
         class="w-[32.5%] h-32 mb-0.5 rounded-sm bg-granite-gray relative"
+        v-if="(product.combinations === null)"
     >
-        <img :src="product.image" alt="product image" class="w-full h-full object-cover rounded-sm" />
+        <img :src="product.images[0].image" alt="product image" class="w-full h-full object-cover rounded-sm" v-if="product.images.length" />
+        <img src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081" alt="product image" class="w-full h-full object-cover rounded-sm bg-granite-gray" v-else />
 
         <!-- out of stock  -->
         <div
@@ -62,7 +64,7 @@ defineProps({
         <!-- Price -->
         <div class="w-full relative bottom-8 z-5 h-6 p-1">
             <p class="bg-white w-full text-center rounded-sm">
-                <small>₦</small><span>{{ product.price.toLocaleString() }}</span
+                <small>₦</small><span>{{ (product.price / 100).toLocaleString() }}</span
                 ><small>.00</small>
             </p>
         </div>
