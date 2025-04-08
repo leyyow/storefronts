@@ -48,15 +48,26 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
     scrollBehavior(to) {
-        return new Promise(() => {
+        return new Promise((resolve) => {
             nextTick(() => {
                 if (to.hash) {
-                    const element = document.querySelector(to.hash);
-                    if (element) {
-                        element.scrollIntoView({ behavior: "smooth" });
-                    }
+                    const id = to.hash.replace("#", "");
+
+                    const scrollToElement = () => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.scrollIntoView({ behavior: "auto" });
+                            resolve(); // finish the scroll behavior
+                        } else {
+                            // Keep checking until the element appears
+                            setTimeout(scrollToElement, 100);
+                        }
+                    };
+
+                    scrollToElement();
                 } else {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    window.scrollTo({ top: 0, behavior: "auto" });
+                    resolve();
                 }
             });
         });
