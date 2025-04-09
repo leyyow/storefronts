@@ -4,7 +4,7 @@
             <div v-if="isLoading && routeName">
                 <HomeSkeleton v-if="routeName === 'Home'" />
                 <StoreHomeSkeleton v-else />
-                <!-- i will put the rest of the skeletons here -->
+                <!-- rest of the skeletons -->
             </div>
             <router-view v-slot="{ Component }" v-else>
                 <transition name="fade">
