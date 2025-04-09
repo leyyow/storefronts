@@ -225,12 +225,19 @@
     </div>
 </template>
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useCartStore } from "../stores/cart";
 import { useApiCalls } from "../composables/useApiCalls";
+
+onMounted(() => {
+    const popup = document.createElement('script')
+    popup.setAttribute('src', 'https://js.paystack.co/v2/inline.js')
+    popup.async = true
+    document.head.appendChild(popup)
+});
 
 const { shippingDetails, deliveryFee } = useOrderStore();
 const { cart, cartLength, cartTotal } = useCartStore();
@@ -276,27 +283,31 @@ const variantNames = (product) => {
 const orderRef = generateOrderRef(storeInfo.store, cart);
 const orderDate = new Date().toISOString().split("T")[0];
 const payloadItems = cart.map((item, i) => {
-    return {
+    const variants = variantNames(item);
+    const payloadItem = {
         has_feedback: false,
-        index: 0,
+        index: i,
         lead_time: 5,
         note: "",
         product: item.id,
         productid: item.id,
-        var1name: variantNames(item)[0],
-        var2name: variantNames(item)[1],
-        // var3name: variantNames(item)[2],
-        selected_option1: item.selected_variant1,
-        selected_option2: item.selected_variant2,
-        // selected_option3: item.selected_variant3,
         qty: item.selected_quantity,
-        price_sold: item.variant_price ? item.variant_price : item.price,
+        price_sold: item.variant_price || item.price,
         status: 1,
         sub_total: item.itemTotal,
         selected_position: i + 1,
         is_returned: false,
     };
+
+    // Dynamically add varXname and selected_optionX
+    variants.forEach((variantName, index) => {
+        payloadItem[`var${index + 1}name`] = variantName;
+        payloadItem[`selected_option${index + 1}`] = item[`selected_variant${index + 1}`];
+    });
+
+    return payloadItem;
 });
+
 
 const checkout = () => {
     const payload = {

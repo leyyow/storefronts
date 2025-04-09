@@ -34,6 +34,7 @@ export function useApiCalls() {
                 console.log(orderData);
                 
                 // await handleOrderSuccess(orderData);
+                window.location.href = `https://checkout.paystack.com/${orderData.access_code}`;
             },
         });
 
