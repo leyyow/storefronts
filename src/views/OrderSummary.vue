@@ -239,7 +239,7 @@ const { createOrder } = useApiCalls();
 const { mutate: useCreateOrder, isPending, error } = createOrder();
 
 const totalAmount = computed(() => {
-    return (deliveryFee ? deliveryFee + cartTotal / 100 : cartTotal / 100).toLocaleString();
+    return (shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal / 100 : cartTotal / 100).toLocaleString();
 });
 
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
@@ -268,6 +268,10 @@ const generateOrderRef = (storeId, cartItems) => {
 
     return `${refType}${paddedStoreId}${month}${day}${cartCount}${year}${randInt}`;
 };
+const variantNames = (product) => {
+    const names = product.variants.split(",").filter(Boolean);
+    return names.length ? names : ["", "", ""];
+};
 
 const orderRef = generateOrderRef(storeInfo.store, cart);
 const orderDate = new Date().toISOString().split("T")[0];
@@ -279,12 +283,12 @@ const payloadItems = cart.map((item, i) => {
         note: "",
         product: item.id,
         productid: item.id,
-        var1name: item.selected_variant1,
-        var2name: item.selected_variant2,
-        var3name: item.selected_variant2,
+        var1name: variantNames(item)[0],
+        var2name: variantNames(item)[1],
+        // var3name: variantNames(item)[2],
         selected_option1: item.selected_variant1,
         selected_option2: item.selected_variant2,
-        selected_option3: item.selected_variant3,
+        // selected_option3: item.selected_variant3,
         qty: item.selected_quantity,
         price_sold: item.variant_price ? item.variant_price : item.price,
         status: 1,
