@@ -12,6 +12,8 @@ export function useApiCalls() {
                 if (!merchantSlug) throw new Error("Merchant slug is required");
                 const response = await apiGet(`/account/store-website/public/${merchantSlug}/`) as { status: number; data: any };
 
+                console.log('Merchant Slug:', merchantSlug);
+                
                 console.log(response.data);
 
                 if (response.status === 200) {
