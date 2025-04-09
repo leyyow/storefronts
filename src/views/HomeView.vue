@@ -8,7 +8,7 @@
                     <button class="py-5 w-full bg-black text-white rounded-lg">Enter Shop</button>
                 </RouterLink>
 
-                <router-link to="#testimonials" class="w-full" v-if="storeInfo.length > 0">
+                <router-link to="#testimonials" class="w-full" v-if="storeInfo.reviews.length > 0">
                     <button class="py-5 w-full bg-anti-flash-white rounded-lg">Testimonials</button>
                 </router-link>
             </div>

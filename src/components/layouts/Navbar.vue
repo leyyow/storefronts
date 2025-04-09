@@ -2,7 +2,7 @@
     <div class="relative" @wheel.prevent @touchmove.prevent @scroll.prevent>
         <nav class="py-5 px-4 flex justify-between items-center z-20">
             <RouterLink to="/" class="logo max-h-8">
-                <h5 class="text-dark-green font-bold text-2xl">Logo</h5>
+                <img :src="storeInfo.store_logo" :alt="`${storeInfo.store_name} logo`" class="h-8" />
             </RouterLink>
 
             <!-- <div
