@@ -7,7 +7,7 @@ export const useStoreInfo = defineStore(
         let storeInfo = shallowReactive({});
 
         const updateStoreInfo = (info: any) => {
-            storeInfo = info;
+            Object.assign(storeInfo, info);
         };
 
         return {

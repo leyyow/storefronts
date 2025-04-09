@@ -8,12 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Avatar: typeof import('primevue/avatar')['default']
     Button: typeof import('primevue/button')['default']
     CartPageItem: typeof import('./src/components/CartPageItem.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
-    Dropdown: typeof import('primevue/dropdown')['default']
-    FilterPopup: typeof import('./src/components/FilterPopup.vue')['default']
     FooterComponent: typeof import('./src/components/layouts/FooterComponent.vue')['default']
     Form: typeof import('@primevue/forms/form')['default']
     HomeSkeleton: typeof import('./src/components/skeletons/HomeSkeleton.vue')['default']
@@ -22,8 +19,10 @@ declare module 'vue' {
     Message: typeof import('primevue/message')['default']
     Navbar: typeof import('./src/components/layouts/Navbar.vue')['default']
     ProductCard: typeof import('./src/components/ProductCard.vue')['default']
-    ProductNavbar: typeof import('./src/components/product/ProductNavbar.vue')['default']
-    ProgressBar: typeof import('primevue/progressbar')['default']
+    ProductImage: typeof import('./src/components/product-details/ProductImage.vue')['default']
+    ProductInfo: typeof import('./src/components/product-details/ProductInfo.vue')['default']
+    ProductNavbar: typeof import('./src/components/product-details/ProductNavbar.vue')['default']
+    ProductVariantsForm: typeof import('./src/components/product-details/ProductVariantsForm.vue')['default']
     RadioButton: typeof import('primevue/radiobutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -33,5 +32,6 @@ declare module 'vue' {
     StoreHomeSkeleton: typeof import('./src/components/skeletons/StoreHomeSkeleton.vue')['default']
     SwiperCarousel: typeof import('./src/components/SwiperCarousel.vue')['default']
     Toast: typeof import('primevue/toast')['default']
+    ToastSuccess: typeof import('./src/components/product-details/ToastSuccess.vue')['default']
   }
 }

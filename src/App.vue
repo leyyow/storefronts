@@ -42,7 +42,8 @@ watch(
 // Get the slug directly
 const hostname = window.location.hostname;
 const parts = hostname.split(".");
-const merchantSlug = parts.length > 2 ? parts[0] : "demo";
+// const merchantSlug = parts.length > 2 ? parts[0] : "demo";
+const merchantSlug = parts.length > 2 ? "demo" : "demo";
 
 // Call the composable directly during setup
 const storeQuery = fetchStoreInfo(merchantSlug);

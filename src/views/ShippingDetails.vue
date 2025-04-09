@@ -41,9 +41,9 @@
             </div>
 
             <div class="bg-anti-flash-white rounded-md px-3 w-full" v-if="initialValues.shippingMethod === 'Delivery'">
-                <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="location in storeInfo.store.delivery_price">
-                    <label for="Badagry">{{ location.location }} - <span class="font-bold"><small class="me-0.5">₦</small>{{ location.price.toLocaleString() }}<small>.00</small></span></label>
-                    <RadioButton v-model="initialValues.location" :inputId="location.location" name="location" :value="location.location" />
+                <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="location in storeInfo.shipping_prices">
+                    <label :for="location.area">{{ location.area }} - <span class="font-bold"><small class="me-0.5">₦</small>{{ location.amount.toLocaleString() }}<small>.00</small></span></label>
+                    <RadioButton v-model="initialValues.location" :inputId="location.area" name="location" :value="location.area" />
                 </div>
                 <Message v-if="$form.location?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{ $form.location.error.message }}</Message>
             </div>
@@ -55,7 +55,7 @@
             </div>
 
             <div v-if="initialValues.shippingMethod === 'Pickup'">
-                <p><span class="font-bold">Pickup at:</span> {{ storeInfo.store.address }}</p>
+                <p><span class="font-bold">Pickup at:</span> {{ storeInfo.address }}</p>
             </div>
 
             <Button type="submit" severity="secondary" label="Proceed to Checkout" class="py-3 bg-black text-white" />

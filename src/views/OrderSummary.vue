@@ -7,7 +7,15 @@
 
         <div class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
             <div class="flex gap-2 mb-2" v-for="item in cart">
-                <img :src="item.image" alt="product image" class="w-16 h-16 object-cover rounded-sm" />
+                <img
+                    :src="
+                        item.images.length
+                            ? item.images[0].image
+                            : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
+                    "
+                    alt="product image"
+                    class="w-16 h-16 object-cover rounded-sm"
+                />
 
                 <div class="flex flex-col gap-2 flex-1">
                     <div class="flex gap-1.5">
@@ -19,12 +27,14 @@
 
                             <p class="text-granite-gray">
                                 <span v-if="item.selected_variant1">{{ item.selected_variant1 }}</span
-                                ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span>
+                                ><span v-if="item.selected_variant2">, {{ item.selected_variant2 }}</span
+                                ><span v-if="item.selected_variant3">, {{ item.selected_variant3 }}</span>
                             </p>
                         </div>
-                        <div class="w-[33%]">
+                        <div class="w-[33%] flex flex-col items-end">
                             <p class="leading-none pt-2 pb-3 font-bold">
-                                <small class="me-0.5">₦</small>{{ item.itemTotal.toLocaleString() }}<small>.00</small>
+                                <small class="me-0.5">₦</small>{{ (item.itemTotal / 100).toLocaleString()
+                                }}<small>.00</small>
                             </p>
 
                             <p class="text-granite-gray w-full flex justify-end">Qty: {{ item.selected_quantity }}</p>
@@ -100,7 +110,7 @@
 
                 <div class="flex justify-between items-center mt-2">
                     <p v-if="shippingDetails.shippingMethod === 'Delivery'">{{ shippingDetails.address }}</p>
-                    <p v-else>{{ storeInfo.store.address }}</p>
+                    <p v-else>{{ storeInfo.address }}</p>
 
                     <!-- delivery -->
                     <div
@@ -181,8 +191,10 @@
 
         <div class="h-43 shadow-[0px_-4px_8px_0px_#00000014] px-4 py-2.5">
             <div class="flex justify-between pb-1.5">
-                <p class="text-granite-gray">SubTotal ({{ totalProducts }} item<span v-if="totalProducts > 0">s</span>):</p>
-                <p><small class="me-0.5">₦</small>{{ cartTotal.toLocaleString() }}<small>.00</small></p>
+                <p class="text-granite-gray">
+                    SubTotal ({{ totalProducts }} item<span v-if="totalProducts > 0">s</span>):
+                </p>
+                <p><small class="me-0.5">₦</small>{{ (cartTotal / 100).toLocaleString() }}<small>.00</small></p>
             </div>
 
             <div
@@ -205,9 +217,9 @@
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
                     <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
                 </router-link>
-                <router-link :to="{ name: 'OrderSuccessful', params: { id: 1 } }" class="w-[63%]">
-                    <button class="w-full bg-black text-white py-3 rounded-md">Proceed to Checkout</button>
-                </router-link>
+                <button class="w-[63%] bg-black text-white py-3 rounded-md" @click="checkout">
+                    Proceed to Checkout
+                </button>
             </div>
         </div>
     </div>
@@ -218,13 +230,16 @@ import { Minus, Plus } from "lucide-vue-next";
 import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useCartStore } from "../stores/cart";
+import { useApiCalls } from "../composables/useApiCalls";
 
 const { shippingDetails, deliveryFee } = useOrderStore();
 const { cart, cartLength, cartTotal } = useCartStore();
 const { storeInfo } = useStoreInfo();
+const { createOrder } = useApiCalls();
+const { mutate: useCreateOrder, isPending, error } = createOrder();
 
 const totalAmount = computed(() => {
-    return (deliveryFee ? deliveryFee + cartTotal : cartTotal).toLocaleString();
+    return (deliveryFee ? deliveryFee + cartTotal / 100 : cartTotal / 100).toLocaleString();
 });
 
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
@@ -235,5 +250,89 @@ const trimmedString = (string) => {
     }
     return string.substring(0, 20);
 };
+
+const uniqueProductCount = () => {
+    const uniqueIds = new Set(cart.map((item) => item.id));
+    return uniqueIds.size;
+};
+
+const generateOrderRef = (storeId, cartItems) => {
+    const refType = "1";
+    const randInt = Math.floor(Math.random() * 9000) + 1000; // ensures it's 4-digit
+    const today = new Date();
+    const year = today.getFullYear().toString().slice(-2);
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const day = today.getDate().toString().padStart(2, "0");
+    const cartCount = cartItems.length.toString().padStart(2, "0");
+    const paddedStoreId = storeId.toString().padStart(4, "0");
+
+    return `${refType}${paddedStoreId}${month}${day}${cartCount}${year}${randInt}`;
+};
+
+const orderRef = generateOrderRef(storeInfo.store, cart);
+const orderDate = new Date().toISOString().split("T")[0];
+const payloadItems = cart.map((item, i) => {
+    return {
+        has_feedback: false,
+        index: 0,
+        lead_time: 5,
+        note: "",
+        product: item.id,
+        productid: item.id,
+        var1name: item.selected_variant1,
+        var2name: item.selected_variant2,
+        var3name: item.selected_variant2,
+        selected_option1: item.selected_variant1,
+        selected_option2: item.selected_variant2,
+        selected_option3: item.selected_variant3,
+        qty: item.selected_quantity,
+        price_sold: item.variant_price ? item.variant_price : item.price,
+        status: 1,
+        sub_total: item.itemTotal,
+        selected_position: i + 1,
+        is_returned: false,
+    };
+});
+
+const checkout = () => {
+    const payload = {
+        channel: 3,
+        customer_info: {
+            address: shippingDetails.address,
+            email: shippingDetails.email,
+            first_name: shippingDetails.name,
+            last_name: "",
+            line1: shippingDetails.address,
+            phone: shippingDetails.phoneNumber,
+            city: shippingDetails.location,
+        },
+        fulfilled: 0,
+        has_customer: false,
+        items_count: cartLength,
+        order_ref: orderRef,
+        order_date: orderDate,
+        paid_amount: 0,
+        payment_mode: 1,
+        payment_status: 0,
+        products_total: cartTotal,
+        shipping_price: deliveryFee * 100,
+        shipping_company: 0,
+        shipping_mode: false,
+        shipping_paid: false,
+        store: storeInfo.store,
+        total_amount: deliveryFee ? deliveryFee * 100 + cartTotal : cartTotal,
+        unique_items: uniqueProductCount(),
+        items: [...payloadItems],
+    };
+
+    console.log(payload);
+    useCreateOrder(payload);
+    if (isPending.value) {
+        console.log("Order is being created...");
+    } else if (error.value) {
+        console.error("Error creating order:", error.value);
+    } else {
+        console.log("Order created successfully!");
+    }
+};
 </script>
-<style></style>
