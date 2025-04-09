@@ -8,7 +8,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BottomCart: typeof import('./src/components/product-details/BottomCart.vue')['default']
     Button: typeof import('primevue/button')['default']
+    CartButton: typeof import('./src/components/product-details/CartButton.vue')['default']
     CartPageItem: typeof import('./src/components/CartPageItem.vue')['default']
     Dialog: typeof import('primevue/dialog')['default']
     FooterComponent: typeof import('./src/components/layouts/FooterComponent.vue')['default']
