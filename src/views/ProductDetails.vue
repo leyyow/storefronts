@@ -16,7 +16,7 @@
                 <!-- product image  -->
                 <ProductImage :filteredProduct="filteredProduct" />
 
-                <ProductInfo :filteredProduct="filteredProduct" :shareUrl="shareUrl" />
+                <ProductInfo :filteredProduct="filteredProduct" @share-clicked="shareUrl" />
 
                 <ProductVariantsForm
                     :filteredProduct="filteredProduct"
@@ -170,12 +170,13 @@ const resolver = ({ values }) => {
     };
 };
 
-const shareUrl = () => {
+const shareUrl = (productId) => {
+    const baseUrl = `${window.location.origin}/store/product#${productId}`;
     if (navigator.share) {
         navigator
             .share({
                 title: document.title,
-                url: window.location.href,
+                url: baseUrl,
             })
             .then(() => console.log("Successfully shared"))
             .catch((error) => console.error("Error sharing", error));

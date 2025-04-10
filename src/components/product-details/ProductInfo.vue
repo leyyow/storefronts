@@ -1,3 +1,22 @@
+<script setup>
+import { defineProps, computed, defineEmits } from "vue";
+
+const props = defineProps({
+    filteredProduct: {
+        type: Object,
+        required: true,
+    },
+});
+
+const emit = defineEmits(["share-clicked"]);
+
+const formattedPrice = computed(() => (props.filteredProduct.price / 100).toLocaleString());
+
+const handleShareClick = () => {
+    emit("share-clicked", props.filteredProduct.id); // Optionally pass product data
+};
+</script>
+
 <template>
     <div>
         <div class="flex py-3 justify-between items-center">
@@ -5,7 +24,7 @@
             <div>
                 <button
                     class="rounded-full w-10 h-10 border-platinum border flex justify-center items-center cursor-pointer"
-                    @click="shareUrl"
+                    @click="handleShareClick"
                 >
                     <svg
                         width="18"
@@ -49,21 +68,3 @@
         </h5>
     </div>
 </template>
-
-<script setup>
-import { defineProps, computed } from "vue";
-
-const props = defineProps({
-    filteredProduct: {
-        type: Object,
-        required: true,
-    },
-    shareUrl: {
-        type: Function,
-        required: true,
-    },
-});
-
-// Computed property for formatted price
-const formattedPrice = computed(() => (props.filteredProduct.price / 100).toLocaleString());
-</script>

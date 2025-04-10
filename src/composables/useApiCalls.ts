@@ -4,6 +4,7 @@ import { useStoreInfo } from "../stores/storeInfo";
 
 export function useApiCalls() {
     const { updateStoreInfo } = useStoreInfo();
+    
     // Fetch store info (requires merchantSlug)
     const fetchStoreInfo = (merchantSlug: string) =>
         useQuery({
