@@ -1,17 +1,18 @@
 import { defineStore } from "pinia";
 import { computed, ref, watch } from "vue";
+import type { CartItem, Selections, Product } from "../includes/interfaces";
 
 export const useCartStore = defineStore(
     "cart",
     () => {
-        const cart = ref<any[]>([]);
-        const cartTotal = computed(() => cart.value.reduce((sum, item) => sum + (item.variant_price * item.selected_quantity), 0));
-        const cartLength = computed(() => cart.value.length);
+        const cart = ref<CartItem[]>([]);
+        const cartTotal = computed<Number>(() => cart.value.reduce((sum, item) => sum + (item.variant_price * item.selected_quantity), 0));
+        const cartLength = computed<Number>(() => cart.value.length);
 
         // 🛒 Add items to the cart
         function addToCart(
-            product: any,
-            selections: { variant1: string; variant2: string; variant3: string; quantity: number },
+            product: Product,
+            selections: Selections,
             price: number,
             stockLeft: number,
         ) {
@@ -30,7 +31,7 @@ export const useCartStore = defineStore(
                     return;
                 }
             } else {
-                const cartItem = { ...product } as any;
+                const cartItem = { ...product } as CartItem;
                 cartItem.selected_variant1 = selections.variant1;
                 cartItem.selected_variant2 = selections.variant2;
                 cartItem.selected_variant3 = selections.variant3;
@@ -43,26 +44,28 @@ export const useCartStore = defineStore(
         }
 
         // 🔍 Check if a product with exact variants is in the cart
-        function getCartItemQuantity(product: any) {
+        function getCartItemQuantity(product: Product) {
             const items = cart.value.filter((i) => i.id === product.id);
             return items.reduce((sum, item) => sum + item.selected_quantity, 0);
         }
 
         // ✅ Remove a specific selection from the cart
-        function removeSelection(cartItem: any) {
-            const del = cart.value.find(
+        function removeSelection(cartItem: CartItem) {
+            const del: CartItem | undefined = cart.value.find(
                 (i) =>
                     i.id === cartItem.id &&
                     (cartItem.selected_variant1 ? i.selected_variant1 === cartItem.selected_variant1 : true) &&
                     (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true) &&
                     (cartItem.selected_variant3 ? i.selected_variant3 === cartItem.selected_variant3 : true),
             );
-            const index = cart.value.indexOf(del)
-            cart.value.splice(index, 1)
+            if (del) {
+                const index = cart.value.indexOf(del);
+                cart.value.splice(index, 1);
+            }
         }
 
         // ➕ Increase quantity of a selection
-        function increaseSelectionQuantity(cartItem: any) {
+        function increaseSelectionQuantity(cartItem: CartItem) {
             const item = cart.value.find(
                 (i) =>
                     i.id === cartItem.id &&
@@ -79,7 +82,7 @@ export const useCartStore = defineStore(
         }
 
         // ➖ Decrease quantity of a selection (removes item if quantity reaches 0)
-        function decreaseSelectionQuantity(cartItem: any) {
+        function decreaseSelectionQuantity(cartItem: CartItem) {
             const item = cart.value.find(
                 (i) =>
                     i.id === cartItem.id &&
@@ -93,7 +96,7 @@ export const useCartStore = defineStore(
             }
         }
 
-        function updateSelectionQuantity(cartItem: any, quantity: number) {
+        function updateSelectionQuantity(cartItem: CartItem, quantity: number) {
             const item = cart.value.find(
                 (i) =>
                     i.id === cartItem.id &&
@@ -101,21 +104,25 @@ export const useCartStore = defineStore(
                     (cartItem.selected_variant2 ? i.selected_variant2 === cartItem.selected_variant2 : true) &&
                     (cartItem.selected_variant3 ? i.selected_variant3 === cartItem.selected_variant3 : true),
             );
-            if (quantity > item.variant_total_stock) {
-                item.selected_quantity = item.variant_total_stock;
+            if (item) {
+                if (quantity > item.variant_total_stock) {
+                    item.selected_quantity = item.variant_total_stock;
+                } else {
+                    item.selected_quantity = quantity;
+                }
+                item.itemTotal = item.variant_price * item.selected_quantity;
             } else {
-                item.selected_quantity = quantity
+                return;
             }
-            item.itemTotal = item.variant_price * item.selected_quantity;
         }
 
-        function isProductInCart(product: any) {
+        function isProductInCart(product: Product) {
             return cart.value.some((i) => i.id === product.id);
         }
 
         function isInStock(
-            product: any,
-            selections: { variant1: string; variant2: string; variant3: string; quantity: number },
+            product: Product,
+            selections: Selections,
         ) {
             const item = cart.value.find(
                 (i) =>

@@ -13,7 +13,7 @@
                 </router-link>
             </div>
 
-            <SwiperCarousel>
+            <SwiperCarousel v-if="landing_images.length > 0">
                 <SwiperSlide
                     v-for="(item, index) in landing_images"
                     :key="index"

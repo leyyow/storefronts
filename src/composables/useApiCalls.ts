@@ -30,7 +30,7 @@ export function useApiCalls() {
         return useMutation({
             mutationKey: ["createOrder"],
             mutationFn: async (data: any) => {
-                return await apiPost("inventory/orders/public/", data);
+                return await apiPost("/inventory/orders/public/", data);
             },
             onSuccess: async (orderData: any) => {
                 queryClient.refetchQueries({ queryKey: ["storeInfo"] });

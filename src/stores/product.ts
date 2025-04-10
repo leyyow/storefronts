@@ -1,18 +1,19 @@
 import { defineStore } from "pinia";
 import { ref, computed, watch } from "vue";
 import { useStoreInfo } from "../stores/storeInfo";
+import type { StoreInfo, Product } from "../includes/interfaces";
 
 export const useProductStore = defineStore("product", () => {
-    const { storeInfo } = useStoreInfo() as unknown as { storeInfo: { products: any[] } };
+    const { storeInfo } = useStoreInfo();
     const activeTab = ref("all");
     const searchInput = ref("");
-    const inventory = ref<any[]>([]); // This will hold the modified list
-    const originalInventory = ref<any[]>([]); // Keep the original API response
+    const inventory = ref<Product[]>([]); // This will hold the modified list
+    const originalInventory = ref<Product[]>([]); // Keep the original API response
     const sortOrder = ref<"asc" | "desc" | "def">("def"); // Null means default order
 
     // Watch storeInfo and update inventory when it changes
     watch(
-        () => storeInfo?.products,
+        () => (storeInfo as StoreInfo)?.products,
         (newInventory) => {
             if (newInventory) {
                 originalInventory.value = [...newInventory]; // Store original order
@@ -39,7 +40,7 @@ export const useProductStore = defineStore("product", () => {
         }
     };
 
-    const filteredProducts = computed(() => {
+    const filteredProducts = computed<Product[]>(() => {
         if (!inventory.value.length) return [];
 
         let products =

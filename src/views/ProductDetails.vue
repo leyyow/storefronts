@@ -37,7 +37,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, nextTick, watch, reactive, computed } from "vue";
 import { useRoute } from "vue-router";
 import Navbar from "../components/product-details/ProductNavbar.vue";
@@ -51,6 +51,7 @@ import { useStoreInfo } from "../stores/storeInfo";
 import { useToast } from "primevue/usetoast";
 import { Minus, Plus, Check } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
+import type { Product } from "../includes/interfaces";
 
 const route = useRoute();
 const productId = ref(route.params.id);
@@ -59,10 +60,9 @@ const cartStore = useCartStore();
 const { storeInfo } = useStoreInfo();
 const toast = useToast();
 const toastText = ref("");
-
 const visible = ref(false);
 const error = ref(false);
-const formState = reactive({ default: { variant1: "", variant2: "", quantity: 1 } });
+const formState = reactive({ default: { variant1: "", variant2: "", variant3: "", quantity: 1 } });
 
 const totalAmount = computed(() =>
     cartStore.cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0),
@@ -70,7 +70,7 @@ const totalAmount = computed(() =>
 
 const totalProducts = computed(() => cartStore.cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
-const variantNames = (product) => {
+const variantNames = (product: Product) => {
     const names = product.variants.split(",").filter(Boolean);
     return names;
 };
@@ -79,29 +79,8 @@ const optionsArray = (option) => {
     const options = option.split(",").filter(Boolean);
     return options;
 };
-//     const combinations = product.combinations
-//         .split(";")
-//         .map((combo) => {
-//             const parts = combo.split(",").map(Number);
 
-//             if (parts.length === 3) {
-//                 // Single variant case
-//                 const [index1, price, stock] = parts;
-//                 return { index1, price, stock };
-//             } else if (parts.length === 4) {
-//                 // Two variant case
-//                 const [index1, index2, price, stock] = parts;
-//                 return { index1, index2, price, stock };
-//             }
-
-//             return null; // Handle unexpected cases
-//         })
-//         .filter(Boolean);
-
-//     return combinations;
-// };
-
-const price = (product) => {
+const price = (product: Product) => {
     getInitialValues(product.id);
     let skuObject = null;
 
@@ -118,7 +97,7 @@ const price = (product) => {
     return skuObject ? skuObject.price : product.price;
 };
 
-const stock = (product) => {
+const stock = (product: Product) => {
     getInitialValues(product.id);
     let skuObject = null;
 
@@ -130,14 +109,12 @@ const stock = (product) => {
                 item.option3 === formState[product.id].variant3
             );
         });
-
-        console.log("skuObject", skuObject);
     }
 
     return skuObject ? skuObject.qty : product.total_stock;
 };
 
-const getInitialValues = (productId) => {
+const getInitialValues = (productId: number) => {
     if (!formState[productId]) {
         formState[productId] = {
             variant1: "",
@@ -185,9 +162,7 @@ const shareUrl = (productId) => {
     }
 };
 
-const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
-    console.log(cartStore.isInStock(product, formState[product.id], stockLeft));
-
+const onFormSubmit = ({ valid, values }, product: Product, variantPrice: number, stockLeft: number) => {
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
@@ -202,7 +177,6 @@ const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
         });
         visible.value = "success";
         cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft);
-
         visible.value = false;
     } else {
         error.value = true;
