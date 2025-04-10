@@ -217,8 +217,11 @@
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
                     <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
                 </router-link>
-                <button class="w-[63%] bg-black text-white py-3 rounded-md" @click="checkout">
-                    Proceed to Checkout
+                <button class="w-[63%] bg-black text-white py-3 rounded-md cursor-pointer" :disabled="isPending" @click="checkout">
+                    <div role="status" class="" v-if="isPending">
+                        <Spinner />
+                    </div>
+                    <span v-else>Proceed to Checkout</span>
                 </button>
             </div>
         </div>
@@ -231,12 +234,13 @@ import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useCartStore } from "../stores/cart";
 import { useApiCalls } from "../composables/useApiCalls";
+import Spinner from "../components/utils/Spinner.vue";
 
 onMounted(() => {
-    const popup = document.createElement('script')
-    popup.setAttribute('src', 'https://js.paystack.co/v2/inline.js')
-    popup.async = true
-    document.head.appendChild(popup)
+    const popup = document.createElement("script");
+    popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
+    popup.async = true;
+    document.head.appendChild(popup);
 });
 
 const { shippingDetails, deliveryFee } = useOrderStore();
@@ -246,7 +250,9 @@ const { createOrder } = useApiCalls();
 const { mutate: useCreateOrder, isPending, error } = createOrder();
 
 const totalAmount = computed(() => {
-    return (shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal / 100 : cartTotal / 100).toLocaleString();
+    return (
+        shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal / 100 : cartTotal / 100
+    ).toLocaleString();
 });
 
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
@@ -308,7 +314,6 @@ const payloadItems = cart.map((item, i) => {
     return payloadItem;
 });
 
-
 const checkout = () => {
     const payload = {
         channel: 3,
@@ -330,24 +335,18 @@ const checkout = () => {
         payment_mode: 1,
         payment_status: 0,
         products_total: cartTotal,
-        shipping_price: deliveryFee * 100,
+        shipping_price: shippingDetails.shippingMethod === "Delivery" ? deliveryFee * 100 : 0,
         shipping_company: 0,
         shipping_mode: false,
         shipping_paid: false,
         store: storeInfo.store,
-        total_amount: deliveryFee ? deliveryFee * 100 + cartTotal : cartTotal,
+        total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee * 100 + cartTotal : cartTotal,
         unique_items: uniqueProductCount(),
         items: [...payloadItems],
+        redirect_url: `${window.location.origin}/store/order-successful/${orderRef}`,
     };
 
     console.log(payload);
     useCreateOrder(payload);
-    if (isPending.value) {
-        console.log("Order is being created...");
-    } else if (error.value) {
-        console.error("Error creating order:", error.value);
-    } else {
-        console.log("Order created successfully!");
-    }
 };
 </script>

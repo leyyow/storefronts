@@ -2,7 +2,7 @@
     <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="flex-1 overflow-y-auto flex justify-center items-center">
             <div class="flex flex-col items-center text-center p-4">
-                <Toast class="w-8/9" />
+                <ToastSuccess :visible="(visible = 'success')" @close="visible = false" :text="toastText" />
 
                 <img src="../assets/order-successful.png" alt="carboard box gif" />
 
@@ -10,8 +10,8 @@
 
                 <p class="text-granite-gray">
                     Your order has been placed, and confirmation has been sent to
-                    <span class="text-feldgrau font-bold">email@gmail.com</span>. Please note your order number for
-                    reference.
+                    <span class="text-feldgrau font-bold">{{ shippingDetails.email }}</span
+                    >. Please note your order number for reference.
                 </p>
 
                 <div
@@ -48,7 +48,6 @@
             <router-link :to="{ name: 'Store' }">
                 <button class="w-full bg-black text-white py-3 rounded-md">Back to Shop</button>
             </router-link>
-            <!-- <button class="w-full bg-black text-white py-3 rounded-md">Track Order</button> -->
         </div>
     </div>
 </template>
@@ -56,22 +55,35 @@
 import { useToast } from "primevue/usetoast";
 import { useRoute } from "vue-router";
 import { useCartStore } from "../stores/cart";
-import { onMounted } from "vue";
+import { useOrderStore } from "../stores/order";
+import { onMounted, ref } from "vue";
+import ToastSuccess from "../components/utils/ToastSuccess.vue";
+import { useQueryClient } from "@tanstack/vue-query";
 
 onMounted(() => {
     useCartStore().clearCart();
-})
+    const queryClient = useQueryClient();
+    queryClient.refetchQueries({ queryKey: ["storeInfo"] });
+});
 
 const route = useRoute();
 const orderId = route.params.id;
-
+const { shippingDetails } = useOrderStore();
+const toastText = ref("");
 const toast = useToast();
 
 const copy = () => {
     navigator.clipboard
         .writeText(`#${orderId}`)
         .then(() => {
-            toast.add({ severity: "success", summary: "Copied", detail: "Order reference copied to clipboard!" });
+            toastText.value = "Order Reference copied to clipboard!";
+            toast.add({
+                severity: "custom",
+                life: 2000,
+                group: "headless",
+                styleClass: "w-full",
+            });
+            visible.value = "success";
         })
         .catch((err) => {
             toast.add({ severity: "error", summary: "Error", detail: "Failed to copy Order ID" });

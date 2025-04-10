@@ -102,11 +102,16 @@ const resolver = ({ values }) => {
 
     return {
         errors,
+        values,
     };
 };
 
-const onFormSubmit = ({ valid }) => {
+const onFormSubmit = ({ valid, values }) => {
     if (valid) {
+        if (values.shippingMethod === 'Pickup') {
+            values.location = "",
+            values.address = "";
+        }
         router.push({ name: 'OrderSummary' });
     }
 }

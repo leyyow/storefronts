@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/vue-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { apiGet, apiPost } from "../includes/api";
 import { useStoreInfo } from "../stores/storeInfo";
 
@@ -24,40 +24,18 @@ export function useApiCalls() {
             enabled: !!merchantSlug, // Only run if merchantSlug exists
         });
 
-    const createOrder = () =>
-        useMutation({
+    const createOrder = () => {
+        const queryClient = useQueryClient();
+        return useMutation({
             mutationKey: ["createOrder"],
             mutationFn: async (data: any) => {
                 return await apiPost("inventory/orders/public/", data);
             },
             onSuccess: async (orderData: any) => {
-                console.log(orderData);
-                
-                // await handleOrderSuccess(orderData);
-                window.location.href = `https://checkout.paystack.com/${orderData.access_code}`;
+                queryClient.refetchQueries({ queryKey: ["storeInfo"] });
+                window.location.href = `https://checkout.paystack.com/${orderData.data.access_code}`;
             },
         });
-
-    // const handleOrderSuccess = async (orderData: any) => {
-    //     const orderItemResponse = await createOrderItem.mutateAsync(orderData.id);
-    //     if (orderItemResponse) {
-    //         await processPayment.mutateAsync(orderData.id);
-    //     }
-    // };
-
-    // const createOrderItem = useMutation({
-    //     mutationKey: ["createOrderItem"],
-    //     mutationFn: async (orderId: string) => {
-    //         return await apiPost("inventory/order_item/create/", { orderId });
-    //     },
-    // });
-
-    // const processPayment = useMutation({
-    //     mutationKey: ["processPayment"],
-    //     mutationFn: async (access_code: string) => {
-    //         return await apiPost(`https://checkout.paystack.com/${access_code}`);
-    //     },
-    // });
-
+    }
     return { fetchStoreInfo, createOrder };
 }

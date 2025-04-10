@@ -2,7 +2,7 @@
     <div class="flex flex-col w-full h-screen overflow-y-hidden">
         <Navbar />
 
-        <ToastSuccess :visible="visible" @close="visible = false" />
+        <ToastSuccess :visible="(visible = 'success')" @close="visible = false" :text="toastText" />
 
         <Toast class="w-8/9 flex items-center" :visible="error" />
 
@@ -41,7 +41,7 @@
 import { ref, onMounted, nextTick, watch, reactive, computed } from "vue";
 import { useRoute } from "vue-router";
 import Navbar from "../components/product-details/ProductNavbar.vue";
-import ToastSuccess from "../components/product-details/ToastSuccess.vue";
+import ToastSuccess from "../components/utils/ToastSuccess.vue";
 import ProductVariantsForm from "../components/product-details/ProductVariantsForm.vue";
 import ProductImage from "../components/product-details/ProductImage.vue";
 import ProductInfo from "../components/product-details/ProductInfo.vue";
@@ -58,6 +58,7 @@ const productStore = useProductStore();
 const cartStore = useCartStore();
 const { storeInfo } = useStoreInfo();
 const toast = useToast();
+const toastText = ref("");
 
 const visible = ref(false);
 const error = ref(false);
@@ -191,13 +192,14 @@ const onFormSubmit = ({ valid, values }, product, variantPrice, stockLeft) => {
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
         return;
     } else if (valid && cartStore.isInStock(product, formState[product.id], stockLeft)) {
+        toastText.value = "Item added to cart";
         toast.add({
             severity: "custom",
             life: 2000,
             group: "headless",
             styleClass: "w-full",
         });
-        visible.value = true;
+        visible.value = "success";
         cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft);
 
         visible.value = false;

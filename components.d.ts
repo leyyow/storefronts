@@ -8,7 +8,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    BottomCart: typeof import('./src/components/product-details/BottomCart.vue')['default']
     Button: typeof import('primevue/button')['default']
     CartButton: typeof import('./src/components/product-details/CartButton.vue')['default']
     CartPageItem: typeof import('./src/components/CartPageItem.vue')['default']
@@ -31,9 +30,10 @@ declare module 'vue' {
     Select: typeof import('primevue/select')['default']
     Skeleton: typeof import('primevue/skeleton')['default']
     SortPopup: typeof import('./src/components/SortPopup.vue')['default']
+    Spinner: typeof import('./src/components/utils/Spinner.vue')['default']
     StoreHomeSkeleton: typeof import('./src/components/skeletons/StoreHomeSkeleton.vue')['default']
     SwiperCarousel: typeof import('./src/components/SwiperCarousel.vue')['default']
     Toast: typeof import('primevue/toast')['default']
-    ToastSuccess: typeof import('./src/components/product-details/ToastSuccess.vue')['default']
+    ToastSuccess: typeof import('./src/components/utils/ToastSuccess.vue')['default']
   }
 }
