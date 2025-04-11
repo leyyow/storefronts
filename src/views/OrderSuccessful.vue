@@ -4,7 +4,7 @@
             <div class="flex flex-col items-center text-center p-4">
                 <ToastSuccess :visible="(visible = 'success')" @close="visible = false" :text="toastText" />
 
-                <img src="../assets/order-successful.png" alt="carboard box gif" />
+                <img src="../assets/gifs/order-successful.gif" alt="carboard box gif" />
 
                 <h6 class="py-3">Order placed successfully</h6>
 

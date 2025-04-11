@@ -30,7 +30,7 @@
             </router-link>
         </div>
 
-        <p>{{ shippingDetails.name }}</p>
+        <p>{{ shippingDetails.firstName }} {{ shippingDetails.lastName }}</p>
         <p>{{ shippingDetails.email }}</p>
         <p>{{ shippingDetails.phoneNumber }}</p>
     </div>

@@ -97,8 +97,8 @@ export interface CartItem extends Product {
 }
 
 export interface ShippingDetails {
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     phoneNumber: string;
     shippingMethod: string;

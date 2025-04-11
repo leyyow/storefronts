@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
 import { shallowReactive, computed } from "vue";
 import { useStoreInfo } from "../stores/storeInfo";
-import type { StoreInfo } from "../includes/interfaces";
+import type { StoreInfo, ShippingDetails } from "../includes/interfaces";
 
 const {storeInfo} = useStoreInfo();
 
 export const useOrderStore = defineStore(
     "order",
     () => {
-        let shippingDetails = shallowReactive({
-            name: "",
+        let shippingDetails = shallowReactive<ShippingDetails>({
+            firstName: "",
+            lastName: "",
             email: "",
             phoneNumber: "",
             shippingMethod: "",
@@ -27,7 +28,8 @@ export const useOrderStore = defineStore(
 
         const resetShippingDetails = () => {
             shippingDetails = shallowReactive({
-                name: "",
+                firstName: "",
+                lastName: "",
                 email: "",
                 phoneNumber: "",
                 shippingMethod: "",

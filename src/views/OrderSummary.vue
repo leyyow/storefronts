@@ -118,8 +118,8 @@ const handleCheckout = () => {
         customer_info: {
             address: shippingDetails.address,
             email: shippingDetails.email,
-            first_name: shippingDetails.name,
-            last_name: "",
+            first_name: shippingDetails.firstName,
+            last_name: shippingDetails.lastName,
             line1: shippingDetails.address,
             phone: shippingDetails.phoneNumber,
             city: shippingDetails.location,

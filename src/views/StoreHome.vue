@@ -3,26 +3,26 @@
         <div class="ps-4 flex overflow-x-auto scrollbar-hide">
             <div
                 :class="[
-                    'tab border-b-2 py-2 px-3 cursor-pointer',
+                    'tab border-b-2 py-2 px-3 cursor-pointer flex items-center',
                     productStore.activeTab === 'all'
                         ? 'text-spanish-viridian border-spanish-viridian'
                         : 'text-manatee border-manatee',
                 ]"
                 @click="productStore.toggleTab('all')"
             >
-                All
+                <p>All</p>
             </div>
             <div
                 v-for="category in storeInfo.categories"
                 :class="[
-                    'tab border-b-2 py-2 px-3 cursor-pointer',
+                    'tab border-b-2 py-0 px-3 cursor-pointer flex items-center',
                     productStore.activeTab === category.category
                         ? 'text-spanish-viridian border-spanish-viridian'
                         : 'text-manatee border-manatee',
                 ]"
                 @click="productStore.toggleTab(category.category)"
             >
-                {{ category.category }}
+                <p>{{ category.category }}</p>
             </div>
         </div>
 

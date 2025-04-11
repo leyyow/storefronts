@@ -24,7 +24,7 @@
                         <span v-if="item.selected_variant3">, {{ item.selected_variant3 }}</span>
                     </p>
                 </div>
-                <div class="w-[33%] font-bold flex justify-end items-center">
+                <div class="w-[33%] font-bold flex justify-end items-start">
                     <p v-html="formatPrice(item.variant_price * item.selected_quantity)"></p>
                 </div>
             </div>
