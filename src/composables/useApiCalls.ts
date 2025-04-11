@@ -1,9 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { apiGet, apiPost } from "../includes/api";
 import { useStoreInfo } from "../stores/storeInfo";
+import { useUtils } from "./useUtils";
+import type { StoreInfo } from "../includes/interfaces";
 
 export function useApiCalls() {
     const { updateStoreInfo } = useStoreInfo();
+    const { setFavicon, setTitle } = useUtils();
     
     // Fetch store info (requires merchantSlug)
     const fetchStoreInfo = (merchantSlug: string) =>
@@ -11,7 +14,7 @@ export function useApiCalls() {
             queryKey: ["storeInfo", merchantSlug],
             queryFn: async () => {
                 if (!merchantSlug) throw new Error("Merchant slug is required");
-                const response = await apiGet(`/account/store-website/public/${merchantSlug}/`) as { status: number; data: any };
+                const response = await apiGet(`/account/store-website/public/${merchantSlug}/`) as { status: number; data: StoreInfo };
 
                 console.log('Merchant Slug:', merchantSlug);
                 
@@ -19,6 +22,8 @@ export function useApiCalls() {
 
                 if (response.status === 200) {
                     updateStoreInfo(response.data);
+                    setFavicon(response.data.store_logo);
+                    setTitle(response.data.store_name);
                     return response.data;
                 }
             },

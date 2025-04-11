@@ -38,7 +38,7 @@
                     :key="index"
                     class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5"
                 >
-                    <img src="../assets/box.svg" alt="image of a black box" class="w-10 h-10" />
+                    <img src="../assets/images/svgs/box.svg" alt="image of a black box" class="w-10 h-10" />
                     <h6>{{ reason.title }}</h6>
                     <p class="text-crayola">{{ reason.content }}</p>
                 </div>
@@ -69,7 +69,7 @@
                         class="flex justify-center items-center"
                     >
                         <div class="bg-chinese-black rounded-lg flex flex-col gap-3 p-5">
-                            <img src="../assets/campaign.svg" alt="campaign icon" class="w-10 h-10" />
+                            <img src="../assets/images/svgs/campaign.svg" alt="campaign icon" class="w-10 h-10" />
                             <p class="text-crayola">{{ review.comment }}</p>
                             <div class="flex justify-end w-full">
                                 <p class="text-manatee flex items-center"><Minus /> @{{ review.customer }}</p>

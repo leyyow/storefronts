@@ -37,5 +37,20 @@ export function useUtils() {
         }
         return string.substring(0, 20);
     };
-    return { convertToNaira, formatPrice, trimmedString, formatNaira };
+
+    const setFavicon = (url: string) => {
+        let link = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+        if (!link) {
+            link = document.createElement("link");
+            link.rel = "icon";
+            document.head.appendChild(link);
+        }
+        link.href = url;
+    };
+
+    const setTitle = (title: string) => {
+        document.title = title;
+    }
+
+    return { convertToNaira, formatPrice, trimmedString, formatNaira, setFavicon, setTitle };
 }
