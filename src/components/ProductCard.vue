@@ -2,8 +2,10 @@
 import { RouterLink } from "vue-router";
 import { useProductStore } from "../stores/product";
 import { useCartStore } from "../stores/cart";
+import { useUtils } from "../composables/useUtils";
 
 const { isProductInCart } = useCartStore();
+const { formatPrice } = useUtils();
 const productStore = useProductStore();
 
 defineProps({
@@ -62,10 +64,7 @@ defineProps({
 
         <!-- Price -->
         <div class="w-full relative bottom-8 z-5 h-6 p-1">
-            <p class="bg-white w-full text-center rounded-sm">
-                <small>₦</small><span>{{ (product.price / 100).toLocaleString() }}</span
-                ><small>.00</small>
-            </p>
+            <p class="bg-white w-full text-center rounded-sm" v-html="formatPrice(product.price)"></p>
         </div>
     </RouterLink>
 </template>

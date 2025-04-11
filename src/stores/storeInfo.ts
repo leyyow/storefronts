@@ -1,18 +1,18 @@
 import { defineStore } from "pinia";
-import { shallowReactive, computed } from "vue";
+import { reactive } from "vue";
 import type { StoreInfo } from "../includes/interfaces";
 
 export const useStoreInfo = defineStore(
     "storeInfo",
     () => {
-        let storeInfo = shallowReactive < StoreInfo | {} >({});
+        let storeInfo = reactive< StoreInfo | {} >({});
 
         const updateStoreInfo = (info: StoreInfo) => {
             Object.assign(storeInfo, info);
         };
 
         return {
-            storeInfo: computed(() => storeInfo),
+            storeInfo,
             updateStoreInfo,
         };
     },

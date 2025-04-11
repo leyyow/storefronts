@@ -1,5 +1,8 @@
 <script setup>
 import { defineProps, computed, defineEmits } from "vue";
+import { useUtils } from "../../composables/useUtils";
+
+const { formatPrice } = useUtils();
 
 const props = defineProps({
     filteredProduct: {
@@ -62,9 +65,6 @@ const handleShareClick = () => {
             </div>
         </div>
 
-        <h5>
-            <small class="me-0.5">₦</small>{{ formattedPrice }}
-            <small>.00</small>
-        </h5>
+        <h5 v-html="formatPrice(props.filteredProduct.price)"></h5>
     </div>
 </template>

@@ -2,7 +2,15 @@
     <div class="flex gap-2 mb-5">
         <Toast class="w-8/9 flex items-center" :visible="error" />
 
-        <img :src="item.images.length ? item.images[0].image : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'" alt="product image" class="w-24 h-24 min-h-full object-cover rounded-sm" />
+        <img
+            :src="
+                item.images.length
+                    ? item.images[0].image
+                    : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081'
+            "
+            alt="product image"
+            class="w-24 h-24 min-h-full object-cover rounded-sm"
+        />
 
         <div class="flex flex-col gap-2 flex-1 justify-between">
             <div class="flex gap-1.5">
@@ -17,17 +25,14 @@
                     </p>
                 </div>
                 <div class="w-[33%] font-bold flex justify-end items-center">
-                    <p>
-                        <small class="me-0.5">₦</small
-                        >{{ ((item.variant_price * item.selected_quantity)/100).toLocaleString() }}<small>.00</small>
-                    </p>
+                    <p v-html="formatPrice(item.variant_price * item.selected_quantity)"></p>
                 </div>
             </div>
             <div class="flex justify-between items-center">
                 <div class="flex gap-1 items-center">
                     <button
                         class="text-feldgrau bg-granite-gray/50 w-6 h-6 flex justify-center items-center rounded-sm cursor-pointer"
-                        @click="decreaseSelectionQuantity(item)"
+                        @click="decreaseQuantity(item)"
                     >
                         <Minus class="w-4 h-4" />
                     </button>
@@ -179,6 +184,7 @@ import { computed, ref, watch, reactive } from "vue";
 import { Minus, Plus } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
 import { useToast } from "primevue/usetoast";
+import { useUtils } from "../composables/useUtils";
 
 const props = defineProps({
     item: Object,
@@ -186,44 +192,6 @@ const props = defineProps({
 
 const toast = useToast();
 const error = ref(false);
-
-const increaseQuantity = (cartItem) => {
-    increaseSelectionQuantity(cartItem);
-    if (cartItem.variant_total_stock === cartItem.selected_quantity) {
-        error.value = true;
-        toast.add({ severity: "info", detail: "All available stock are in your cart", life: 1000 });
-    }
-}
-
-const initialValues = reactive({
-    quantity: props.item.selected_quantity,
-});
-
-const resolver = ({ values }) => {
-    const errors = {};
-
-    if (values.quantity > props.item.variant_total_stock) {
-        errors.quantity = [{ message: 'Not enough stock available' }];
-    }
-
-    if (values.quantity === 0) {
-        errors.quantity = [{ message: 'Please enter a valid quantity' }];
-    }
-
-    return {
-        values, // (Optional) Used to pass current form values to submit event.
-        errors
-    };
-};
-
-const onFormSubmit = ({ valid, values }) => {
-    if (valid) {
-        updateSelectionQuantity(props.item, values.quantity);
-        quantityPopupIsOpen.value = false;
-        initialValues.quantity = values.quantity;
-    }
-};
-
 const quantityPopupIsOpen = ref(false);
 const visible = ref(false);
 const {
@@ -235,11 +203,50 @@ const {
     removeSelection,
     updateSelectionQuantity,
 } = useCartStore();
+const { trimmedString, formatPrice } = useUtils();
 
-const trimmedString = (string) => {
-    if (string.length < 20) {
-        return false;
+const increaseQuantity = (cartItem) => {
+    increaseSelectionQuantity(cartItem);
+    if (cartItem.variant_total_stock === cartItem.selected_quantity) {
+        error.value = true;
+        toast.add({ severity: "info", detail: "All available stock are in your cart", life: 1000 });
     }
-    return string.substring(0, 20);
+};
+
+const decreaseQuantity = (cartItem) => {
+    decreaseSelectionQuantity(cartItem);
+    if (cartItem.selected_quantity === 1) {
+        error.value = true;
+        toast.add({ severity: "info", detail: "Use the delete button to remove an Item from the cart", life: 1000 });
+    }
+};
+
+const initialValues = reactive({
+    quantity: props.item.selected_quantity,
+});
+
+const resolver = ({ values }) => {
+    const errors = {};
+
+    if (values.quantity > props.item.variant_total_stock) {
+        errors.quantity = [{ message: "Not enough stock available" }];
+    }
+
+    if (values.quantity === 0) {
+        errors.quantity = [{ message: "Please enter a valid quantity" }];
+    }
+
+    return {
+        values,
+        errors,
+    };
+};
+
+const onFormSubmit = ({ valid, values }) => {
+    if (valid) {
+        updateSelectionQuantity(props.item, values.quantity);
+        quantityPopupIsOpen.value = false;
+        initialValues.quantity = values.quantity;
+    }
 };
 </script>

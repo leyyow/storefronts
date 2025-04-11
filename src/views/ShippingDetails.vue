@@ -42,7 +42,7 @@
 
             <div class="bg-anti-flash-white rounded-md px-3 w-full" v-if="initialValues.shippingMethod === 'Delivery'">
                 <div class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0" v-for="location in storeInfo.shipping_prices">
-                    <label :for="location.area">{{ location.area }} - <span class="font-bold"><small class="me-0.5">₦</small>{{ location.amount.toLocaleString() }}<small>.00</small></span></label>
+                    <label :for="location.area">{{ location.area }} - <span class="font-bold" v-html="formatNaira(location.amount)"></span></label>
                     <RadioButton v-model="initialValues.location" :inputId="location.area" name="location" :value="location.area" />
                 </div>
                 <Message v-if="$form.location?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{ $form.location.error.message }}</Message>
@@ -68,10 +68,12 @@ import { useToast } from 'primevue/usetoast';
 import { useOrderStore } from '../stores/order';
 import { useStoreInfo } from '../stores/storeInfo';
 import { useRouter } from 'vue-router';
+import { useUtils } from '../composables/useUtils';
 
 const router = useRouter();
 const { shippingDetails: initialValues } = useOrderStore();
 const { storeInfo } = useStoreInfo();
+const { formatNaira } = useUtils();
 
 const resolver = ({ values }) => {
     const errors = {};

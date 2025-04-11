@@ -18,10 +18,11 @@ export const useOrderStore = defineStore(
         });
 
         const deliveryFee = computed(() => {
-            const x = (storeInfo as StoreInfo)?.shipping_prices?.find((area: any) => {
-                return area.area === shippingDetails.location;
-            });
-            return x?.amount ? Number(x?.amount) : x?.amount;
+            const amount = (storeInfo as StoreInfo)?.shipping_prices?.find(
+                (area: any) => area.area === shippingDetails.location,
+            )?.amount;
+
+            return Number(amount) || 0;
         });
 
         const resetShippingDetails = () => {

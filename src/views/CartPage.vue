@@ -1,8 +1,5 @@
 <template>
     <div class="flex flex-col h-dvh w-full overflow-y-hidden">
-        <!-- <div class="h-16 px-4 flex items-center">
-            <h6 class="font-normal">Basket ({{ cart.length ? cart.length : 0 }})</h6>
-        </div> -->
 
         <div class="flex-1 overflow-y-auto px-4 py-2 mt-3">
             <CartPageItem v-for="item in cart" :key="item.id" :item="item" />
@@ -21,7 +18,7 @@
                 <p class="text-granite-gray">
                     SubTotal ({{ totalProducts ? totalProducts : 0 }} item<span v-if="totalProducts > 0">s</span>):
                 </p>
-                <p><small class="me-0.5 font-bold">₦</small>{{ (totalAmount/100).toLocaleString() }}<small>.00</small></p>
+                <p v-html="formatPrice(totalAmount)"></p>
             </div>
             <div class="flex justify-between py-3">
                 <router-link :to="{ name: 'Store' }" class="w-[35%]">
@@ -40,8 +37,10 @@ import { useCartStore } from "../stores/cart";
 import CartPageItem from "../components/CartPageItem.vue";
 import { useRouter } from "vue-router";
 import { useQueryClient } from "@tanstack/vue-query";
+import { useUtils } from "../composables/useUtils";
 
 const queryClient = useQueryClient();
+const { formatPrice } = useUtils();
 
 onMounted(() => {
     queryClient.invalidateQueries({ queryKey: ["storeInfo"] })

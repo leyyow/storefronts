@@ -9,9 +9,9 @@
         <section class="overflow-y-auto flex-1">
             <div
                 class="p-4 last-of-type:min-h-185"
-                v-for="filteredProduct in productStore.filteredProducts"
+                v-for="filteredProduct in filteredProducts"
                 :key="filteredProduct.id"
-                :id="filteredProduct.id"
+                :id="`${filteredProduct.id}`"
             >
                 <!-- product image  -->
                 <ProductImage :filteredProduct="filteredProduct" />
@@ -22,7 +22,7 @@
                     :filteredProduct="filteredProduct"
                     :formState="formState"
                     :cartStore="cartStore"
-                    :resolver="resolver"
+                    :resolver="getResolverForProduct(filteredProduct)"
                     :getInitialValues="getInitialValues"
                     :variantNames="variantNames"
                     :optionsArray="optionsArray"
@@ -38,8 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch, reactive, computed } from "vue";
-import { useRoute } from "vue-router";
+import { ref, reactive, computed } from "vue";
 import Navbar from "../components/product-details/ProductNavbar.vue";
 import ToastSuccess from "../components/utils/ToastSuccess.vue";
 import ProductVariantsForm from "../components/product-details/ProductVariantsForm.vue";
@@ -47,35 +46,32 @@ import ProductImage from "../components/product-details/ProductImage.vue";
 import ProductInfo from "../components/product-details/ProductInfo.vue";
 import CartButton from "../components/product-details/CartButton.vue";
 import { useProductStore } from "../stores/product";
-import { useStoreInfo } from "../stores/storeInfo";
 import { useToast } from "primevue/usetoast";
-import { Minus, Plus, Check } from "lucide-vue-next";
 import { useCartStore } from "../stores/cart";
 import type { Product } from "../includes/interfaces";
 
-const route = useRoute();
-const productId = ref(route.params.id);
+// data 
 const productStore = useProductStore();
 const cartStore = useCartStore();
-const { storeInfo } = useStoreInfo();
 const toast = useToast();
 const toastText = ref("");
-const visible = ref(false);
+const visible = ref<String|Boolean>(false);
 const error = ref(false);
-const formState = reactive({ default: { variant1: "", variant2: "", variant3: "", quantity: 1 } });
+const formState = reactive<Record<number | string, { variant1: string; variant2: string; variant3: string; quantity: number }>>({
+    default: { variant1: "", variant2: "", variant3: "", quantity: 1 },
+});
 
-const totalAmount = computed(() =>
-    cartStore.cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0),
-);
-
+// computed properties
+const filteredProducts = computed(() => productStore.filteredProducts);
 const totalProducts = computed(() => cartStore.cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
+// methods 
 const variantNames = (product: Product) => {
     const names = product.variants.split(",").filter(Boolean);
     return names;
 };
 
-const optionsArray = (option) => {
+const optionsArray = (option: string) => {
     const options = option.split(",").filter(Boolean);
     return options;
 };
@@ -126,19 +122,26 @@ const getInitialValues = (productId: number) => {
     return formState[productId];
 };
 
-const resolver = ({ values }) => {
-    const errors = {};
+const getResolverForProduct = (product: Product) => {
+    return ({ values }: { values: Record<string, any> }) => {
+        return resolver({ values, product });
+    };
+};
 
-    if (!values.variant1) {
-        errors.variant1 = [{ message: "This field is required." }];
+const resolver = ({ values, product }: { values: Record<string, any>, product: Product }) => {
+    const errors: Record<string, { message: string }[]> = {};
+    const variants = variantNames(product);
+
+    if (!values.variant1 && variants[0]) {
+        errors.variant1 = [{ message: `Please select ${variants[0]}` }];
     }
 
-    if (!values.variant2) {
-        errors.variant2 = [{ message: "This field is required." }];
+    if (!values.variant2 && variants[1]) {
+        errors.variant2 = [{ message: `Please select ${variants[1]}` }];
     }
 
-    if (!values.variant3) {
-        errors.variant3 = [{ message: "This field is required." }];
+    if (!values.variant3 && variants[2]) {
+        errors.variant3 = [{ message: `Please select ${variants[2]}` }];
     }
 
     return {
@@ -147,7 +150,7 @@ const resolver = ({ values }) => {
     };
 };
 
-const shareUrl = (productId) => {
+const shareUrl = (productId: number) => {
     const baseUrl = `${window.location.origin}/store/product#${productId}`;
     if (navigator.share) {
         navigator
@@ -162,12 +165,12 @@ const shareUrl = (productId) => {
     }
 };
 
-const onFormSubmit = ({ valid, values }, product: Product, variantPrice: number, stockLeft: number) => {
+const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPrice: number, stockLeft: number) => {
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
         return;
-    } else if (valid && cartStore.isInStock(product, formState[product.id], stockLeft)) {
+    } else if (valid && cartStore.isInStock(product, formState[product.id])) {
         toastText.value = "Item added to cart";
         toast.add({
             severity: "custom",
