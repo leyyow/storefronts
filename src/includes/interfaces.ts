@@ -93,6 +93,7 @@ export interface CartItem extends Product {
     variant_price: number;
     variant_total_stock: number;
     itemTotal: number;
+    selected_sku: number;
 }
 
 export interface ShippingDetails {

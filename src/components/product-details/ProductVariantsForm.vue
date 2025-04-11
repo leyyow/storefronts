@@ -5,7 +5,7 @@
         :resolver="resolver"
         :validateOnValueUpdate="true"
         :validateOnBlur="false"
-        @submit="onFormSubmit($event, filteredProduct, price(filteredProduct), stock(filteredProduct))"
+        @submit="onFormSubmit($event, filteredProduct, price(filteredProduct), stock(filteredProduct), sku(filteredProduct))"
         class="flex flex-col gap-4 w-full py-4"
     >
         <div class="flex flex-wrap w-full gap-2">
@@ -88,6 +88,7 @@ export default {
         optionsArray: Function,
         price: Function,
         stock: Function,
+        sku: Function,
         onFormSubmit: Function,
     },
 };

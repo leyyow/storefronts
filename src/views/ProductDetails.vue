@@ -28,6 +28,7 @@
                     :optionsArray="optionsArray"
                     :price="price"
                     :stock="stock"
+                    :sku="sku"
                     :onFormSubmit="onFormSubmit"
                 />
             </div>
@@ -110,6 +111,23 @@ const stock = (product: Product) => {
     return skuObject ? skuObject.qty : product.total_stock;
 };
 
+const sku = (product: Product) => {
+    getInitialValues(product.id);
+    let skuObject = null;
+
+    if (variantNames(product).length) {
+        skuObject = (product.sku || []).find((item) => {
+            return (
+                item.option1 === formState[product.id].variant1 &&
+                item.option2 === formState[product.id].variant2 &&
+                item.option3 === formState[product.id].variant3
+            );
+        });
+    }
+
+    return skuObject ? skuObject.id : null;
+};
+
 const getInitialValues = (productId: number) => {
     if (!formState[productId]) {
         formState[productId] = {
@@ -165,7 +183,7 @@ const shareUrl = (productId: number) => {
     }
 };
 
-const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPrice: number, stockLeft: number) => {
+const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPrice: number, stockLeft: number, sku: string) => {
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
@@ -179,7 +197,7 @@ const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPr
             styleClass: "w-full",
         });
         visible.value = "success";
-        cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft);
+        cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft, Number(sku));
         visible.value = false;
     } else {
         error.value = true;

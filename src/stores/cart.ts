@@ -15,6 +15,7 @@ export const useCartStore = defineStore(
             selections: Selections,
             price: number,
             stockLeft: number,
+            sku: number,
         ) {
             const item = cart.value.find(
                 (i) =>
@@ -39,6 +40,7 @@ export const useCartStore = defineStore(
                 cartItem.variant_price = price;
                 cartItem.variant_total_stock = stockLeft;
                 cartItem.itemTotal = price * selections.quantity;
+                cartItem.selected_sku = sku;
                 cart.value.push(cartItem);
             }
         }

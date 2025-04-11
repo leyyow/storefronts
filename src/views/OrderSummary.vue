@@ -94,6 +94,7 @@ const payloadItems = cart.map((item, i) => {
         note: "",
         product: item.id,
         productid: item.id,
+        sku: item.selected_sku,
         qty: item.selected_quantity,
         price_sold: item.variant_price || item.price,
         status: 1,
