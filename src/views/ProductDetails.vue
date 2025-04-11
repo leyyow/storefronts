@@ -123,9 +123,11 @@ const sku = (product: Product) => {
                 item.option3 === formState[product.id].variant3
             );
         });
+    } else {
+        skuObject = product.sku[0];
     }
 
-    return skuObject ? skuObject.id : null;
+    return skuObject?.id;
 };
 
 const getInitialValues = (productId: number) => {
