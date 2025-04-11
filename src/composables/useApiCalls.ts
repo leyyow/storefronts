@@ -23,7 +23,7 @@ export function useApiCalls() {
                 if (response.status === 200) {
                     updateStoreInfo(response.data);
                     setFavicon(response.data.store_logo);
-                    setTitle(response.data.store_name);
+                    setTitle(`${response.data.store_name} -- Powered by Leyyow!`);
                     return response.data;
                 }
             },
