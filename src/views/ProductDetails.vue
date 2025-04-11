@@ -183,7 +183,7 @@ const shareUrl = (productId: number) => {
     }
 };
 
-const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPrice: number, stockLeft: number, sku: string) => {
+const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPrice: number, stockLeft: number, sku: number) => {
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });
@@ -197,7 +197,7 @@ const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPr
             styleClass: "w-full",
         });
         visible.value = "success";
-        cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft, Number(sku));
+        cartStore.addToCart(product, formState[product.id], variantPrice, stockLeft, sku);
         visible.value = false;
     } else {
         error.value = true;
