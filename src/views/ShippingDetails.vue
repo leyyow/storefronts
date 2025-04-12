@@ -75,9 +75,9 @@
 
             <div>
                 <div class="flex gap-3">
-                    <div class="w-full p-3 rounded-md bg-anti-flash-white cursor-pointer" @click="initialValues.shippingMethod = 'Delivery'">
-                        <div class="flex justify-between">
-                            <label for="Delivery">Delivery</label>
+                    <label for="Delivery" class="w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block">
+                        <div class="flex justify-between items-center">
+                            <span>Delivery</span>
                             <RadioButton
                                 v-model="initialValues.shippingMethod"
                                 inputId="Delivery"
@@ -86,10 +86,11 @@
                             />
                         </div>
                         <p class="text-granite-gray leading-none text-xs mt-2">Delivered to your door, hassle-free.</p>
-                    </div>
-                    <div class="w-full p-3 rounded-md bg-anti-flash-white cursor-pointer" @click="initialValues.shippingMethod = 'Pickup'">
-                        <div class="flex justify-between">
-                            <label for="Pickup">Pickup</label>
+                    </label>
+
+                    <label for="Pickup" class="w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block">
+                        <div class="flex justify-between items-center">
+                            <span>Pickup</span>
                             <RadioButton
                                 v-model="initialValues.shippingMethod"
                                 inputId="Pickup"
@@ -100,7 +101,7 @@
                         <p class="text-granite-gray leading-none text-xs mt-2">
                             Pick up your order at your convenience
                         </p>
-                    </div>
+                    </label>
                 </div>
                 <Message
                     v-if="$form.shippingMethod?.invalid"
@@ -113,22 +114,24 @@
             </div>
 
             <div class="bg-anti-flash-white rounded-md px-3 w-full" v-if="initialValues.shippingMethod === 'Delivery'">
-                <div
+                <label
                     class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0 cursor-pointer"
                     v-for="location in storeInfo.shipping_prices"
                     :key="location.area"
-                    @click="initialValues.location = location.area"
+                    :for="location.area"
                 >
-                    <label :for="location.area"
-                        >{{ location.area }} - <span class="font-bold" v-html="formatNaira(location.amount)"></span
-                    ></label>
+                    <span>
+                        {{ location.area }} -
+                        <span class="font-bold" v-html="formatNaira(location.amount)"></span>
+                    </span>
                     <RadioButton
                         v-model="initialValues.location"
                         :inputId="location.area"
                         name="location"
                         :value="location.area"
                     />
-                </div>
+                </label>
+
                 <Message v-if="$form.location?.invalid" severity="error" class="mt-1" size="small" variant="simple">{{
                     $form.location.error.message
                 }}</Message>
