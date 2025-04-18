@@ -18,11 +18,21 @@ defineProps({
 
 <template>
     <RouterLink
-        :to="{ path: '/store/product', hash: `#${product.id}` }"
+        :to="{ name: 'ProductDetail', hash: `#${product.id}` }"
         class="w-[32.5%] h-32 mb-0.5 rounded-sm bg-granite-gray relative"
     >
-        <img :src="product.images[0].image" alt="product image" class="w-full h-full object-cover rounded-sm" v-if="product.images.length" />
-        <img src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081" alt="product image" class="w-full h-full object-cover rounded-sm bg-granite-gray" v-else />
+        <img
+            :src="product.images[0].image"
+            alt="product image"
+            class="w-full h-full object-cover rounded-sm"
+            v-if="product.images.length"
+        />
+        <img
+            src="https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081"
+            alt="product image"
+            class="w-full h-full object-cover rounded-sm bg-granite-gray"
+            v-else
+        />
 
         <!-- out of stock  -->
         <div
@@ -41,7 +51,13 @@ defineProps({
         </div>
 
         <!-- if product is in cart  -->
-        <div :class="['w-7 h-7 rounded-sm absolute right-1 flex items-center justify-center bg-bright-gray', product.total_stock > 0 && product.total_stock <= 5 ? 'top-5.5' : 'top-1']" v-if="isProductInCart(product)">
+        <div
+            :class="[
+                'w-7 h-7 rounded-sm absolute right-1 flex items-center justify-center bg-bright-gray',
+                product.total_stock > 0 && product.total_stock <= 5 ? 'top-5.5' : 'top-1',
+            ]"
+            v-if="isProductInCart(product)"
+        >
             <svg
                 width="16"
                 height="16"

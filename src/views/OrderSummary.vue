@@ -2,7 +2,7 @@
     <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="h-16 px-4 flex justify-between items-center">
             <h6 class="font-normal">Order Summary</h6>
-            <router-link to="/store/cart" class="underline text-spanish-viridian text-xs">Edit All</router-link>
+            <router-link :to="{ name: 'Cart' }" class="underline text-spanish-viridian text-xs">Edit All</router-link>
         </div>
 
         <div class="flex-1 overflow-y-auto px-4 pt-2 pb-4">

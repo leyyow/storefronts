@@ -1,7 +1,7 @@
 <template>
     <div class="relative" @wheel.prevent @touchmove.prevent @scroll.prevent>
         <nav class="py-5 px-4 flex justify-between items-center z-20">
-            <RouterLink to="/" class="logo max-h-8 w-1/3">
+            <RouterLink :to="{ name: 'Home' }" class="logo max-h-8 w-1/3">
                 <img :src="storeInfo.store_logo" :alt="`${storeInfo.store_name} logo`" class="h-8" />
             </RouterLink>
 
@@ -25,7 +25,7 @@
                 >
                 <router-link @click="toggleNav" to="#" class="mb-4 text-xl">Return Policy</router-link>
                 <div class="flex gap-3 pt-2">
-                    <RouterLink @click="toggleNav" to="/store" class="w-full">
+                    <RouterLink @click="toggleNav" :to="{ name: 'Store' }" class="w-full">
                         <button class="py-4 w-full bg-black text-white rounded-lg">Enter Shop</button>
                     </RouterLink>
 

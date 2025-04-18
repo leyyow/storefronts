@@ -26,11 +26,12 @@ import StoreHomeSkeleton from "./components/skeletons/StoreHomeSkeleton.vue";
 const { storeInfo, updateStoreInfo } = useStoreInfo();
 const { fetchStoreInfo } = useApiCalls();
 const route = useRoute();
-console.log(route.params.slug);
 const merchantSlug = computed(() => route.params.slug);
+console.log(merchantSlug.value);
 
 // ✅ Call useQuery immediately with the computed slug
-const storeQuery = fetchStoreInfo(merchantSlug.value);
+const storeQuery = fetchStoreInfo(merchantSlug);
 
 const isLoading = computed(() => storeQuery.isLoading.value);
+const routeName = computed(() => route.name);
 </script>

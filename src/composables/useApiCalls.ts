@@ -3,20 +3,22 @@ import { apiGet, apiPost } from "../includes/api";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useUtils } from "./useUtils";
 import type { StoreInfo } from "../includes/interfaces";
+import { computed } from "vue";
 
 export function useApiCalls() {
     const { updateStoreInfo } = useStoreInfo();
     const { setFavicon, setTitle } = useUtils();
     
     // Fetch store info (requires merchantSlug)
-    const fetchStoreInfo = (merchantSlug: string) =>
+    const fetchStoreInfo = (merchantSlug: { value: string; }) =>
         useQuery({
             queryKey: ["storeInfo", merchantSlug],
             queryFn: async () => {
-                if (!merchantSlug) throw new Error("Merchant slug is required");
-                const response = await apiGet(`/account/store-website/public/${merchantSlug}/`) as { status: number; data: StoreInfo };
-
-                console.log('Merchant Slug:', merchantSlug);
+                if (!merchantSlug.value) throw new Error("Merchant slug is required");
+                const response = (await apiGet(`/account/store-website/public/${merchantSlug.value}/`)) as {
+                    status: number;
+                    data: StoreInfo;
+                };
 
                 if (response.status === 200) {
                     updateStoreInfo(response.data);
@@ -28,7 +30,7 @@ export function useApiCalls() {
                     throw new Error("Failed to fetch store info");
                 }
             },
-            enabled: !!merchantSlug, // Only run if merchantSlug exists
+            enabled: computed(() => !!merchantSlug.value), // Only run if merchantSlug exists
         });
 
     const createOrder = () => {
