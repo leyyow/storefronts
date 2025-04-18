@@ -25,6 +25,9 @@ export function useApiCalls() {
                     setFavicon(response.data.store_logo);
                     setTitle(`${response.data.store_name} -- Powered by Leyyow!`);
                     return response.data;
+                } else {
+                    console.log(response);
+                    throw new Error("Failed to fetch store info");
                 }
             },
             enabled: !!merchantSlug, // Only run if merchantSlug exists
