@@ -15,6 +15,8 @@
             <Skeleton height="15rem" width="9rem" class="rounded-lg shadow-lg flex-shrink-0"></Skeleton>
             <Skeleton height="15rem" width="9rem" class="rounded-lg shadow-lg flex-shrink-0"></Skeleton>
         </div>
+
+        <Skeleton height="15rem" class="my-5 w-full"></Skeleton>
     </div>
 </template>
 <script setup></script>

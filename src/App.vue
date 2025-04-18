@@ -28,25 +28,10 @@ const { fetchStoreInfo } = useApiCalls();
 const route = useRoute();
 
 const routeName = ref("");
-
-// Track route changes
-watch(
-  () => route.name,
-  (newRouteName) => {
-    routeName.value = newRouteName;
-    console.log("Route Name:", routeName.value);
-  },
-  { immediate: true }
-);
-
-// Get the slug directly
-const hostname = window.location.hostname;
-const pathParts = window.location.pathname.split("/");
-const merchantSlug = pathParts.length > 1 ? pathParts[1] : "demo";
+const merchantSlug = route.params.slug || "demo";
 
 // Call the composable directly during setup
 const storeQuery = fetchStoreInfo(merchantSlug);
 
 const isLoading = computed(() => storeQuery.isLoading.value);
-
 </script>
