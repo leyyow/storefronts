@@ -17,8 +17,6 @@ export function useApiCalls() {
                 const response = await apiGet(`/account/store-website/public/${merchantSlug}/`) as { status: number; data: StoreInfo };
 
                 console.log('Merchant Slug:', merchantSlug);
-                
-                console.log(response.data);
 
                 if (response.status === 200) {
                     updateStoreInfo(response.data);

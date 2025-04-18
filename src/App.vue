@@ -26,12 +26,11 @@ import StoreHomeSkeleton from "./components/skeletons/StoreHomeSkeleton.vue";
 const { storeInfo, updateStoreInfo } = useStoreInfo();
 const { fetchStoreInfo } = useApiCalls();
 const route = useRoute();
+console.log(route.params.slug);
+const merchantSlug = computed(() => route.params.slug);
 
-const routeName = ref("");
-const merchantSlug = route.params.slug || "demo";
-
-// Call the composable directly during setup
-const storeQuery = fetchStoreInfo(merchantSlug);
+// ✅ Call useQuery immediately with the computed slug
+const storeQuery = fetchStoreInfo(merchantSlug.value);
 
 const isLoading = computed(() => storeQuery.isLoading.value);
 </script>
