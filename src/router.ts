@@ -12,7 +12,7 @@ const routes = [
         children: [
             { path: "", component: () => import("./views/HomeView.vue"), name: "Home" },
             {
-                path: "/store",
+                path: "store",
                 component: () => import("./views/StoreHome.vue"),
                 meta: {
                     title: "Store",
