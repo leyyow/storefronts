@@ -1,9 +1,8 @@
-<!-- components/ShippingSummary.vue -->
 <template>
     <div class="py-4 my-4 border-platinum border-t border-b flex flex-col gap-2.5">
         <div class="flex justify-between items-center mb-1">
             <h6>Shipping Information</h6>
-            <router-link :to="{ name: 'ShippingDetails' }" class="cursor-pointer">
+            <router-link :to="{ name: 'ShippingDetails', params: { slug: currentSlug } }" class="cursor-pointer">
                 <svg
                     width="20"
                     height="20"
@@ -38,6 +37,10 @@
 
 <script setup lang="ts">
 import { defineProps } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const currentSlug = route.params.slug;
 
 defineProps({
     shippingDetails: {

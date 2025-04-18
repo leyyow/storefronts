@@ -2,7 +2,7 @@
     <div class="h-15 shadow-[0px_-4px_8px_0px_#00000014] p-4 flex items-center">
         <div class="flex justify-end items-center w-full">
             <div class="w-10 h-10">
-                <router-link :to="{ name: 'Cart' }">
+                <router-link :to="{ name: 'Cart', params: { slug: currentSlug } }">
                     <button
                         class="bg-anti-flash-white rounded-sm w-full h-full flex items-center justify-center cursor-pointer relative"
                     >
@@ -39,6 +39,10 @@
 
 <script setup>
 import { defineProps } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const currentSlug = route.params.slug;
 
 const props = defineProps({
     totalProducts: {

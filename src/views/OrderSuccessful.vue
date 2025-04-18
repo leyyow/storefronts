@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="h-20 p-4 flex flex-col gap-2">
-            <router-link :to="{ name: 'Store' }">
+            <router-link :to="{ name: 'Store', params: { slug: currentSlug } }">
                 <button class="w-full bg-black text-white py-3 rounded-md">Back to Shop</button>
             </router-link>
         </div>
@@ -67,6 +67,7 @@ onMounted(() => {
 });
 
 const route = useRoute();
+const currentSlug = route.params.slug;
 const orderId = route.params.id;
 const { shippingDetails } = useOrderStore();
 const toastText = ref("");

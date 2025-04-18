@@ -2,6 +2,10 @@
 import { defineProps } from "vue";
 import type { PropType } from "vue";
 import type { StoreInfo } from "../../includes/interfaces";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const currentSlug = route.params.slug;
 
 defineProps({
     shippingDetails: {
@@ -18,7 +22,7 @@ defineProps({
     <div>
         <div class="flex justify-between items-center mb-1">
             <p class="text-manatee">Shipping Method</p>
-            <router-link :to="{ name: 'ShippingDetails' }" class="cursor-pointer">
+            <router-link :to="{ name: 'ShippingDetails', params: { slug: currentSlug } }" class="cursor-pointer">
                 <svg
                     width="20"
                     height="20"

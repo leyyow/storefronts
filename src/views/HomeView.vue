@@ -4,7 +4,7 @@
             <h1>{{ storeInfo.title }}</h1>
             <p class="text-granite-gray py-3 w-10/12">{{ storeInfo.subtitle }}</p>
             <div class="flex gap-3 pt-3 pb-6">
-                <RouterLink :to="{ name: 'Store' }" class="w-full">
+                <RouterLink :to="{ name: 'Store', params: { slug: currentSlug } }" class="w-full">
                     <button class="py-5 w-full bg-black text-white rounded-lg">Enter Shop</button>
                 </RouterLink>
 
@@ -53,7 +53,7 @@
                 <ProductCard v-for="product in storeInfo.best_sellers" :key="product.id" :product="product" />
             </div>
 
-            <RouterLink :to="{ name: 'Store' }" class="w-full flex justify-center pt-4">
+            <RouterLink :to="{ name: 'Store', params: { slug: currentSlug } }" class="w-full flex justify-center pt-4">
                 <button class="py-5 w-2/3 bg-black text-white rounded-lg">Enter Shop</button>
             </RouterLink>
         </section>
@@ -93,6 +93,10 @@ import { Minus } from "lucide-vue-next";
 import SwiperCarousel from "../components/SwiperCarousel.vue";
 import ProductCard from "../components/ProductCard.vue";
 import FooterComponent from "../components/layouts/FooterComponent.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const currentSlug = route.params.slug;
 
 const { storeInfo } = useStoreInfo();
 

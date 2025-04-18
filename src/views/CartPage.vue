@@ -21,7 +21,7 @@
                 <p v-html="formatPrice(totalAmount)"></p>
             </div>
             <div class="flex justify-between py-3">
-                <router-link :to="{ name: 'Store' }" class="w-[35%]">
+                <router-link :to="{ name: 'Store', params: { slug: currentSlug } }" class="w-[35%]">
                     <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
                 </router-link>
                 <button class="w-[63%] bg-black text-white py-3 rounded-md" @click="proceedToShipping">
@@ -38,6 +38,7 @@ import CartPageItem from "../components/CartPageItem.vue";
 import { useRouter } from "vue-router";
 import { useQueryClient } from "@tanstack/vue-query";
 import { useUtils } from "../composables/useUtils";
+import { useRoute } from "vue-router";
 
 const queryClient = useQueryClient();
 const { formatPrice } = useUtils();
@@ -47,11 +48,13 @@ onMounted(() => {
 });
 
 const router = useRouter();
+const route = useRoute();
+const currentSlug = route.params.slug;
 const { cart, cartLength } = useCartStore();
 
 const proceedToShipping = () => {
     if (cart.length !== 0) {
-        router.push({ name: "ShippingDetails" });
+        router.push({ name: "ShippingDetails", params: { slug: currentSlug } });
     }
 };
 

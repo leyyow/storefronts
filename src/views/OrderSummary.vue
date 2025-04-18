@@ -2,7 +2,7 @@
     <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="h-16 px-4 flex justify-between items-center">
             <h6 class="font-normal">Order Summary</h6>
-            <router-link :to="{ name: 'Cart' }" class="underline text-spanish-viridian text-xs">Edit All</router-link>
+            <router-link :to="{ name: 'Cart', params: { slug: currentSlug } }" class="underline text-spanish-viridian text-xs">Edit All</router-link>
         </div>
 
         <div class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
@@ -37,6 +37,10 @@ import SummaryItem from "../components/order-summary/SummaryItem.vue";
 import ShippingSummary from "../components/order-summary/ShippingSummary.vue";
 import ShippingMethod from "../components/order-summary/ShippingMethod.vue";
 import SummaryTotal from "../components/order-summary/SummaryTotal.vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const currentSlug = route.params.slug;
 
 onMounted(() => {
     const popup = document.createElement("script");

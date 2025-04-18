@@ -23,7 +23,7 @@
         </div>
 
         <div class="flex justify-between py-3">
-            <router-link :to="{ name: 'Store' }" class="w-[35%]">
+            <router-link :to="{ name: 'Store', params: { slug: currentSlug } }" class="w-[35%]">
                 <button class="w-full bg-anti-flash-white text-black py-3 rounded-md">Back to Shop</button>
             </router-link>
             <button

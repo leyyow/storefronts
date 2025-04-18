@@ -99,7 +99,7 @@
 
             <!-- cart  -->
             <div class="w-10 h-10">
-                <router-link :to="{ name: 'Cart' }">
+                <router-link :to="{ name: 'Cart', params: { slug: currentSlug } }">
                     <button
                         class="bg-anti-flash-white rounded-sm w-full h-full flex items-center justify-center cursor-pointer relative"
                     >
@@ -147,7 +147,10 @@ import ProductCard from "../components/ProductCard.vue";
 import { useProductStore } from "../stores/product";
 import { useCartStore } from "../stores/cart";
 import SortPopup from "../components/SortPopup.vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+const currentSlug = route.params.slug;
 const sortIsOpen = ref(false);
 const { storeInfo } = useStoreInfo();
 const productStore = useProductStore();

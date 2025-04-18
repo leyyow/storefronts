@@ -3,7 +3,10 @@ import { RouterLink } from "vue-router";
 import { useProductStore } from "../stores/product";
 import { useCartStore } from "../stores/cart";
 import { useUtils } from "../composables/useUtils";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+const currentSlug = route.params.slug;
 const { isProductInCart } = useCartStore();
 const { formatPrice } = useUtils();
 const productStore = useProductStore();
@@ -18,7 +21,7 @@ defineProps({
 
 <template>
     <RouterLink
-        :to="{ name: 'ProductDetail', hash: `#${product.id}` }"
+        :to="{ name: 'ProductDetail', params: { slug: currentSlug }, hash: `#${product.id}` }"
         class="w-[32.5%] h-32 mb-0.5 rounded-sm bg-granite-gray relative"
     >
         <img

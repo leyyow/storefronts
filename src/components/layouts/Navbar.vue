@@ -1,7 +1,7 @@
 <template>
     <div class="relative" @wheel.prevent @touchmove.prevent @scroll.prevent>
         <nav class="py-5 px-4 flex justify-between items-center z-20">
-            <RouterLink :to="{ name: 'Home' }" class="logo max-h-8 w-1/3">
+            <RouterLink :to="{ name: 'Home', params: { slug: currentSlug } }" class="logo max-h-8 w-1/3">
                 <img :src="storeInfo.store_logo" :alt="`${storeInfo.store_name} logo`" class="h-8" />
             </RouterLink>
 
@@ -19,7 +19,7 @@
         <div v-if="navIsOpen" class="nav__menu border-t-2 border-platinum flex-1 bg-white absolute h-screen w-full z-10">
             <div class="py-8 px-6 flex flex-col">
                 <router-link @click="toggleNav" to="#why-us" class="mb-4 text-xl">Why Us?</router-link>
-                <router-link @click="toggleNav" :to="{ name: 'Store' }" class="mb-4 text-xl">Shop Now</router-link>
+                <router-link @click="toggleNav" :to="{ name: 'Store', params: { slug: currentSlug } }" class="mb-4 text-xl">Shop Now</router-link>
                 <router-link @click="toggleNav" to="#best-sellers" class="mb-4 text-xl"
                     >Best Selling Products</router-link
                 >
@@ -47,7 +47,10 @@
 import { Menu, X } from "lucide-vue-next";
 import { ref } from "vue";
 import { useStoreInfo } from "../../stores/storeInfo";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+const currentSlug = route.params.slug;
 const navIsOpen = ref(false);
 const { storeInfo } = useStoreInfo();
 
