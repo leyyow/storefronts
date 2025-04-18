@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="p-4">
-            <h1 class="py-5">{{ storeInfo.title }}</h1>
+            <h1>{{ storeInfo.title }}</h1>
             <p class="text-granite-gray py-3 w-10/12">{{ storeInfo.subtitle }}</p>
             <div class="flex gap-3 pt-3 pb-6">
                 <RouterLink to="/store" class="w-full">
@@ -22,7 +22,7 @@
                     <img
                         :src="item"
                         alt="Slide Image"
-                        class="rounded-lg shadow-lg object-cover h-80 w-full bg-manatee"
+                        class="rounded-lg shadow-lg object-cover h-60 w-full bg-manatee"
                     />
                 </SwiperSlide>
             </SwiperCarousel>

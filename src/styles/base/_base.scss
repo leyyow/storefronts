@@ -61,7 +61,7 @@ small {
 h1 {
     line-height: 1.2;
     $vw: 100vw;
-    font-size: calc($vw / 375px * 50px);
+    font-size: calc($vw / 375px * 48px);
     font-weight: 500;
 
     @include media(">=phone") {
