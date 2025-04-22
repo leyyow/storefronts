@@ -42,13 +42,6 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const currentSlug = route.params.slug;
 
-onMounted(() => {
-    const popup = document.createElement("script");
-    popup.setAttribute("src", "https://js.paystack.co/v2/inline.js");
-    popup.async = true;
-    document.head.appendChild(popup);
-});
-
 const { shippingDetails, deliveryFee } = useOrderStore();
 const { cart, cartLength, cartTotal } = useCartStore();
 const { storeInfo } = useStoreInfo();
@@ -145,7 +138,7 @@ const handleCheckout = () => {
         total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee * 100 + cartTotal : cartTotal,
         unique_items: uniqueProductCount(),
         items: [...payloadItems],
-        redirect_url: `${window.location.origin}/store/order-successful/${orderRef}`,
+        redirect_url: `${window.location.origin}/${currentSlug}/store/order-successful/${orderRef}`,
     };
 
     console.log(payload);

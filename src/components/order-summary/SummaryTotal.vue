@@ -43,7 +43,10 @@
 <script setup>
 import { defineProps, defineEmits } from "vue";
 import { useUtils } from "../../composables/useUtils";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
+const currentSlug = route.params.slug;
 const { formatPrice, formatNaira } = useUtils();
 defineProps({
     totalProducts: Number,

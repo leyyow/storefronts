@@ -22,7 +22,7 @@
                     <img
                         :src="item"
                         alt="Slide Image"
-                        class="rounded-lg shadow-lg object-cover h-60 w-full bg-manatee"
+                        class="rounded-lg shadow-lg object-cover h-70 w-full bg-manatee"
                     />
                 </SwiperSlide>
             </SwiperCarousel>
