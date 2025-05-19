@@ -4,7 +4,7 @@ import { createWebHistory, createRouter } from "vue-router";
 const routes = [
     {
         path: "/",
-        redirect: "/demo",
+        redirect: "/not-found",
     },
     {
         path: "/:slug",
@@ -45,6 +45,11 @@ const routes = [
         path: "/:slug/store/order/shipping",
         component: () => import("./views/ShippingDetails.vue"),
         name: "ShippingDetails",
+    },
+    {
+        path: "/not-found",
+        component: () => import("./views/404Page.vue"),
+        name: "NotFound",
     },
 ];
 

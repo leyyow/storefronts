@@ -4,16 +4,19 @@ import { useStoreInfo } from "../stores/storeInfo";
 import { useUtils } from "./useUtils";
 import type { StoreInfo } from "../includes/interfaces";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 export function useApiCalls() {
     const { updateStoreInfo } = useStoreInfo();
     const { setFavicon, setTitle } = useUtils();
+    const router = useRouter();
     
     // Fetch store info (requires merchantSlug)
     const fetchStoreInfo = (merchantSlug: { value: string; }) =>
         useQuery({
             queryKey: ["storeInfo", merchantSlug],
             queryFn: async () => {
+                sessionStorage.clear()
                 if (!merchantSlug.value) throw new Error("Merchant slug is required");
                 const response = (await apiGet(`/account/store-website/public/${merchantSlug.value}/`)) as {
                     status: number;
@@ -26,8 +29,8 @@ export function useApiCalls() {
                     setTitle(`${response.data.store_name} -- Powered by Leyyow!`);
                     return response.data;
                 } else {
-                    console.log(response);
-                    throw new Error("Failed to fetch store info");
+                    console.error("Fetch store info failed.");
+                    router.push({ name: "NotFound" });
                 }
             },
             enabled: computed(() => !!merchantSlug.value), // Only run if merchantSlug exists

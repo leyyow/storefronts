@@ -10,11 +10,12 @@ export function useUtils() {
     };
 
     const formatPrice = (priceInKobo: number) => {
-        const nairaAmount = priceInKobo / 100;
+        const nairaAmount = priceInKobo;
         const formattedAmount = nairaAmount.toLocaleString("en-NG", { style: "currency", currency });
-        const currencySymbol = new Intl.NumberFormat("en-NG", { style: "currency", currency })
-            .formatToParts()
-            .find(part => part.type === "currency")?.value || "";
+        const currencySymbol =
+            new Intl.NumberFormat("en-NG", { style: "currency", currency })
+                .formatToParts()
+                .find((part) => part.type === "currency")?.value || "";
         const [naira, kobo] = formattedAmount.replace(currencySymbol, "").split(".");
         return `<small class="me-0.5">${currencySymbol}</small><span>${naira}</span><small>.${kobo || "00"}</small>`;
     };
