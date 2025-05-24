@@ -16,7 +16,7 @@
                 <!-- product image  -->
                 <ProductImage :filteredProduct="filteredProduct" />
 
-                <ProductInfo :filteredProduct="filteredProduct" @share-clicked="shareUrl" />
+                <ProductInfo :filteredProduct="filteredProduct" :price="price(filteredProduct)" @share-clicked="shareUrl" />
 
                 <ProductVariantsForm
                     :filteredProduct="filteredProduct"
@@ -51,14 +51,16 @@ import { useToast } from "primevue/usetoast";
 import { useCartStore } from "../stores/cart";
 import type { Product } from "../includes/interfaces";
 
-// data 
+// data
 const productStore = useProductStore();
 const cartStore = useCartStore();
 const toast = useToast();
 const toastText = ref("");
-const visible = ref<String|Boolean>(false);
+const visible = ref<String | Boolean>(false);
 const error = ref(false);
-const formState = reactive<Record<number | string, { variant1: string; variant2: string; variant3: string; quantity: number }>>({
+const formState = reactive<
+    Record<number | string, { variant1: string; variant2: string; variant3: string; quantity: number }>
+>({
     default: { variant1: "", variant2: "", variant3: "", quantity: 1 },
 });
 
@@ -66,13 +68,17 @@ const formState = reactive<Record<number | string, { variant1: string; variant2:
 const filteredProducts = computed(() => productStore.filteredProducts);
 const totalProducts = computed(() => cartStore.cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
-// methods 
+// methods
 const variantNames = (product: Product) => {
     const names = product.variants.split(",").filter(Boolean);
     return names;
 };
 
 const optionsArray = (option: string) => {
+    if (!option) {
+        console.warn("optionsArray called with undefined");
+        return;
+    }
     const options = option.split(",").filter(Boolean);
     return options;
 };
@@ -148,7 +154,7 @@ const getResolverForProduct = (product: Product) => {
     };
 };
 
-const resolver = ({ values, product }: { values: Record<string, any>, product: Product }) => {
+const resolver = ({ values, product }: { values: Record<string, any>; product: Product }) => {
     const errors: Record<string, { message: string }[]> = {};
     const variants = variantNames(product);
 
@@ -185,7 +191,13 @@ const shareUrl = (productId: number) => {
     }
 };
 
-const onFormSubmit = ({ valid }: { valid: boolean }, product: Product, variantPrice: number, stockLeft: number, sku: number) => {
+const onFormSubmit = (
+    { valid }: { valid: boolean },
+    product: Product,
+    variantPrice: number,
+    stockLeft: number,
+    sku: number,
+) => {
     if (stockLeft === 0) {
         error.value = true;
         toast.add({ severity: "info", detail: "Item is not available in stock", life: 1000 });

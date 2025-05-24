@@ -9,6 +9,10 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    price: {
+        type: Number,
+        required: true,
+    },
 });
 
 const emit = defineEmits(["share-clicked"]);
@@ -65,6 +69,6 @@ const handleShareClick = () => {
             </div>
         </div>
 
-        <h5 v-html="formatPrice(props.filteredProduct.price)"></h5>
+        <h5 v-html="formatPrice(props.price)"></h5>
     </div>
 </template>
