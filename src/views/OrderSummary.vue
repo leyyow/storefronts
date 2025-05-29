@@ -51,7 +51,7 @@ const { mutate: useCreateOrder, isPending, error } = createOrder();
 
 const totalAmount = computed(() => {
     return Number(
-        shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal / 100 : cartTotal / 100
+        shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal : cartTotal
     ).toLocaleString();
 });
 

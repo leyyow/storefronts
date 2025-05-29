@@ -21,6 +21,7 @@ declare module 'vue' {
     Navbar: typeof import('./src/components/layouts/Navbar.vue')['default']
     ProductCard: typeof import('./src/components/ProductCard.vue')['default']
     ProductImage: typeof import('./src/components/product-details/ProductImage.vue')['default']
+    ProductImagePlaceholder: typeof import('./src/components/common/ProductImagePlaceholder.vue')['default']
     ProductInfo: typeof import('./src/components/product-details/ProductInfo.vue')['default']
     ProductNavbar: typeof import('./src/components/product-details/ProductNavbar.vue')['default']
     ProductVariantsForm: typeof import('./src/components/product-details/ProductVariantsForm.vue')['default']
