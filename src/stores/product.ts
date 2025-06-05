@@ -54,6 +54,7 @@ export const useProductStore = defineStore("product", () => {
             );
         }
 
+        products = products.filter((product) => product.display === true);
         return products; // No sorting here, inventory is already sorted
     });
 
