@@ -34,7 +34,7 @@
                 <div role="status" v-if="isPending">
                     <Spinner />
                 </div>
-                <span v-else>Proceed to Checkout</span>
+                <span v-else>Checkout</span>
             </button>
         </div>
     </div>

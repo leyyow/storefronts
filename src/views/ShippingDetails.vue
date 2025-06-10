@@ -15,7 +15,7 @@
             <div class="flex flex-col gap-5 w-full">
                 <div class="flex gap-2">
                     <div class="flex flex-col gap-1">
-                        <label for="firstName" class="mb-1">First Name</label>
+                        <label for="firstName" class="mb-1">First Name <span class="text-red-500">*</span></label>
                         <InputText
                             v-model="initialValues.firstName"
                             name="firstName"
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="flex flex-col gap-1">
-                        <label for="lastName" class="mb-1">Last Name</label>
+                        <label for="lastName" class="mb-1">Last Name <span class="text-red-500">*</span></label>
                         <InputText
                             v-model="initialValues.lastName"
                             name="lastName"
@@ -45,7 +45,7 @@
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="email" class="mb-1">Email</label>
+                    <label for="email" class="mb-1">Email <span class="text-red-500">*</span></label>
                     <InputText
                         v-model="initialValues.email"
                         name="email"
@@ -60,7 +60,7 @@
                     }}</Message>
                 </div>
                 <div class="flex flex-col gap-1">
-                    <label for="phoneNumber" class="mb-1">Phone Number</label>
+                    <label for="phoneNumber" class="mb-1">Phone Number <span class="text-red-500">*</span></label>
                     <InputNumber
                         v-model="initialValues.phoneNumber"
                         name="phoneNumber"
@@ -75,6 +75,7 @@
                 </div>
 
                 <div>
+                    <h6 class="my-3 font-normal">Shipping Method <span class="text-red-500">*</span></h6>
                     <div class="flex gap-3">
                         <label for="Delivery" class="w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block">
                             <div class="flex justify-between items-center">
@@ -169,7 +170,7 @@
                 </div>
             </div>
 
-            <Button type="submit" severity="secondary" label="Proceed to Checkout" class="py-3 bg-black text-white" />
+            <Button type="submit" severity="secondary" label="Next" class="py-3 bg-black text-white" />
         </Form>
     </div>
 </template>
