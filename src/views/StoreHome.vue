@@ -1,6 +1,6 @@
 <template>
     <div class="store-home pb-4">
-        <div class="ps-4 flex overflow-x-auto scrollbar-hide">
+        <!-- <div class="ps-4 flex overflow-x-auto scrollbar-hide">
             <div
                 :class="[
                     'tab border-b-2 py-2 px-3 cursor-pointer flex items-center',
@@ -24,7 +24,7 @@
             >
                 <p>{{ category.category }}</p>
             </div>
-        </div>
+        </div> -->
 
         <div class="py-5 px-4">
             <h4 class="font-normal">Shop</h4>
