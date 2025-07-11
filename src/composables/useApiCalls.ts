@@ -16,7 +16,6 @@ export function useApiCalls() {
         useQuery({
             queryKey: ["storeInfo", merchantSlug],
             queryFn: async () => {
-                sessionStorage.clear()
                 if (!merchantSlug.value) throw new Error("Merchant slug is required");
                 const response = (await apiGet(`/account/store-website/public/${merchantSlug.value}/`)) as {
                     status: number;
@@ -30,6 +29,7 @@ export function useApiCalls() {
                     return response.data;
                 } else {
                     console.error("Fetch store info failed.");
+                    sessionStorage.clear();
                     router.push({ name: "NotFound" });
                 }
             },
