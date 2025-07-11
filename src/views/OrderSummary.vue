@@ -142,6 +142,6 @@ const handleCheckout = () => {
     };
 
     console.log(payload);
-    // useCreateOrder(payload);
+    useCreateOrder(payload);
 };
 </script>
