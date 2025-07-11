@@ -130,18 +130,18 @@ const handleCheckout = () => {
         payment_mode: 1,
         payment_status: 0,
         products_total: cartTotal,
-        shipping_price: shippingDetails.shippingMethod === "Delivery" ? deliveryFee * 100 : 0,
+        shipping_price: shippingDetails.shippingMethod === "Delivery" ? deliveryFee : 0,
         shipping_company: 0,
         shipping_mode: false,
         shipping_paid: false,
         store: storeInfo.store,
-        total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee * 100 + cartTotal : cartTotal,
+        total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal : cartTotal,
         unique_items: uniqueProductCount(),
         items: [...payloadItems],
         redirect_url: `${window.location.origin}/${currentSlug}/store/order-successful/${orderRef}`,
     };
 
     console.log(payload);
-    useCreateOrder(payload);
+    // useCreateOrder(payload);
 };
 </script>
