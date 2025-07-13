@@ -2,7 +2,11 @@
     <div class="flex flex-col h-dvh w-full overflow-y-hidden">
         <div class="h-16 px-4 flex justify-between items-center">
             <h6 class="font-normal">Order Summary</h6>
-            <router-link :to="{ name: 'Cart', params: { slug: currentSlug } }" class="underline text-spanish-viridian text-xs">Edit All</router-link>
+            <router-link
+                :to="{ name: 'Cart', params: { slug: currentSlug } }"
+                class="underline text-spanish-viridian text-xs"
+                >Edit All</router-link
+            >
         </div>
 
         <div class="flex-1 overflow-y-auto px-4 pt-2 pb-4">
@@ -38,9 +42,11 @@ import ShippingSummary from "../components/order-summary/ShippingSummary.vue";
 import ShippingMethod from "../components/order-summary/ShippingMethod.vue";
 import SummaryTotal from "../components/order-summary/SummaryTotal.vue";
 import { useRoute } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
 const route = useRoute();
 const currentSlug = route.params.slug;
+const toast = useToast();
 
 const { shippingDetails, deliveryFee } = useOrderStore();
 const { cart, cartLength, cartTotal } = useCartStore();
@@ -50,9 +56,7 @@ const { trimmedString } = useUtils();
 const { mutate: useCreateOrder, isPending, error } = createOrder();
 
 const totalAmount = computed(() => {
-    return Number(
-        shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal : cartTotal
-    ).toLocaleString();
+    return Number(shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal : cartTotal).toLocaleString();
 });
 
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
@@ -142,6 +146,18 @@ const handleCheckout = () => {
     };
 
     console.log(payload);
-    useCreateOrder(payload);
+    useCreateOrder(payload, {
+        onError: (error) => {
+            console.error("Create order failed:", error);
+
+            const message = error?.response?.data?.message || error?.message || "An error occurred";
+
+            toast.add({
+                severity: "error",
+                detail: message,
+                life: 1000,
+            });
+        },
+    });
 };
 </script>
