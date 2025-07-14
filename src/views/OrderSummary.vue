@@ -49,14 +49,17 @@ const currentSlug = route.params.slug;
 const toast = useToast();
 
 const { shippingDetails, deliveryFee } = useOrderStore();
-const { cart, cartLength, cartTotal } = useCartStore();
+const { cart, cartLength } = useCartStore();
 const { storeInfo } = useStoreInfo();
 const { createOrder } = useApiCalls();
 const { trimmedString } = useUtils();
 const { mutate: useCreateOrder, isPending, error } = createOrder();
 
+const cartTotal = computed(() => cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0));
 const totalAmount = computed(() => {
-    return Number(shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal : cartTotal).toLocaleString();
+    return Number(
+        shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal.value : cartTotal.value,
+    ).toLocaleString();
 });
 
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
@@ -83,7 +86,6 @@ const variantNames = (product) => {
     return names.length ? names : ["", "", ""];
 };
 
-const orderRef = generateOrderRef(storeInfo.store, cart);
 const orderDate = new Date().toISOString().split("T")[0];
 
 const payloadItems = cart.map((item, i) => {
@@ -104,7 +106,6 @@ const payloadItems = cart.map((item, i) => {
         is_returned: false,
     };
 
-    // Dynamically add varXname and selected_optionX
     variants.forEach((variantName, index) => {
         payloadItem[`var${index + 1}name`] = variantName;
         payloadItem[`selected_option${index + 1}`] = item[`selected_variant${index + 1}`];
@@ -114,6 +115,7 @@ const payloadItems = cart.map((item, i) => {
 });
 
 const handleCheckout = () => {
+    const orderRef = generateOrderRef(storeInfo.store, cart);
     const payload = {
         channel: 3,
         customer_info: {
