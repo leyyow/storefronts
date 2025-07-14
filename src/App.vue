@@ -24,13 +24,27 @@ import { useApiCalls } from "./composables/useApiCalls.ts";
 import { useRoute, useRouter } from "vue-router";
 import HomeSkeleton from "./components/skeletons/HomeSkeleton.vue";
 import StoreHomeSkeleton from "./components/skeletons/StoreHomeSkeleton.vue";
+import { useCartStore } from "./stores/cart.ts";
 
 const { storeInfo, updateStoreInfo } = useStoreInfo();
 const { fetchStoreInfo } = useApiCalls();
 const route = useRoute();
 const router = useRouter();
+const cartStore = useCartStore();
 const merchantSlug = computed(() => route.params.slug);
-console.log(merchantSlug.value);
+
+const previousSlug = localStorage.getItem("currentSlug");
+watch(
+    () => merchantSlug.value,
+    (slug) => {
+        console.log(slug);
+
+        if (previousSlug !== slug) {
+            cartStore.clearCart();
+            localStorage.setItem("currentSlug", slug);
+        }
+    },
+);
 
 // ✅ Call useQuery immediately with the computed slug
 const storeQuery = fetchStoreInfo(merchantSlug);
