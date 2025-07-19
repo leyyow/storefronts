@@ -33,19 +33,6 @@ const router = useRouter();
 const cartStore = useCartStore();
 const merchantSlug = computed(() => route.params.slug);
 
-const previousSlug = localStorage.getItem("currentSlug");
-watch(
-    () => merchantSlug.value,
-    (slug) => {
-        console.log(slug);
-
-        if (previousSlug !== slug) {
-            cartStore.clearCart();
-            localStorage.setItem("currentSlug", slug);
-        }
-    },
-);
-
 // ✅ Call useQuery immediately with the computed slug
 const storeQuery = fetchStoreInfo(merchantSlug);
 watch(
