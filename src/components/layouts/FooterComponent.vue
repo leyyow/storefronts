@@ -8,8 +8,10 @@
         </div>
         <div class="w-[44%] flex flex-col gap-4">
             <h6 class="text-sm">Support</h6>
-            <a href="mailto:example@gmail.com" class="text-granite-gray text-xs">example@gmail.com</a>
-            <a href="tel:+2348082826122" class="text-granite-gray text-xs">+2348082826122</a>
+            <a :href="`mailto:${storeInfo.email}`" class="text-granite-gray text-xs">{{ storeInfo.email }}</a>
+            <a :href="`tel:${storeInfo.phone_number}`" class="text-granite-gray text-xs">{{
+                storeInfo.phone_number
+            }}</a>
         </div>
         <div class="w-1/4 flex flex-col gap-4">
             <h6 class="text-sm">Socials</h6>
@@ -21,4 +23,8 @@
     </footer>
 </template>
 
-<script setup></script>
+<script setup>
+import { useStoreInfo } from "../../stores/storeInfo";
+
+const { storeInfo } = useStoreInfo();
+</script>
