@@ -51,6 +51,11 @@ const routes = [
         component: () => import("./views/404Page.vue"),
         name: "NotFound",
     },
+    {
+        path: "/not-ready",
+        component: () => import("./views/AlmostReady.vue"),
+        name: "NotReady",
+    },
 ];
 
 const router = createRouter({
