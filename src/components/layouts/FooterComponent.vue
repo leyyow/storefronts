@@ -13,13 +13,13 @@
                 storeInfo.phone_number
             }}</a>
         </div>
-        <div class="w-1/4 flex flex-col gap-4">
+        <!-- <div class="w-1/4 flex flex-col gap-4">
             <h6 class="text-sm">Socials</h6>
             <RouterLink to="#" class="text-granite-gray text-xs">Instagram</RouterLink>
             <RouterLink to="#" class="text-granite-gray text-xs">Twitter</RouterLink>
             <RouterLink to="#" class="text-granite-gray text-xs">Facebook</RouterLink>
             <RouterLink to="#" class="text-granite-gray text-xs">TikTok</RouterLink>
-        </div>
+        </div> -->
     </footer>
 </template>
 
