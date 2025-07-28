@@ -4,15 +4,15 @@ import { useStoreInfo } from "../stores/storeInfo";
 import { useUtils } from "./useUtils";
 import type { StoreInfo } from "../includes/interfaces";
 import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { useGlobalStore } from "../stores/global";
 
 export function useApiCalls() {
     const { updateStoreInfo } = useStoreInfo();
+    const { setShowNotFound } = useGlobalStore();
     const { setFavicon, setTitle } = useUtils();
-    const router = useRouter();
-    
+
     // Fetch store info (requires merchantSlug)
-    const fetchStoreInfo = (merchantSlug: { value: string; }) =>
+    const fetchStoreInfo = (merchantSlug: { value: string }) =>
         useQuery({
             queryKey: ["storeInfo", merchantSlug],
             queryFn: async () => {
@@ -30,7 +30,7 @@ export function useApiCalls() {
                 } else {
                     console.error("Fetch store info failed.");
                     sessionStorage.clear();
-                    router.push({ name: "NotFound" });
+                    setShowNotFound(true);
                 }
             },
             enabled: computed(() => !!merchantSlug.value), // Only run if merchantSlug exists
@@ -48,6 +48,6 @@ export function useApiCalls() {
                 window.location.href = `https://checkout.paystack.com/${orderData.data.access_code}`;
             },
         });
-    }
+    };
     return { fetchStoreInfo, createOrder };
 }
