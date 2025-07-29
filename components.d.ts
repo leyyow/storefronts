@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     404Screen: typeof import('./src/components/layouts/404Screen.vue')['default']
+    AlmostReady: typeof import('./src/components/layouts/AlmostReady.vue')['default']
     Button: typeof import('primevue/button')['default']
     CartButton: typeof import('./src/components/product-details/CartButton.vue')['default']
     CartPageItem: typeof import('./src/components/CartPageItem.vue')['default']
