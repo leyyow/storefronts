@@ -102,6 +102,8 @@
                 <router-link :to="{ name: 'Cart', params: { slug: currentSlug } }">
                     <button
                         class="bg-anti-flash-white rounded-sm w-full h-full flex items-center justify-center cursor-pointer relative"
+                        :disabled="totalProducts === 0"
+                        :style="{ opacity: totalProducts === 0 ? 0.5 : 1 }"
                     >
                         <svg
                             width="16"

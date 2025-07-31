@@ -1,5 +1,5 @@
 <template>
-    <div class="font-aeonik h-screen flex justify-center items-center">
+    <div class="font-sato h-screen flex justify-center items-center">
         <div class="md:w-lg lg:w-sm w-full h-full max-h-screen overflow-y-auto scrollbar-hide">
             <div v-if="isLoading && routeName">
                 <HomeSkeleton v-if="routeName === 'Home'" />

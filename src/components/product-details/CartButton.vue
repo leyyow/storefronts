@@ -1,11 +1,14 @@
 <template>
     <div class="h-15 shadow-[0px_-4px_8px_0px_#00000014] p-4 flex items-center">
         <div class="flex justify-end items-center w-full">
-            <div class="w-10 h-10">
+            <div class="px-4 h-10">
                 <router-link :to="{ name: 'Cart', params: { slug: currentSlug } }">
                     <button
                         class="bg-anti-flash-white rounded-sm w-full h-full flex items-center justify-center cursor-pointer relative"
+                        :disabled="totalProducts === 0"
+                        :style="{ opacity: totalProducts === 0 ? 0.5 : 1 }"
                     >
+                        <small class="mr-1 text-spanish-viridian ps-3">View Cart</small>
                         <svg
                             width="16"
                             height="16"
