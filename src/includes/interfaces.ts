@@ -38,6 +38,7 @@ export interface StoreInfo {
     opening_time: string | null;
     closing_time: string | null;
     shipping_prices: { area: string; amount: string }[];
+    is_live: boolean;
 }
 
 export interface Product {

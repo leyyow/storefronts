@@ -8,7 +8,7 @@ import { useGlobalStore } from "../stores/global";
 
 export function useApiCalls() {
     const { updateStoreInfo } = useStoreInfo();
-    const { setShowNotFound } = useGlobalStore();
+    const { setShowNotFound, setShowNotReady } = useGlobalStore();
     const { setFavicon, setTitle } = useUtils();
 
     // Fetch store info (requires merchantSlug)
@@ -26,6 +26,9 @@ export function useApiCalls() {
                     updateStoreInfo(response.data);
                     setFavicon(response.data.store_logo);
                     setTitle(`${response.data.store_name} -- Powered by Leyyow!`);
+                    if (!response.data.is_live) {
+                        setShowNotReady(true);
+                    }
                     return response.data;
                 } else {
                     console.error("Fetch store info failed.");
