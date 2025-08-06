@@ -78,11 +78,13 @@ const formState = reactive<
 
 // lifecycle hooks
 onBeforeUnmount(() => {
-    Object.keys(formState).forEach((key) => {
-        if (key !== "default") {
-            delete formState[key];
-        }
-    });
+  // Reset all keys including 'default'
+  for (const key in formState) {
+    formState[key].variant1 = "";
+    formState[key].variant2 = "";
+    formState[key].variant3 = "";
+    formState[key].quantity = 1;
+  }
 });
 
 // computed properties
