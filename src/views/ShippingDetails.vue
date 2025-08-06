@@ -93,7 +93,14 @@
                             </p>
                         </label>
 
-                        <label for="Pickup" class="w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block">
+                        <label
+                            for="Pickup"
+                            class="w-full p-3 rounded-md bg-anti-flash-white block"
+                            :class="{
+                                'opacity-50 cursor-default': storeInfo.pickup_location === '',
+                                'opacity-100 cursor-pointer': storeInfo.pickup_location !== ''
+                            }"
+                        >
                             <div class="flex justify-between items-center">
                                 <span>Pickup</span>
                                 <RadioButton
@@ -101,6 +108,7 @@
                                     inputId="Pickup"
                                     name="shippingMethod"
                                     value="Pickup"
+                                    :disabled="storeInfo.pickup_location === ''"
                                 />
                             </div>
                             <p class="text-granite-gray leading-none text-xs mt-2">
@@ -167,7 +175,7 @@
                 </div>
 
                 <div v-if="initialValues.shippingMethod === 'Pickup'">
-                    <p><span class="font-bold">Pickup at:</span> {{ storeInfo.address }}</p>
+                    <p><span class="font-bold">Pickup at:</span> {{ storeInfo.pickup_location }}</p>
                 </div>
             </div>
 
