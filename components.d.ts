@@ -16,6 +16,7 @@ declare module 'vue' {
     Dialog: typeof import('primevue/dialog')['default']
     FooterComponent: typeof import('./src/components/layouts/FooterComponent.vue')['default']
     Form: typeof import('@primevue/forms/form')['default']
+    FullCartButton: typeof import('./src/components/product-details/FullCartButton.vue')['default']
     HomeSkeleton: typeof import('./src/components/skeletons/HomeSkeleton.vue')['default']
     InputNumber: typeof import('primevue/inputnumber')['default']
     InputText: typeof import('primevue/inputtext')['default']
