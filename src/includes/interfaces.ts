@@ -104,6 +104,50 @@ export interface ShippingDetails {
     email: string;
     phoneNumber: string;
     shippingMethod: string;
-    location: string;
+    courier_name: string;
     address: string;
+    courier_id?: string; // Optional for backward compatibility
+}
+
+export interface ShippingOption {
+    courier_id: string;
+    courier_name: string;
+    courier_image: string;
+    service_code: string;
+    insurance: {
+        code: string;
+        fee: number;
+    };
+    discount: {
+        percentage: number;
+        symbol: string;
+        discounted: number;
+    };
+    service_type: string;
+    waybill: boolean;
+    on_demand: boolean;
+    is_cod_available: boolean;
+    tracking_level: number;
+    ratings: number;
+    votes: number;
+    connected_account: boolean;
+    rate_card_amount: number;
+    rate_card_currency: string;
+    pickup_eta: string;
+    pickup_eta_time: string;
+    dropoff_station: string | null;
+    pickup_station: string | null;
+    delivery_eta: string;
+    delivery_eta_time: string;
+    info: string | null;
+    currency: string;
+    vat: number;
+    total: number;
+    tracking: {
+        bars: number;
+        label: string;
+    };
+    sub_total: number;
+    service_charge: number;
+    total_amount: number;
 }

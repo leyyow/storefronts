@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { reactive, computed } from "vue";
 import { useStoreInfo } from "../stores/storeInfo";
-import type { StoreInfo, ShippingDetails } from "../includes/interfaces";
+import type { ShippingDetails, ShippingOption } from "../includes/interfaces";
 
-const {storeInfo, shippingOptions} = useStoreInfo();
+const { shippingOptions } = useStoreInfo();
 
 export const useOrderStore = defineStore(
     "order",
@@ -14,8 +14,9 @@ export const useOrderStore = defineStore(
             email: "",
             phoneNumber: "",
             shippingMethod: "",
-            location: "",
+            courier_name: "",
             address: "",
+            courier_id: "", // Optional for backward compatibility
         });
 
         const deliveryFee = computed(() => {
@@ -23,7 +24,9 @@ export const useOrderStore = defineStore(
 
             if (!Array.isArray(prices) || prices.length === 0) return 0;
 
-            const amount = prices.find((option: any) => option.name === shippingDetails.location)?.amount;
+            const amount = prices.find(
+                (option: ShippingOption) => option.courier_id === shippingDetails.courier_id,
+            )?.total_amount;
 
             return Number(amount) || 0;
         });
@@ -35,10 +38,11 @@ export const useOrderStore = defineStore(
                 email: "",
                 phoneNumber: "",
                 shippingMethod: "",
-                location: "",
+                courier_name: "",
                 address: "",
+                courier_id: "", // Optional for backward compatibility
             });
-        }
+        };
 
         return {
             shippingDetails,

@@ -67,7 +67,7 @@
                         inputmode="numeric"
                         pattern="[0-9]*"
                         placeholder="Enter phone number"
-                        @input="(e) => (initialValues.phoneNumber = e.target.value.replace(/\D/g, ''))"
+                        @input="(e) => { const target = e.target as HTMLInputElement; if (target) initialValues.phoneNumber = target.value.replace(/\D/g, ''); }"
                         class="p-3 border-none outline-none focus:outline-none focus:ring-0 focus:border-transparent"
                     />
                     <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple">{{
@@ -111,7 +111,7 @@
                             class="w-full p-3 rounded-md bg-anti-flash-white block"
                             :class="{
                                 'opacity-50 cursor-default': storeInfo.pickup_location === '',
-                                'opacity-100 cursor-pointer': storeInfo.pickup_location !== ''
+                                'opacity-100 cursor-pointer': storeInfo.pickup_location !== '',
                             }"
                         >
                             <div class="flex justify-between items-center">
@@ -140,60 +140,74 @@
                 </div>
 
                 <div class="flex flex-col gap-1" v-if="initialValues.shippingMethod === 'Delivery'">
-                    <label for="address" class="mb-1">Address</label>
-                    <InputText
+                    <label for="address" class="mb-1 hidden">Address</label>
+                    <GooglePlacesAutocomplete
                         v-model="initialValues.address"
-                        name="address"
-                        type="text"
-                        placeholder="12, Ogun Street, Opebi"
-                        fluid
-                        class="px-4 py-3"
-                        :formControl="{ validateOnValueUpdate: true }"
+                        label="Address"
+                        placeholder="Enter your address..."
+                        :required="true"
+                        @selected="
+                            (item: any) => {
+                                initialValues.address = item.description;
+                                console.log('Selected address:', item);
+                            }
+                        "
                     />
                     <Message v-if="$form.address?.invalid" severity="error" size="small" variant="simple">{{
                         $form.address.error.message
                     }}</Message>
 
-                    <div class="mt-3 pt-3 bg-[#F2F5F2] rounded-t-md">
-                        <p class="py-2 text-center">Select your preferred courier</p>
+                    <div v-if="initialValues.address.length > 0" class="mt-3 pt-3 bg-[#F2F5F2] rounded-t-md">
+                        <p v-if="!isGettingRates && shippingOptions.length > 0" class="py-2 text-center">
+                            Select your preferred courier
+                        </p>
                         <div class="my-2">
-                            <div class="max-h-60 overflow-y-auto overflow-x-hidden scrollbar-hide px-2 relative">
+                            <div class="max-h-70 overflow-y-auto overflow-x-hidden scrollbar-hide px-2 relative">
+                                <div
+                                    role="status"
+                                    v-if="isGettingRates"
+                                    class="w-full flex justify-center items-center p-10"
+                                >
+                                    <Spinner styleClass="fill-spanish-viridian w-16 h-16" />
+                                </div>
+                                <NoCouriersAvailable v-if="!isGettingRates && shippingOptions.length === 0" />
                                 <label
+                                    v-else
                                     class="bg-white flex justify-between py-3 border cursor-pointer px-2 rounded-2xl mb-2 items-center"
                                     :class="[
-                                        initialValues.location === option.name
+                                        initialValues.courier_name === option.courier_name
                                             ? 'border-spanish-viridian bg-spanish-viridian/5'
                                             : 'border-platinum',
                                     ]"
                                     v-for="option in shippingOptions"
-                                    :key="option.value"
-                                    :for="option.value"
+                                    :key="option.courier_id"
+                                    :for="option.courier_id"
                                 >
                                     <div class="flex">
                                         <img
-                                            :src="option.pin_image"
+                                            :src="option.courier_image"
                                             alt="courier logo"
                                             class="w-10 border border-gray-200 rounded-md"
                                         />
 
                                         <div class="flex-1 flex flex-col justify-between ms-2">
-                                            <p class="text-xs font-bold text-black">{{ option.name }}</p>
+                                            <p class="text-xs font-bold text-black">{{ option.courier_name }}</p>
                                             <div class="flex text-[#838383] items-center relative">
                                                 <Icon icon="mdi:star-outline" class="relative bottom-0.5" />
-                                                <p class="text-[10px] ms-0.5">{{ option.rating }}</p>
-                                                <p class="text-[10px] ms-1">({{ option.no_of_reviews }} reviews)</p>
+                                                <p class="text-[10px] ms-0.5">{{ option.tracking.bars }}</p>
+                                                <p class="text-[10px] ms-1">({{ option.votes }} reviews)</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <RadioButton
-                                        v-model="initialValues.location"
-                                        :inputId="option.value"
+                                        v-model="initialValues.courier_id"
+                                        :inputId="option.courier_id"
                                         name="location"
-                                        :value="option.name"
-                                        class="opacity-0 w-0 h-0 absolute"
+                                        :value="option.courier_id"
+                                        class="absolute h-0 w-0 opacity-0"
                                     />
-                                    <p class="font-bold" v-html="formatNaira(option.amount)"></p>
+                                    <p class="font-bold" v-html="formatNaira(option.total_amount)"></p>
                                 </label>
                             </div>
                             <div
@@ -227,23 +241,55 @@
         </Form>
     </div>
 </template>
-<script setup>
-import { ref } from "vue";
-import { useToast } from "primevue/usetoast";
+<script setup lang="ts">
+import { watch } from "vue";
 import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useRouter } from "vue-router";
 import { useUtils } from "../composables/useUtils";
-import LocationIcon from "../assets/icons/location-icon.vue";
 import { Icon } from "@iconify/vue";
+import GooglePlacesAutocomplete from "../components/common/google-places-auto-complete.vue";
+import { useApiCalls } from "../composables/useApiCalls";
+import { useCartStore } from "../stores/cart";
+import type { ShippingOption, StoreInfo } from "../includes/interfaces";
+import NoCouriersAvailable from "../components/common/NoCouriersAvailable.vue";
 
 const router = useRouter();
 const { shippingDetails: initialValues } = useOrderStore();
-const { storeInfo, shippingOptions } = useStoreInfo();
-const { formatNaira } = useUtils();
+const storeInfo = useStoreInfo().storeInfo as StoreInfo;
 
-const resolver = ({ values }) => {
-    const errors = {};
+const { formatNaira } = useUtils();
+const { cart } = useCartStore();
+const { getRates } = useApiCalls();
+const shippingOptions = useStoreInfo().shippingOptions as ShippingOption[];
+const { mutate: getRatesMutation, isPending: isGettingRates } = getRates();
+
+watch(
+    () => initialValues.address,
+    (newAddress) => {
+        if (newAddress && newAddress.length > 10) {
+            // Create sku_data as key-value pairs: { sku_id: quantity }
+            const skuData: Record<string, number> = {};
+            cart.forEach((item) => {
+                skuData[item.selected_sku] = item.selected_quantity;
+            });
+
+            getRatesMutation({
+                delivery_address: initialValues.address,
+                customer_name: `${initialValues.firstName} ${initialValues.lastName}`,
+                customer_phone: initialValues.phoneNumber,
+                customer_email: initialValues.email,
+                sku_data: skuData,
+            });
+        } else {
+            initialValues.address = "";
+        }
+    },
+    { immediate: true },
+);
+
+const resolver = ({ values }: { values: { [key: string]: any } }) => {
+    const errors: Record<string, any[]> = {};
 
     if (!values.firstName) {
         errors.firstName = [{ message: "First name is required." }];
@@ -273,13 +319,17 @@ const resolver = ({ values }) => {
         errors.address = [{ message: "Address is required." }];
     }
 
+    // if (!values.courier_id) {
+    //     errors.courier
+    // }
+
     return {
         errors,
         values,
     };
 };
 
-const onFormSubmit = ({ valid, values }) => {
+const onFormSubmit = ({ valid, values }: { valid: boolean; values: Record<string, any> }) => {
     if (valid) {
         if (values.shippingMethod === "Pickup") {
             (values.location = ""), (values.address = "");

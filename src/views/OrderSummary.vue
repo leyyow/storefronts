@@ -133,7 +133,7 @@ const handleCheckout = () => {
             last_name: shippingDetails.lastName,
             line1: shippingDetails.address,
             phone: shippingDetails.phoneNumber,
-            city: shippingDetails.location,
+            city: "",
         },
         fulfilled: 0,
         has_customer: false,

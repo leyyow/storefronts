@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import { apiGet, apiPost } from "../includes/api";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useUtils } from "./useUtils";
-import type { StoreInfo } from "../includes/interfaces";
+import type { ShippingOption, StoreInfo } from "../includes/interfaces";
 import { computed } from "vue";
 import { useGlobalStore } from "../stores/global";
 
@@ -52,5 +52,24 @@ export function useApiCalls() {
             },
         });
     };
-    return { fetchStoreInfo, createOrder };
+
+    const getRates = () => {
+        return useMutation({
+            mutationKey: ["shippingRates"],
+            mutationFn: async (data: any) => {
+                return (await apiPost("/shipping/rates/", data)) as { rates: { couriers: ShippingOption[] }; message: string };
+            },
+            onSuccess: (response) => {
+                const { updateShippingOptions } = useStoreInfo();
+                updateShippingOptions(response.rates.couriers);
+                console.log("Shipping options updated:", response.rates.couriers);
+            },
+            onError: (error) => {
+                console.error("Error fetching shipping rates:", error);
+            },
+            retry: false,
+        });
+    };
+
+    return { fetchStoreInfo, createOrder, getRates };
 }
