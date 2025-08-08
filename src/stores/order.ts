@@ -3,7 +3,7 @@ import { reactive, computed } from "vue";
 import { useStoreInfo } from "../stores/storeInfo";
 import type { StoreInfo, ShippingDetails } from "../includes/interfaces";
 
-const {storeInfo} = useStoreInfo();
+const {storeInfo, shippingOptions} = useStoreInfo();
 
 export const useOrderStore = defineStore(
     "order",
@@ -19,11 +19,11 @@ export const useOrderStore = defineStore(
         });
 
         const deliveryFee = computed(() => {
-            const prices = (storeInfo as StoreInfo)?.shipping_prices;
+            const prices = shippingOptions;
 
             if (!Array.isArray(prices) || prices.length === 0) return 0;
 
-            const amount = prices.find((area: any) => area.area === shippingDetails.location)?.amount;
+            const amount = prices.find((option: any) => option.name === shippingDetails.location)?.amount;
 
             return Number(amount) || 0;
         });

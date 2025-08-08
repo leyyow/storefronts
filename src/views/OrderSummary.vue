@@ -48,20 +48,28 @@ const route = useRoute();
 const currentSlug = route.params.slug;
 const toast = useToast();
 
-const { shippingDetails, deliveryFee } = useOrderStore();
+const { shippingDetails } = useOrderStore();
 const { cart, cartLength } = useCartStore();
-const { storeInfo } = useStoreInfo();
+const { storeInfo, shippingOptions } = useStoreInfo();
 const { createOrder } = useApiCalls();
 const { trimmedString } = useUtils();
 const { mutate: useCreateOrder, isPending, error } = createOrder();
 
+const deliveryFee = computed(() => {
+    const prices = shippingOptions;
+
+    if (!Array.isArray(prices) || prices.length === 0) return 0;
+
+    const amount = prices.find((option) => option.name === shippingDetails.location)?.amount;
+
+    return Number(amount) || 0;
+});
 const cartTotal = computed(() => cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0));
 const totalAmount = computed(() => {
     return Number(
-        shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal.value : cartTotal.value,
+        shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value + cartTotal.value : cartTotal.value,
     ).toLocaleString();
 });
-
 const totalProducts = computed(() => cart.reduce((sum, item) => sum + item.selected_quantity, 0));
 
 const uniqueProductCount = () => {
@@ -136,12 +144,12 @@ const handleCheckout = () => {
         payment_mode: 1,
         payment_status: 0,
         products_total: cartTotal.value,
-        shipping_price: shippingDetails.shippingMethod === "Delivery" ? deliveryFee : 0,
+        shipping_price: shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value : 0,
         shipping_company: 0,
         shipping_mode: false,
         shipping_paid: false,
         store: storeInfo.store,
-        total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee + cartTotal.value : cartTotal.value,
+        total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value + cartTotal.value : cartTotal.value,
         unique_items: uniqueProductCount(),
         items: [...payloadItems],
         redirect_url: `${window.location.origin}/${currentSlug}/store/order-successful/${orderRef}`,

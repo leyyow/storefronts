@@ -1,5 +1,5 @@
 <template>
-    <div class="px-4 pb-2 pt-4 flex flex-col min-h-full">
+    <div class="px-4 pb-2 pt-4 flex flex-col min-h-screen">
         <h5 class="font-normal py-2">Shipping Details</h5>
         <p class="text-granite-gray">Kindly input your information</p>
 
@@ -10,7 +10,7 @@
             :validateOnValueUpdate="false"
             :validateOnBlur="true"
             @submit="onFormSubmit"
-            class="flex flex-col flex-1 gap-5 justify-between w-full mt-5"
+            class="flex flex-col gap-5 w-full mt-5"
         >
             <div class="flex flex-col gap-5 w-full">
                 <div class="flex gap-2">
@@ -78,7 +78,15 @@
                 <div>
                     <h6 class="my-3 font-normal">Shipping Method <span class="text-red-500">*</span></h6>
                     <div class="flex gap-3">
-                        <label for="Delivery" class="w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block">
+                        <label
+                            for="Delivery"
+                            :class="[
+                                'w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block border',
+                                initialValues.shippingMethod === 'Delivery'
+                                    ? 'border-spanish-viridian bg-spanish-viridian/5'
+                                    : 'border-transparent',
+                            ]"
+                        >
                             <div class="flex justify-between items-center">
                                 <span>Delivery</span>
                                 <RadioButton
@@ -88,9 +96,14 @@
                                     value="Delivery"
                                 />
                             </div>
-                            <p class="text-granite-gray leading-none text-xs mt-2">
-                                Delivered to your door, hassle-free.
-                            </p>
+                            <div class="flex items-center gap-1 mt-2">
+                                <p class="text-granite-gray leading-none text-xs">Powered by</p>
+                                <img
+                                    src="../assets/images/pngs/shipbubble-logo.png"
+                                    alt="shipbubble logo"
+                                    class="h-3"
+                                />
+                            </div>
                         </label>
 
                         <label
@@ -126,38 +139,6 @@
                     >
                 </div>
 
-                <div
-                    class="bg-anti-flash-white rounded-md px-3 w-full"
-                    v-if="initialValues.shippingMethod === 'Delivery'"
-                >
-                    <label
-                        class="flex justify-between py-3 border-platinum border-b last-of-type:border-b-0 cursor-pointer"
-                        v-for="location in storeInfo.shipping_prices"
-                        :key="location.area"
-                        :for="location.area"
-                    >
-                        <span>
-                            {{ location.area }} -
-                            <span class="font-bold" v-html="formatNaira(location.amount)"></span>
-                        </span>
-                        <RadioButton
-                            v-model="initialValues.location"
-                            :inputId="location.area"
-                            name="location"
-                            :value="location.area"
-                        />
-                    </label>
-
-                    <Message
-                        v-if="$form.location?.invalid"
-                        severity="error"
-                        class="mt-1"
-                        size="small"
-                        variant="simple"
-                        >{{ $form.location.error.message }}</Message
-                    >
-                </div>
-
                 <div class="flex flex-col gap-1" v-if="initialValues.shippingMethod === 'Delivery'">
                     <label for="address" class="mb-1">Address</label>
                     <InputText
@@ -172,6 +153,69 @@
                     <Message v-if="$form.address?.invalid" severity="error" size="small" variant="simple">{{
                         $form.address.error.message
                     }}</Message>
+
+                    <div class="mt-3 pt-3 bg-[#F2F5F2] rounded-t-md">
+                        <p class="py-2 text-center">Select your preferred courier</p>
+                        <div class="my-2">
+                            <div class="max-h-60 overflow-y-auto overflow-x-hidden scrollbar-hide px-2 relative">
+                                <label
+                                    class="bg-white flex justify-between py-3 border cursor-pointer px-2 rounded-2xl mb-2 items-center"
+                                    :class="[
+                                        initialValues.location === option.name
+                                            ? 'border-spanish-viridian bg-spanish-viridian/5'
+                                            : 'border-platinum',
+                                    ]"
+                                    v-for="option in shippingOptions"
+                                    :key="option.value"
+                                    :for="option.value"
+                                >
+                                    <div class="flex">
+                                        <img
+                                            :src="option.pin_image"
+                                            alt="courier logo"
+                                            class="w-10 border border-gray-200 rounded-md"
+                                        />
+
+                                        <div class="flex-1 flex flex-col justify-between ms-2">
+                                            <p class="text-xs font-bold text-black">{{ option.name }}</p>
+                                            <div class="flex text-[#838383] items-center relative">
+                                                <Icon icon="mdi:star-outline" class="relative bottom-0.5" />
+                                                <p class="text-[10px] ms-0.5">{{ option.rating }}</p>
+                                                <p class="text-[10px] ms-1">({{ option.no_of_reviews }} reviews)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <RadioButton
+                                        v-model="initialValues.location"
+                                        :inputId="option.value"
+                                        name="location"
+                                        :value="option.name"
+                                        class="opacity-0 w-0 h-0 absolute"
+                                    />
+                                    <p class="font-bold" v-html="formatNaira(option.amount)"></p>
+                                </label>
+                            </div>
+                            <div
+                                class="w-full border-y border-[#D83854] bg-[#D83854]/5 py-3 flex gap-1 justify-center items-center"
+                            >
+                                <p class="text-xs">This service is provided by</p>
+                                <img
+                                    src="../assets/images/pngs/shipbubble-logo.png"
+                                    alt="shipbubble logo"
+                                    class="h-3"
+                                />
+                            </div>
+                            <Message
+                                v-if="$form.location?.invalid"
+                                severity="error"
+                                class="mt-1"
+                                size="small"
+                                variant="simple"
+                                >{{ $form.location.error.message }}</Message
+                            >
+                        </div>
+                    </div>
                 </div>
 
                 <div v-if="initialValues.shippingMethod === 'Pickup'">
@@ -190,10 +234,12 @@ import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useRouter } from "vue-router";
 import { useUtils } from "../composables/useUtils";
+import LocationIcon from "../assets/icons/location-icon.vue";
+import { Icon } from "@iconify/vue";
 
 const router = useRouter();
 const { shippingDetails: initialValues } = useOrderStore();
-const { storeInfo } = useStoreInfo();
+const { storeInfo, shippingOptions } = useStoreInfo();
 const { formatNaira } = useUtils();
 
 const resolver = ({ values }) => {
