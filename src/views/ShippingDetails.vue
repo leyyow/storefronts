@@ -175,7 +175,7 @@
                                     v-else
                                     class="bg-white flex justify-between py-3 border cursor-pointer px-2 rounded-2xl mb-2 items-center"
                                     :class="[
-                                        initialValues.courier_name === option.courier_name
+                                        initialValues.courier_id === option.courier_id
                                             ? 'border-spanish-viridian bg-spanish-viridian/5'
                                             : 'border-platinum',
                                     ]"
@@ -328,6 +328,15 @@ const resolver = ({ values }: { values: { [key: string]: any } }) => {
         values,
     };
 };
+
+watch(
+    () => initialValues.shippingMethod,
+    (newMethod) => {
+        if (newMethod === "Pickup") {
+            initialValues.courier_id = "";
+        }
+    }
+);
 
 const onFormSubmit = ({ valid, values }: { valid: boolean; values: Record<string, any> }) => {
     if (valid) {
