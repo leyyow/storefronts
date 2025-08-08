@@ -9,7 +9,7 @@
             class="flex justify-between pb-3 border-b border-platinum"
             v-if="shippingDetails.shippingMethod === 'Delivery'"
         >
-            <p class="text-granite-gray">Shipping ({{ shippingDetails.location }}):</p>
+            <p class="text-granite-gray">Shipping ({{ courierName }}):</p>
             <p v-html="formatNaira(deliveryFee)"></p>
         </div>
         <div class="flex justify-between pb-3 border-b border-platinum" v-else>
@@ -58,6 +58,7 @@ defineProps({
         required: true,
     },
     isPending: Boolean,
+    courierName: String,
 });
 
 defineEmits(["checkout"]);

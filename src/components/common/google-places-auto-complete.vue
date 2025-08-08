@@ -19,11 +19,14 @@
         :required="required"
         :name="name"
         :disabled="disabled"
+        @blur="handleBlur"
+        @focus="handleFocus"
+        @keydown.esc="closeSuggestions"
       />
 
       <!-- Dropdown -->
       <div
-        v-if="suggestions.length && !hasSelectedSuggestion"
+        v-if="showDropdown && suggestions.length && !hasSelectedSuggestion"
         class="absolute z-10 mt-1 w-full max-h-56 overflow-auto rounded-lg bg-white py-1 shadow-md ring-1 ring-black/10 focus:outline-none"
       >
         <div
@@ -33,7 +36,7 @@
             'cursor-pointer select-none py-2 px-4 hover:bg-brand-100 hover:text-brand-500 text-brand-600',
             dense ? 'text-xs' : 'text-sm',
           ]"
-          @click="selectSuggestion(item)"
+          @mousedown.prevent="selectSuggestion(item)"
         >
           {{ item.description }}
         </div>
@@ -50,7 +53,7 @@
 import { ref, watch, onMounted, computed } from "vue";
 
 const apiKey =
-  import.meta.env.VITE_GOOGLE_MAPS_API_CODE || "";
+  import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
@@ -70,6 +73,7 @@ const emit = defineEmits(["update:modelValue", "selected"]);
 const searchInput = ref(props.modelValue);
 const suggestions = ref([]);
 const autocompleteService = ref(null);
+const showDropdown = ref(false);
 
 const hasSelectedSuggestion = computed(() => {
   return suggestions.value.some((item) => item.description === searchInput.value);
@@ -80,7 +84,7 @@ watch(
   () => props.modelValue,
   (newVal) => {
     searchInput.value = newVal;
-  },
+  }
 );
 
 // Watch searchInput for autocomplete
@@ -94,10 +98,12 @@ watch(searchInput, (val) => {
       },
       (predictions) => {
         suggestions.value = predictions || [];
-      },
+        showDropdown.value = !!suggestions.value.length;
+      }
     );
   } else {
     suggestions.value = [];
+    showDropdown.value = false;
   }
 });
 
@@ -118,7 +124,23 @@ onMounted(() => {
 const selectSuggestion = (item) => {
   searchInput.value = item.description;
   suggestions.value = [];
-  // if you need the full place object
+  showDropdown.value = false;
   emit("selected", item);
+};
+
+const handleBlur = () => {
+  setTimeout(() => {
+    showDropdown.value = false;
+  }, 150); // allow click to register
+};
+
+const handleFocus = () => {
+  if (suggestions.value.length) {
+    showDropdown.value = true;
+  }
+};
+
+const closeSuggestions = () => {
+  showDropdown.value = false;
 };
 </script>

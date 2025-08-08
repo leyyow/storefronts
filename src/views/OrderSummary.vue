@@ -24,6 +24,7 @@
             :total-amount="totalAmount"
             :shipping-details="shippingDetails"
             :is-pending="isPending"
+            :courier-name="courierName"
             @checkout="handleCheckout"
         />
     </div>
@@ -60,10 +61,16 @@ const deliveryFee = computed(() => {
 
     if (!Array.isArray(prices) || prices.length === 0) return 0;
 
-    const amount = prices.find((option) => option.name === shippingDetails.location)?.amount;
+    const amount = prices.find((option) => option.courier_id === shippingDetails.courier_id)?.total_amount;
 
     return Number(amount) || 0;
 });
+
+const courierName = computed(() => {
+    const option = shippingOptions.find((opt) => opt.courier_id === shippingDetails.courier_id);
+    return option?.courier_name || "";
+});
+
 const cartTotal = computed(() => cart.reduce((sum, item) => sum + item.variant_price * item.selected_quantity, 0));
 const totalAmount = computed(() => {
     return Number(
@@ -149,7 +156,8 @@ const handleCheckout = () => {
         shipping_mode: false,
         shipping_paid: false,
         store: storeInfo.store,
-        total_amount: shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value + cartTotal.value : cartTotal.value,
+        total_amount:
+            shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value + cartTotal.value : cartTotal.value,
         unique_items: uniqueProductCount(),
         items: [...payloadItems],
         redirect_url: `${window.location.origin}/${currentSlug}/store/order-successful/${orderRef}`,

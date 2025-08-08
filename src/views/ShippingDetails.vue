@@ -180,8 +180,8 @@
                                             : 'border-platinum',
                                     ]"
                                     v-for="option in shippingOptions"
-                                    :key="option.courier_id"
-                                    :for="option.courier_id"
+                                    :key="String(option.courier_id)"
+                                    :for="String(option.courier_id)"
                                 >
                                     <div class="flex">
                                         <img
@@ -202,10 +202,10 @@
 
                                     <RadioButton
                                         v-model="initialValues.courier_id"
-                                        :inputId="option.courier_id"
-                                        name="location"
-                                        :value="option.courier_id"
-                                        class="absolute h-0 w-0 opacity-0"
+                                        :inputId="String(option.courier_id)"
+                                        name="courier_id"
+                                        :value="String(option.courier_id)"
+                                        class="sr-only"
                                     />
                                     <p class="font-bold" v-html="formatNaira(option.total_amount)"></p>
                                 </label>
@@ -221,12 +221,12 @@
                                 />
                             </div>
                             <Message
-                                v-if="$form.location?.invalid"
+                                v-if="$form.courier_id?.invalid"
                                 severity="error"
                                 class="mt-1"
                                 size="small"
                                 variant="simple"
-                                >{{ $form.location.error.message }}</Message
+                                >{{ $form.courier_id.error.message }}</Message
                             >
                         </div>
                     </div>
@@ -242,7 +242,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { watch } from "vue";
+import { watch, computed } from "vue";
 import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useRouter } from "vue-router";
@@ -261,7 +261,7 @@ const storeInfo = useStoreInfo().storeInfo as StoreInfo;
 const { formatNaira } = useUtils();
 const { cart } = useCartStore();
 const { getRates } = useApiCalls();
-const shippingOptions = useStoreInfo().shippingOptions as ShippingOption[];
+const shippingOptions = computed(() => useStoreInfo().shippingOptions as ShippingOption[]);
 const { mutate: getRatesMutation, isPending: isGettingRates } = getRates();
 
 watch(
@@ -311,8 +311,8 @@ const resolver = ({ values }: { values: { [key: string]: any } }) => {
         errors.shippingMethod = [{ message: "Shipping method is required." }];
     }
 
-    if (values.shippingMethod === "Delivery" && !values.location) {
-        errors.location = [{ message: "Location is required." }];
+    if (values.shippingMethod === "Delivery" && !values.courier_id) {
+        errors.courier_id = [{ message: "Courier is required." }];
     }
 
     if (values.shippingMethod === "Delivery" && !values.address) {
@@ -332,7 +332,7 @@ const resolver = ({ values }: { values: { [key: string]: any } }) => {
 const onFormSubmit = ({ valid, values }: { valid: boolean; values: Record<string, any> }) => {
     if (valid) {
         if (values.shippingMethod === "Pickup") {
-            (values.location = ""), (values.address = "");
+            (values.location = ""), (values.address = ""), (values.courier_id = "");
         }
         router.push({ name: "OrderSummary" });
     }
