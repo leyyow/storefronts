@@ -8,9 +8,7 @@
             </div>
             <router-view v-slot="{ Component }" v-else>
                 <transition name="fade">
-                    <keep-alive>
-                        <component :is="Component"></component>
-                    </keep-alive>
+                    <component :is="Component"></component>
                 </transition>
             </router-view>
         </div>
