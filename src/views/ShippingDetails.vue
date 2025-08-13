@@ -108,11 +108,15 @@
 
                         <label
                             for="Pickup"
-                            class="w-full p-3 rounded-md bg-anti-flash-white block"
-                            :class="{
-                                'opacity-50 cursor-default': storeInfo.pickup_location === '',
-                                'opacity-100 cursor-pointer': storeInfo.pickup_location !== '',
-                            }"
+                            :class="[
+                                'w-full p-3 rounded-md bg-anti-flash-white block border',
+                                storeInfo.pickup_location === ''
+                                    ? 'opacity-50 cursor-default'
+                                    : 'opacity-100 cursor-pointer',
+                                initialValues.shippingMethod === 'Pickup'
+                                    ? 'border-spanish-viridian bg-spanish-viridian/5'
+                                    : 'border-transparent',
+                            ]"
                         >
                             <div class="flex justify-between items-center">
                                 <span>Pickup</span>
@@ -156,79 +160,78 @@
                     <Message v-if="$form.address?.invalid" severity="error" size="small" variant="simple">{{
                         $form.address.error.message
                     }}</Message>
+                </div>
 
-                    <div v-if="initialValues.address.length > 0" class="mt-3 pt-3 bg-[#F2F5F2] rounded-t-md">
-                        <p v-if="!isGettingRates && shippingOptions.length > 0" class="py-2 text-center">
-                            Select your preferred courier
-                        </p>
-                        <div class="my-2">
-                            <div class="max-h-70 overflow-y-auto overflow-x-hidden scrollbar-hide px-2 relative">
-                                <div
-                                    role="status"
-                                    v-if="isGettingRates"
-                                    class="w-full flex justify-center items-center p-10"
-                                >
-                                    <Spinner styleClass="fill-spanish-viridian w-16 h-16" />
-                                </div>
-                                <NoCouriersAvailable v-if="!isGettingRates && shippingOptions.length === 0" />
-                                <label
-                                    v-else
-                                    class="bg-white flex justify-between py-3 border cursor-pointer px-2 rounded-2xl mb-2 items-center"
-                                    :class="[
-                                        initialValues.courier_id === option.courier_id
-                                            ? 'border-spanish-viridian bg-spanish-viridian/5'
-                                            : 'border-platinum',
-                                    ]"
-                                    v-for="option in shippingOptions"
-                                    :key="String(option.courier_id)"
-                                    :for="String(option.courier_id)"
-                                >
-                                    <div class="flex">
-                                        <img
-                                            :src="option.courier_image"
-                                            alt="courier logo"
-                                            class="w-10 border border-gray-200 rounded-md"
-                                        />
+                <div
+                    v-if="initialValues.address.length > 0 && initialValues.shippingMethod === 'Delivery'"
+                    class="mt-3 pt-3 bg-[#F2F5F2] rounded-t-md"
+                >
+                    <p v-if="!isGettingRates && shippingOptions.length > 0" class="py-2 text-center">
+                        Select your preferred courier
+                    </p>
+                    <div class="my-2">
+                        <div class="max-h-70 overflow-y-auto overflow-x-hidden scrollbar-hide px-2 relative">
+                            <div
+                                role="status"
+                                v-if="isGettingRates"
+                                class="w-full flex justify-center items-center p-10"
+                            >
+                                <Spinner styleClass="fill-spanish-viridian w-16 h-16" />
+                            </div>
+                            <NoCouriersAvailable v-if="!isGettingRates && shippingOptions.length === 0" />
+                            <label
+                                v-else
+                                class="bg-white flex justify-between py-3 border cursor-pointer px-2 rounded-2xl mb-2 items-center"
+                                :class="[
+                                    initialValues.courier_id === option.courier_id
+                                        ? 'border-spanish-viridian bg-spanish-viridian/5'
+                                        : 'border-platinum',
+                                ]"
+                                v-for="option in shippingOptions"
+                                :key="String(option.courier_id)"
+                                :for="String(option.courier_id)"
+                            >
+                                <div class="flex">
+                                    <img
+                                        :src="option.courier_image"
+                                        alt="courier logo"
+                                        class="w-10 border border-gray-200 rounded-md"
+                                    />
 
-                                        <div class="flex-1 flex flex-col justify-between ms-2">
-                                            <p class="text-xs font-bold text-black">{{ option.courier_name }}</p>
-                                            <div class="flex text-[#838383] items-center relative">
-                                                <Icon icon="mdi:star-outline" class="relative bottom-0.5" />
-                                                <p class="text-[10px] ms-0.5">{{ option.tracking.bars }}</p>
-                                                <p class="text-[10px] ms-1">({{ option.votes }} reviews)</p>
-                                            </div>
+                                    <div class="flex-1 flex flex-col justify-between ms-2">
+                                        <p class="text-xs font-bold text-black">{{ option.courier_name }}</p>
+                                        <div class="flex text-[#838383] items-center relative">
+                                            <Icon icon="mdi:star-outline" class="relative bottom-0.5" />
+                                            <p class="text-[10px] ms-0.5">{{ option.tracking.bars }}</p>
+                                            <p class="text-[10px] ms-1">({{ option.votes }} reviews)</p>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <RadioButton
-                                        v-model="initialValues.courier_id"
-                                        :inputId="String(option.courier_id)"
-                                        name="courier_id"
-                                        :value="String(option.courier_id)"
-                                        class="sr-only"
-                                    />
-                                    <p class="font-bold" v-html="formatNaira(option.total_amount)"></p>
-                                </label>
-                            </div>
-                            <div
-                                class="w-full border-y border-[#D83854] bg-[#D83854]/5 py-3 flex gap-1 justify-center items-center"
-                            >
-                                <p class="text-xs">This service is provided by</p>
-                                <img
-                                    src="../assets/images/pngs/shipbubble-logo.png"
-                                    alt="shipbubble logo"
-                                    class="h-3"
+                                <RadioButton
+                                    v-model="initialValues.courier_id"
+                                    :inputId="String(option.courier_id)"
+                                    name="courier_id"
+                                    :value="String(option.courier_id)"
+                                    class="sr-only"
                                 />
-                            </div>
-                            <Message
-                                v-if="$form.courier_id?.invalid"
-                                severity="error"
-                                class="mt-1"
-                                size="small"
-                                variant="simple"
-                                >{{ $form.courier_id.error.message }}</Message
-                            >
+                                <p class="font-bold" v-html="formatNaira(option.total_amount)"></p>
+                            </label>
                         </div>
+                        <div
+                            class="w-full border-y border-[#D83854] bg-[#D83854]/5 py-3 flex gap-1 justify-center items-center"
+                        >
+                            <p class="text-xs">This service is provided by</p>
+                            <img src="../assets/images/pngs/shipbubble-logo.png" alt="shipbubble logo" class="h-3" />
+                        </div>
+                        <Message
+                            v-if="$form.courier_id?.invalid"
+                            severity="error"
+                            class="mt-1"
+                            size="small"
+                            variant="simple"
+                            >{{ $form.courier_id.error.message }}</Message
+                        >
                     </div>
                 </div>
 
@@ -335,7 +338,7 @@ watch(
         if (newMethod === "Pickup") {
             initialValues.courier_id = "";
         }
-    }
+    },
 );
 
 const onFormSubmit = ({ valid, values }: { valid: boolean; values: Record<string, any> }) => {

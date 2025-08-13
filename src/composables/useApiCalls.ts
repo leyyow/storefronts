@@ -48,7 +48,7 @@ export function useApiCalls() {
             },
             onSuccess: async (orderData: any) => {
                 queryClient.refetchQueries({ queryKey: ["storeInfo"] });
-                window.location.href = `https://checkout.paystack.com/${orderData.data.access_code}`;
+                window.location.href = `https://checkout.paystack.com/${orderData.data.access_code.access_code}`;
             },
         });
     };
