@@ -40,6 +40,7 @@ export interface StoreInfo {
     shipping_prices: { area: string; amount: string }[];
     is_live: boolean;
     pickup_location: string | null;
+    enable_shipping: boolean;
 }
 
 export interface Product {
