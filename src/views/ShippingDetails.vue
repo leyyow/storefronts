@@ -82,9 +82,7 @@
                             for="Delivery"
                             :class="[
                                 'w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block border',
-                                storeInfo.enable_shipping
-                                    ? 'opacity-100 cursor-pointer'
-                                    : 'opacity-50 cursor-default',
+                                storeInfo.enable_shipping ? 'opacity-100 cursor-pointer' : 'opacity-50 cursor-default',
                                 initialValues.shippingMethod === 'Delivery'
                                     ? 'border-spanish-viridian bg-spanish-viridian/5'
                                     : 'border-transparent',
