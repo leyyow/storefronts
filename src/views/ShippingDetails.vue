@@ -67,7 +67,7 @@
                         inputmode="numeric"
                         pattern="[0-9]*"
                         placeholder="Enter phone number"
-                        @input="(e) => { const target = e.target as HTMLInputElement; if (target) initialValues.phoneNumber = target.value.replace(/\D/g, ''); }"
+                        @input="(e: { target: HTMLInputElement; }) => { const target = e.target as HTMLInputElement; if (target) initialValues.phoneNumber = target.value.replace(/\D/g, ''); }"
                         class="p-3 border-none outline-none focus:outline-none focus:ring-0 focus:border-transparent"
                     />
                     <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple">{{
@@ -82,6 +82,9 @@
                             for="Delivery"
                             :class="[
                                 'w-full cursor-pointer p-3 rounded-md bg-anti-flash-white block border',
+                                storeInfo.enable_shipping
+                                    ? 'opacity-100 cursor-pointer'
+                                    : 'opacity-50 cursor-default',
                                 initialValues.shippingMethod === 'Delivery'
                                     ? 'border-spanish-viridian bg-spanish-viridian/5'
                                     : 'border-transparent',
@@ -94,6 +97,7 @@
                                     inputId="Delivery"
                                     name="shippingMethod"
                                     value="Delivery"
+                                    :disabled="!storeInfo.enable_shipping"
                                 />
                             </div>
                             <div class="flex items-center gap-1 mt-2">
