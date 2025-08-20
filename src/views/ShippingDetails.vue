@@ -67,7 +67,7 @@
                         inputmode="numeric"
                         pattern="[0-9]*"
                         placeholder="Enter phone number"
-                        @input="(e: { target: HTMLInputElement; }) => { const target = e.target as HTMLInputElement; if (target) initialValues.phoneNumber = target.value.replace(/\D/g, ''); }"
+                        @input="handlePhoneInput"
                         class="p-3 border-none outline-none focus:outline-none focus:ring-0 focus:border-transparent"
                     />
                     <Message v-if="$form.phoneNumber?.invalid" severity="error" size="small" variant="simple">{{
@@ -268,6 +268,13 @@ const { cart } = useCartStore();
 const { getRates } = useApiCalls();
 const shippingOptions = computed(() => useStoreInfo().shippingOptions as ShippingOption[]);
 const { mutate: getRatesMutation, isPending: isGettingRates } = getRates();
+
+function handlePhoneInput(e: Event) {
+  const target = e.target as HTMLInputElement
+  if (target) {
+    initialValues.phoneNumber = target.value.replace(/\D/g, "")
+  }
+}
 
 watch(
     () => initialValues.address,
