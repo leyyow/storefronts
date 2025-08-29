@@ -10,7 +10,11 @@ const routes = [
         path: "/:slug",
         component: () => import("./layouts/NavbarLayout.vue"),
         children: [
-            { path: "", component: () => import("./views/HomeView.vue"), name: "Home" },
+            // { path: "", component: () => import("./views/HomeView.vue"), name: "Home" },
+            {
+                path: "",
+                redirect: { name: "Store" },
+            },
             {
                 path: "store",
                 component: () => import("./views/StoreHome.vue"),

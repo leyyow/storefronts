@@ -32,7 +32,7 @@ defineProps({
 
         <div class="flex justify-between items-center mt-2">
             <p v-if="shippingDetails.shippingMethod === 'Delivery'">{{ shippingDetails.address }}</p>
-            <p v-else>{{ storeInfo.address }}</p>
+            <p v-else>{{ storeInfo.pickup_location }}</p>
 
             <!-- delivery -->
             <div class="flex items-center text-granite-gray" v-if="shippingDetails.shippingMethod === 'Delivery'">
