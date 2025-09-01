@@ -50,7 +50,7 @@
 import { ref, watch, onMounted, computed } from "vue";
 
 const apiKey =
-  import.meta.env.VITE_GOOGLE_MAPS_API_CODE || "";
+  import.meta.env.VITE_GOOGLE_MAPS_API_CODE || "AIzaSyDfrFi_sxwVz2hOci6k7dAorxDtoRLVALI";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
