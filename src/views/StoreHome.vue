@@ -26,8 +26,8 @@
             </div>
         </div> -->
 
-        <div class="py-5 px-4">
-            <h4 class="font-normal">Shop</h4>
+        <div class="pb-5 px-4">
+            <h5 class="font-normal">Shop</h5>
         </div>
 
         <div class="pb-4 px-4 flex justify-between items-center">
