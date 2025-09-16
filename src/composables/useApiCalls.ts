@@ -57,7 +57,7 @@ export function useApiCalls() {
         return useMutation({
             mutationKey: ["shippingRates"],
             mutationFn: async (data: any) => {
-                return (await apiPost("/shipping/rates/", data)) as { rates: { couriers: ShippingOption[] }; message: string };
+                return (await apiPost("/shipping/rates/", data)) as { rates: { couriers: ShippingOption[]; request_token: string }; message: string };
             },
             onSuccess: (response) => {
                 const { updateShippingOptions } = useStoreInfo();
