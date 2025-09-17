@@ -14,7 +14,8 @@ export const useOrderStore = defineStore(
             email: "",
             phoneNumber: "",
             shippingMethod: "",
-            courier_name: "",
+            courier: {},
+            rate: "",
             address: "",
             courier_id: "", // Optional for backward compatibility
         });
@@ -38,7 +39,8 @@ export const useOrderStore = defineStore(
                 email: "",
                 phoneNumber: "",
                 shippingMethod: "",
-                courier_name: "",
+                courier: {},
+                rate: "",
                 address: "",
                 courier_id: "", // Optional for backward compatibility
             });

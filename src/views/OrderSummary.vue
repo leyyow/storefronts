@@ -134,13 +134,13 @@ const handleCheckout = () => {
     const payload = {
         channel: 3,
         customer_info: {
-            address: shippingDetails.address,
+            full_address: shippingDetails.address,
             email: shippingDetails.email,
             first_name: shippingDetails.firstName,
             last_name: shippingDetails.lastName,
-            line1: shippingDetails.address,
+            // line1: shippingDetails.address,
             phone: shippingDetails.phoneNumber,
-            city: "",
+            // city: "",
         },
         fulfilled: 0,
         has_customer: false,
@@ -157,10 +157,14 @@ const handleCheckout = () => {
         shipping_paid: false,
         store: storeInfo.store,
         total_amount:
-            shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value + cartTotal.value : cartTotal.value,
+            Number(shippingDetails.shippingMethod === "Delivery" ? deliveryFee.value + cartTotal.value : cartTotal.value),
         unique_items: uniqueProductCount(),
         items: [...payloadItems],
         redirect_url: `${window.location.origin}/${currentSlug}/store/order-successful/${orderRef}`,
+        rate: shippingDetails.rate,
+        courier: shippingDetails.courier,
+        shipping_provider: shippingDetails.rate !== "" ? "shipbubble" : "manual",
+        has_shipping: shippingDetails.shippingMethod === "Delivery" ? true : false,
     };
 
     console.log(payload);

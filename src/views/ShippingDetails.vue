@@ -195,6 +195,7 @@
                                     v-for="option in shippingOptions"
                                     :key="String(option.courier_id)"
                                     :for="String(option.courier_id)"
+                                    @click="() => { console.log('Selected courier:', option); initialValues.courier = option; initialValues.rate = requestToken; }"
                                 >
                                     <div class="flex">
                                         <img
@@ -255,7 +256,7 @@
     </Form>
 </template>
 <script setup lang="ts">
-import { watch, computed } from "vue";
+import { watch, computed, ref } from "vue";
 import { useOrderStore } from "../stores/order";
 import { useStoreInfo } from "../stores/storeInfo";
 import { useRouter } from "vue-router";
@@ -270,6 +271,7 @@ import NoCouriersAvailable from "../components/common/NoCouriersAvailable.vue";
 const router = useRouter();
 const { shippingDetails: initialValues } = useOrderStore();
 const storeInfo = useStoreInfo().storeInfo as StoreInfo;
+const requestToken = ref<string>("");
 
 const { formatNaira } = useUtils();
 const { cart } = useCartStore();
@@ -300,6 +302,14 @@ watch(
                 customer_phone: initialValues.phoneNumber,
                 customer_email: initialValues.email,
                 sku_data: skuData,
+            }, {
+                onSuccess: (response) => {
+                    requestToken.value = response.rates.request_token;
+                    console.log("Shipping rates fetched successfully:", response);
+                },
+                onError: (error) => {
+                    console.error("Error fetching shipping rates:", error);
+                },
             });
         } else {
             initialValues.address = "";
